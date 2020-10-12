@@ -1,0 +1,47 @@
+.container {
+  height: 100%;
+  width: 100%;
+}
+
+.image {
+  height: 300px;
+  width: 300px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.title {
+  padding: 20px 50px 50px;
+  text-align: center;
+}
+
+.signUpButton {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #3FC1C9;
+  border: 0;
+  padding: 15px 50px;
+  font-size: 20px;
+  width: 180px;
+}
+
+.signUpButton:hover {
+  background-color: #34B1B9;
+}
+
+.registerButton {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #FC5185;
+  border: 0;
+  padding: 15px 50px;
+  font-size: 20px;
+  width: 180px;
+}
+
+.registerButton:hover {
+  background-color: #FB306E;
+}
