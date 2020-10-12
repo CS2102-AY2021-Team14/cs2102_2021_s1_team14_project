@@ -1,0 +1,23 @@
+.title {
+  text-align: left;
+}
+
+.button {
+  background-color: #FC5185;
+  border: 0;
+  margin-top: 20px;
+  height: 40px;
+  width: 180px;
+}
+
+.button:hover {
+  background-color: #FB306E;
+}
+
+.button:focus {
+  background-color: #FC5185;
+}
+
+.link:hover{
+  text-decoration: none;
+}

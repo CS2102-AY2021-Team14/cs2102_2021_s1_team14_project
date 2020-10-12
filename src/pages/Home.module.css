@@ -31,6 +31,10 @@
   background-color: #34B1B9;
 }
 
+.signUpButton:focus {
+  background-color: #3FC1C9;
+}
+
 .registerButton {
   display: block;
   margin-left: auto;
@@ -44,4 +48,8 @@
 
 .registerButton:hover {
   background-color: #FB306E;
+}
+
+.registerButton:focus {
+  background-color: #FC5185;
 }
