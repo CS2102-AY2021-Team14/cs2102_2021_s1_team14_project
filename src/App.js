@@ -1,14 +1,16 @@
 import React from 'react';
 import './App.css';
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+import AppRouter from "./routes/AppRouter";
+
 function App() {
+  document.body.style.backgroundColor = "#F5F5F5";
+
   return (
     <div className="App">
-      <header className="App-header">
-        <p>
-          Hello! My name is Low Jun Kai, Sean
-        </p>
-      </header>
+      <AppRouter />
     </div>
   );
 }
