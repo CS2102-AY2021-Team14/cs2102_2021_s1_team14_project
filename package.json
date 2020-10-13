@@ -2,12 +2,17 @@
   "name": "cs2102_2021_s1_team14_project",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "^12.18.1",
+    "npm": "6.14.1"
+  },
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "bootstrap": "^4.5.2",
     "express": "^4.17.1",
+    "nodemon": "^2.0.4",
     "path": "^0.12.7",
     "react": "^16.13.1",
     "react-bootstrap": "^1.3.0",
@@ -20,7 +25,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "dev": "react-scripts start"
+    "dev": "react-scripts start",
+    "serve": "nodemon server.js",
+    "heroku-postbuild": "npm install && npm run build"
   },
   "eslintConfig": {
     "extends": "react-app"
