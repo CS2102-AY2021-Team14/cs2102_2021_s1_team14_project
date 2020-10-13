@@ -13,8 +13,11 @@ app.get('/ping', (req, res) => {
   return res.send('pong');
 });
 
+// Catchall
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+  res.sendFile(path.join(__dirname, 'build/index.html'));
 });
 
-app.listen(port);
+app.listen(port, () => {
+  console.log(`Server started on port: ${port}`);
+});
