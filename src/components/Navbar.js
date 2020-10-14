@@ -1,6 +1,6 @@
 import React from "react";
 import { Navbar } from "react-bootstrap";
-import { useHistory } from 'react-router-dom';
+import { useHistory } from "react-router-dom";
 
 import logo from "../images/logo-white.png";
 import ROUTES from "../routes/Routes";
@@ -21,6 +21,6 @@ const Nav = () => {
       </Navbar.Brand>
     </Navbar>
   );
-}
+};
 
 export default Nav;

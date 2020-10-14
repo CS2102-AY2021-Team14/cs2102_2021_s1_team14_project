@@ -1,0 +1,8 @@
+{
+  "prettier.trailingComma": "none",
+  "singleQuote": false,
+  "arrowParens": "avoid",
+  "jsxSingleQuote": false,
+  "printWidth": 80,
+  "endOfLine": "lf"
+}

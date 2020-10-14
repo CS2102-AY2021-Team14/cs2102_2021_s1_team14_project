@@ -15,7 +15,7 @@ export const PrivateCareTakerRoute = ({ component: Component, ...rest }) => {
   return (
     <Route
       {...rest}
-      component={(props) =>
+      component={props =>
         isCareTaker ? (
           <div>
             <Component {...props} />
