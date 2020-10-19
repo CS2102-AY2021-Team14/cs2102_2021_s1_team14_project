@@ -1,0 +1,22 @@
+
+.sidenav {
+  height: 80vh;
+  margin: 2vh 2vw 2vh 2vw;
+  border: 2px solid black;
+  border-radius: 10px;
+  color: white;
+}
+
+a {
+  color: black;
+}
+
+.nav-link {
+  margin: 1vw;
+  border-radius: 10vw !important;
+}
+
+.nav-link:hover {
+  color: white;
+  background-color: lightblue;
+}
