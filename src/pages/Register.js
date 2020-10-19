@@ -9,6 +9,7 @@ import styles from "./Register.module.css";
 
 const Register = () => {
   const [inputs, setInputs] = useState({
+    username: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -17,7 +18,9 @@ const Register = () => {
     role: ""
   });
 
-  const { email, 
+  const { 
+        username,
+        email, 
         password, 
         confirmPassword, 
         country, 
@@ -33,6 +36,7 @@ const Register = () => {
     event.preventDefault();
 
     const body = {
+      username,
       email,
       password,
       confirmPassword,
@@ -52,6 +56,19 @@ const Register = () => {
         <h2 className={styles.title}>Register</h2>
 
         <Form className="mt-4 mb-3" onSubmit={handleSubmit}>
+        <Form.Group as={Row} controlId="formPlaintextName">
+            <Form.Label className="text-right" column sm="2">
+              Username:
+            </Form.Label>
+            <Col sm="10">
+              <Form.Control type="text" 
+                            placeholder="Username" 
+                            value={username}
+                            name="username"
+                            onChange={e => onChange(e)} />
+            </Col>
+          </Form.Group>
+
           <Form.Group as={Row} controlId="formPlaintextEmail">
             <Form.Label className="text-right" column sm="2">
               Email:
@@ -133,8 +150,7 @@ const Register = () => {
           <Button className={styles.button} type="submit">Register</Button>
         </Form>
 
-        <p>
-          Already have an account? Sign in&nbsp;
+        <p>Already have an account? Sign in&nbsp;
           <Link className={styles.link} to={ROUTES.SIGN_IN}>here</Link>
           !
         </p>

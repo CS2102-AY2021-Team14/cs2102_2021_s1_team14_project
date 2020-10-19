@@ -1,6 +1,6 @@
 const express = require("express");
 const petsRouter = require("./routes/pets");
-// const jwtAuthRouter = 
+const jwtAuthRouter = require("./routes/jwtAuth");
 
 const apiRouter = express.Router();
 
@@ -10,9 +10,8 @@ const apiRouter = express.Router();
 apiRouter.use("/pets", petsRouter);
 
 // Register and Login Routes
+apiRouter.use("/auth", jwtAuthRouter);
 
-
-// apiRouter.use("/auth", jwtAuthRouter);
 // eg:
 // appRouter.use("/bids", bidsRouter);
 

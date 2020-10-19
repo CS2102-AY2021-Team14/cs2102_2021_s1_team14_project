@@ -30,7 +30,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "dev": "react-scripts start",
-    "serve": "npm run build && nodemon server.js",
+    "serve": "nodemon server.js",
     "heroku-postbuild": "npm install && npm run build"
   },
   "eslintConfig": {
