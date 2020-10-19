@@ -13,7 +13,7 @@ const SignIn = () => {
 
   const history = useHistory();
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     console.log(`Form submitted, Username: ${username}, Password: ${password}`);
 

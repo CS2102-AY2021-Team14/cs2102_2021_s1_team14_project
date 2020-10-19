@@ -8,15 +8,29 @@ import ROUTES from "../routes/Routes";
 import styles from "./Register.module.css";
 
 const Register = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [country, setCountry] = useState("");
-  const [address, setAddress] = useState("");
+
+  const [inputs, setInputs] = useState({
+    email: "",
+    password: "",
+    confirmPassword: "",
+    country: "",
+    address: ""
+  });
+
+  const {email, 
+        password, 
+        confirmPassword, 
+        country, 
+        address} = inputs;
+
+  const onChange = (event) => {
+    setInputs({...inputs, [event.target.name]
+                        : event.target.value});
+  }
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(`Form submitted ${username} ${password} ${confirmPassword} ${country} ${address}`);
+    console.log(`Form submitted ${email} ${password} ${confirmPassword} ${country} ${address}`);
   }
 
   return (
@@ -29,11 +43,14 @@ const Register = () => {
         <Form className="mt-4 mb-3" onSubmit={handleSubmit}>
           <Form.Group as={Row} controlId="formPlaintextEmail">
             <Form.Label className="text-right" column sm="2">
-              Username:
+              Email:
             </Form.Label>
             <Col sm="10">
-              <Form.Control type="email" placeholder="email@example.com" value={username}
-                            onChange={e => setUsername(e.target.value)} />
+              <Form.Control type="email" 
+                            placeholder="email@example.com" 
+                            value={email}
+                            name="email"
+                            onChange={e => onChange(e)} />
             </Col>
           </Form.Group>
 
@@ -42,8 +59,11 @@ const Register = () => {
               Password:
             </Form.Label>
             <Col sm="10">
-              <Form.Control type="password" placeholder="Password" value={password}
-                            onChange={e => setPassword(e.target.value)} />
+              <Form.Control type="password" 
+                            placeholder="Password" 
+                            value={password}
+                            name="password"
+                            onChange={e => onChange(e)} />
             </Col>
           </Form.Group>
 
@@ -52,8 +72,11 @@ const Register = () => {
               Confirm Password:
             </Form.Label>
             <Col sm="10">
-              <Form.Control type="password" placeholder="Confirm Password" value={confirmPassword}
-                            onChange={e => setConfirmPassword(e.target.value)} />
+              <Form.Control type="password" 
+                            placeholder="Confirm Password" 
+                            value={confirmPassword}
+                            name="confirmPassword"
+                            onChange={e => onChange(e)} />
             </Col>
           </Form.Group>
 
@@ -62,8 +85,11 @@ const Register = () => {
               Country:
             </Form.Label>
             <Col sm="10">
-              <Form.Control type="text" placeholder="Country" value={country}
-                            onChange={e => setCountry(e.target.value)} />
+              <Form.Control type="text" 
+                            placeholder="Country" 
+                            value={country}
+                            name="country"
+                            onChange={e => onChange(e)} />
             </Col>
           </Form.Group>
 
@@ -72,8 +98,11 @@ const Register = () => {
               Address:
             </Form.Label>
             <Col sm="10">
-              <Form.Control type="text" placeholder="Address" value={address}
-                            onChange={e => setAddress(e.target.value)} />
+              <Form.Control type="text" 
+                            placeholder="Address" 
+                            value={address}
+                            name="address"
+                            onChange={e => onChange(e)} />
             </Col>
           </Form.Group>
 
