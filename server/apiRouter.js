@@ -1,6 +1,6 @@
 const express = require("express");
 const petsRouter = require("./routes/pets");
-const jwtAuthRouter = require("./routes/jwtAuth");
+
 
 const apiRouter = express.Router();
 

@@ -8,7 +8,6 @@ import ROUTES from "../routes/Routes";
 import styles from "./Register.module.css";
 
 const Register = () => {
-
   const [inputs, setInputs] = useState({
     email: "",
     password: "",
@@ -30,6 +29,16 @@ const Register = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    const body = {
+      email,
+      password,
+      confirmPassword,
+      country,
+      address
+    };
+
+    const response = await fetch("http[://localhost:8080/")
     console.log(`Form submitted ${email} ${password} ${confirmPassword} ${country} ${address}`);
   }
 
