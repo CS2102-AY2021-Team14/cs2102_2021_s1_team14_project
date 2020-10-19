@@ -15,7 +15,7 @@ const Register = () => {
     confirmPassword: "",
     country: "",
     address: "",
-    role: ""
+    role: "ADMIN"
   });
 
   const { 

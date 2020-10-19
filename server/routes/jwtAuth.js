@@ -5,9 +5,11 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 const pool = require("../db/dbPool");
 const jwtGenerator = require("../utils/jwtGenerator");
+const validator = require("../utils/validator");
+const authorization = require("../utils/authorization");
 
 // Registration
-router.post("/register", async (req, res) => {
+router.post("/register", validator, async (req, res) => {
     try {
         // Destructure the req body
         const {
@@ -19,6 +21,10 @@ router.post("/register", async (req, res) => {
             address,
             role
         } = req.body;
+
+        if (password !== confirmPassword) {
+            return res.status(401).json("Please make sure your passwords match!");
+        }
 
         // Check if user exist, if yes, throw error
         const user = await pool.query(
@@ -32,7 +38,7 @@ router.post("/register", async (req, res) => {
 
         // User already exists
         if (user.rows.length !== 0) {
-            return res.status(401).send("Username or email already exist");
+            return res.status(401).json("Username or email already exist");
         }
 
         const saltRound = 10;
@@ -77,7 +83,7 @@ router.post("/register", async (req, res) => {
 });
 
 // Login Route
-router.post("/login", async (req, res) => {
+router.post("/login", validator, async (req, res) => {
     try {
         const { username, password } = req.body;
         const user = await pool.query(
@@ -95,7 +101,7 @@ router.post("/login", async (req, res) => {
         const validPassword = await bcrypt.compare(password, user.rows[0].user_password);
 
         if (!validPassword) {
-            return res.status("Wrong Password");
+            return res.status(401).json("Wrong Password");
         }
 
         const token = jwtGenerator(user.rows[0].user_id);
@@ -105,5 +111,7 @@ router.post("/login", async (req, res) => {
         res.status(500).json("Server error")
     }
 });
+
+// Verification that happens every app refresh
 
 module.exports = router;
