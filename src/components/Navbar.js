@@ -28,6 +28,6 @@ const NavBar = () => {
       </Nav.Item>
     </Navbar>
   );
-}
+};
 
 export default NavBar;
