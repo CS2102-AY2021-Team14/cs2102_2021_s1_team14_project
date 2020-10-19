@@ -13,14 +13,16 @@ const Register = () => {
     password: "",
     confirmPassword: "",
     country: "",
-    address: ""
+    address: "",
+    role: ""
   });
 
   const { email, 
         password, 
         confirmPassword, 
         country, 
-        address } = inputs;
+        address,
+        role } = inputs;
 
   const onChange = (event) => {
     setInputs({...inputs, [event.target.name]
@@ -35,7 +37,8 @@ const Register = () => {
       password,
       confirmPassword,
       country,
-      address
+      address,
+      role
     };
 
     console.log(`Form submitted ${email} ${password} ${confirmPassword} ${country} ${address}`);
@@ -119,10 +122,10 @@ const Register = () => {
               Role:
             </Form.Label>
             <Col sm="10">
-            <Form.Control as="select">
-              <option>ADMIN</option>
-              <option>CARETAKER</option>
-              <option>OWNER</option>
+            <Form.Control as="select" name="role" onChange={e => onChange(e)}>
+              <option value="admin">ADMIN</option>
+              <option value="caretaker">CARETAKER</option>
+              <option value="owner">OWNER</option>
             </Form.Control>
             </Col>
           </Form.Group>

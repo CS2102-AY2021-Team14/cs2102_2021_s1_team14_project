@@ -11,6 +11,8 @@ CREATE TABLE IF NOT EXISTS users (
     user_name       VARCHAR(255)    NOT NULL,
     user_email      VARCHAR(255)    NOT NULL,
     user_password   VARCHAR(255)    NOT NULL,
+    user_country         VARCHAR(30)     NOT NULL,
+    user_address    VARCHAR(255)    NOT NULL,
     user_role       pcs_user_role   NOT NULL
 );
 
