@@ -123,9 +123,9 @@ const Register = () => {
             </Form.Label>
             <Col sm="10">
             <Form.Control as="select" name="role" onChange={e => onChange(e)}>
-              <option value="admin">ADMIN</option>
-              <option value="caretaker">CARETAKER</option>
-              <option value="owner">OWNER</option>
+              <option value="ADMIN">ADMIN</option>
+              <option value="CARETAKER">CARETAKER</option>
+              <option value="OWNER">OWNER</option>
             </Form.Control>
             </Col>
           </Form.Group>
