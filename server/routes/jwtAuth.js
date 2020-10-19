@@ -76,5 +76,34 @@ router.post("/register", async (req, res) => {
     }
 });
 
+// Login Route
+router.post("/login", async (req, res) => {
+    try {
+        const { username, password } = req.body;
+        const user = await pool.query(
+            `SELECT * FROM users WHERE user_name = $1`,
+            [
+                username
+            ]
+        );
+
+        // Check if user exists
+        if (user.rows.length === 0) {
+            return res.status(401).json("Invalid Username");
+        }
+
+        const validPassword = await bcrypt.compare(password, user.rows[0].user_password);
+
+        if (!validPassword) {
+            return res.status("Wrong Password");
+        }
+
+        const token = jwtGenerator(user.rows[0].user_id);
+        res.json({ token });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json("Server error")
+    }
+});
 
 module.exports = router;

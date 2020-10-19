@@ -42,7 +42,7 @@ const SignIn = () => {
               Username:
             </Form.Label>
             <Col sm="10">
-              <Form.Control type="email" placeholder="email@example.com" value={username}
+              <Form.Control type="text" placeholder="Username" value={username}
                             onChange={e => setUsername(e.target.value)} />
             </Col>
           </Form.Group>
