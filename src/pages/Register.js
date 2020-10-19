@@ -16,11 +16,11 @@ const Register = () => {
     address: ""
   });
 
-  const {email, 
+  const { email, 
         password, 
         confirmPassword, 
         country, 
-        address} = inputs;
+        address } = inputs;
 
   const onChange = (event) => {
     setInputs({...inputs, [event.target.name]
@@ -38,7 +38,6 @@ const Register = () => {
       address
     };
 
-    const response = await fetch("http[://localhost:8080/")
     console.log(`Form submitted ${email} ${password} ${confirmPassword} ${country} ${address}`);
   }
 
@@ -112,6 +111,19 @@ const Register = () => {
                             value={address}
                             name="address"
                             onChange={e => onChange(e)} />
+            </Col>
+          </Form.Group>
+
+          <Form.Group as={Row} controlId="formDropdown">
+            <Form.Label className="text-right" column sm="2">
+              Role:
+            </Form.Label>
+            <Col sm="10">
+            <Form.Control as="select">
+              <option>ADMIN</option>
+              <option>CARETAKER</option>
+              <option>OWNER</option>
+            </Form.Control>
             </Col>
           </Form.Group>
 
