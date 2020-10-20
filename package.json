@@ -4,7 +4,7 @@
   "private": true,
   "engines": {
     "node": "^12.18.1",
-    "npm": "6.14.1"
+    "npm": "^6.14.1"
   },
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
@@ -42,7 +42,7 @@
       "not dead",
       "not op_mini all"
     ],
-    "development": [ 
+    "development": [
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
