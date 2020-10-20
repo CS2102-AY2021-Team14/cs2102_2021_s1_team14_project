@@ -17,9 +17,9 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 -- Example invalid insert into user table
-INSERT INTO users (user_name, user_email, user_password, user_country, user_address, user_role) VALUES ('ching', 'ben@ben.com', 'a', 'si', 'anos', 'BANANA');
+-- INSERT INTO users (user_name, user_email, user_password, user_country, user_address, user_role) VALUES ('ching', 'ben@ben.com', 'a', 'si', 'anos', 'BANANA');
 
 -- Example acceptable with bcrypt
-INSERT INTO users (user_name, user_email, user_password, user_country, user_address, user_role) VALUES ('ching', 'ben@ben.com', 'a', 'si', 'anos', 'OWNER');
+INSERT INTO users (user_name, user_email, user_password, user_country, user_address, user_role) VALUES ('rob', 'sean@jon.com', 'zy', 'singapore', 'nus', 'OWNER');
 
 -- -- -- TODOS other queries

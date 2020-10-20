@@ -17,16 +17,26 @@ const SignIn = () => {
     event.preventDefault();
     console.log(`Form submitted, Username: ${username}, Password: ${password}`);
 
-    if (username === "c@c.com" && password === "c") {
-      // Caretaker
-      history.push(ROUTES.CARE_TAKER_HOME);
-    } else if (username === "p@p.com" && password === "p") {
-      // Pet Owner
-      history.push(ROUTES.PET_OWNER_HOME);
-    } else if (username === "a@a.com" && password === "a") {
-      // Admin
-      history.push(ROUTES.ADMIN_HOME);
-    }
+    const body = { username, password };
+    const response = await fetch("https://cs2102-ay2021-s1-team14/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json"},
+      body: JSON.stringify(body)
+    });
+    const parseRes = await response.json();
+
+    console.log(parseRes);
+
+    // if (username === "c@c.com" && password === "c") {
+    //   // Caretaker
+    //   history.push(ROUTES.CARE_TAKER_HOME);
+    // } else if (username === "p@p.com" && password === "p") {
+    //   // Pet Owner
+    //   history.push(ROUTES.PET_OWNER_HOME);
+    // } else if (username === "a@a.com" && password === "a") {
+    //   // Admin
+    //   history.push(ROUTES.ADMIN_HOME);
+    // }
   }
 
   return (
