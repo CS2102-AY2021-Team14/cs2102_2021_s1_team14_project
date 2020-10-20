@@ -33,6 +33,7 @@ const AppRouter = () =>{
         <Route path={ROUTES.SIGN_IN} render={ props => !isAuthenticated ? <SignIn {...props} setAuth={setAuth} />
                                                                         : (<Redirect to={ROUTES.PET_OWNER_HOME} />) } />
         <Route path={ROUTES.PET_OWNER_HOME} component={PetOwnerHome} />
+        <PublicRoute path={ROUTES.HOME} exact={true} component={Home} />
       </Switch>
     </BrowserRouter>
   );

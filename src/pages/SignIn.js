@@ -7,26 +7,36 @@ import ROUTES from "../routes/Routes";
 
 import styles from "./SignIn.module.css";
 
-const SignIn = () => {
+const SignIn = ({ setAuth }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const history = useHistory();
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
-    console.log(`Form submitted, Username: ${username}, Password: ${password}`);
+    try {
+      event.preventDefault();
+      console.log(`Form submitted, Username: ${username}, Password: ${password}`);
 
-    const body = { username, password };
-    const response = await fetch("/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json"},
-      body: JSON.stringify(body)
-    });
-    const parseRes = await response.json();
+      const body = { username, password };
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json"},
+        body: JSON.stringify(body)
+      });
+      const parseRes = await response.json();
 
-    console.log(parseRes);
-
+      if (parseRes.token) {
+        localStorage.setItem("token", parseRes.token);
+        setAuth(true);
+        console.log("Tokened");
+      } else {
+        setAuth(false);
+        console.log("No token");
+      }
+    } catch(error) {
+      console.error(error.message);
+    }
     // if (username === "c@c.com" && password === "c") {
     //   // Caretaker
     //   history.push(ROUTES.CARE_TAKER_HOME);
