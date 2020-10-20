@@ -18,7 +18,7 @@ const SignIn = () => {
     console.log(`Form submitted, Username: ${username}, Password: ${password}`);
 
     const body = { username, password };
-    const response = await fetch("https://cs2102-ay2021-s1-team14/api/auth/login", {
+    const response = await fetch("https://cs2102-ay2021-s1-team14.herokuapp.com/api/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json"},
       body: JSON.stringify(body)
