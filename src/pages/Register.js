@@ -7,7 +7,7 @@ import ROUTES from "../routes/Routes";
 
 import styles from "./Register.module.css";
 
-const Register = () => {
+const Register = ({ setAuth }) => {
   const [inputs, setInputs] = useState({
     username: "",
     email: "",
@@ -55,9 +55,11 @@ const Register = () => {
 
     if (parseRes.token) {
       localStorage.setItem("token", parseRes.token);
-      console.log(parseRes.token);
+      // console.log(parseRes.token);
+      setAuth(true);
     } else {
       console.log("no token");
+      setAuth(false);
     }
     console.log(`Form submitted ${email} ${password} ${confirmPassword} ${country} ${address}`);
   }
