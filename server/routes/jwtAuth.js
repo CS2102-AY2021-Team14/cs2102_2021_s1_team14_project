@@ -72,7 +72,6 @@ router.post("/register", validator, async (req, res) => {
         );
 
         // Generate jwt
-        // res.json(newUser.rows[0]);
         const token = jwtGenerator(newUser.rows[0].user_id);
 
         res.json({ token });

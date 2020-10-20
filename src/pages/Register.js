@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+
 
 import Navbar from "../components/Navbar";
 import ROUTES from "../routes/Routes";
@@ -55,11 +57,11 @@ const Register = ({ setAuth }) => {
 
     if (parseRes.token) {
       localStorage.setItem("token", parseRes.token);
-      // console.log(parseRes.token);
       setAuth(true);
+      toast.success("Registered Successfully!")
     } else {
-      console.log("no token");
       setAuth(false);
+      toast.error(parseRes);
     }
     console.log(`Form submitted ${email} ${password} ${confirmPassword} ${country} ${address}`);
   }
