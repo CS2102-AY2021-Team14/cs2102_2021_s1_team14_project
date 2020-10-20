@@ -12,7 +12,7 @@ module.exports = async (req, res, next) => {
 
         // See jwtGenerator for payload details
         const payload  = jwt.verify(jwtToken, process.env.jwtSecret);
-        req.user = payload.user;
+        req.userId = payload.userId;
         next();
     } catch(err) {
         console.error(err.message);

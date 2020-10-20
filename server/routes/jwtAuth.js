@@ -113,5 +113,14 @@ router.post("/login", validator, async (req, res) => {
 });
 
 // Verification that happens every app refresh
+router.get("/is-verify", authorization, async (req, res) => {
+    try {
+        // If authorization check passed, user is authorized
+        res.json(true);
+    } catch(err) {
+        console.error(err.message);
+        res.status(500).send("Server error");
+    }
+});
 
 module.exports = router;
