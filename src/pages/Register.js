@@ -32,7 +32,7 @@ const Register = () => {
                         : event.target.value});
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     const body = {
@@ -45,6 +45,20 @@ const Register = () => {
       role
     };
 
+    const response = await fetch("/api/auth/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    });
+
+    const parseRes = await response.json();
+
+    if (parseRes.token) {
+      localStorage.setItem("token", parseRes.token);
+      console.log(parseRes.token);
+    } else {
+      console.log("no token");
+    }
     console.log(`Form submitted ${email} ${password} ${confirmPassword} ${country} ${address}`);
   }
 
