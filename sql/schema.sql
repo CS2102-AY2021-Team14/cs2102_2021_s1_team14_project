@@ -73,12 +73,12 @@ CREATE TABLE base_prices (
 -- for part timer, price is part timer set one
 -- for full timer, price is based on base_prices + avg rating proportion
 -- when we INSERT price i think can use CASE or smthg to set price by case
-CREATE TABLE care_takers_availabiltiy (
+CREATE TABLE care_takers_availability (
     care_taker      VARCHAR(255)    NOT NULL REFERENCES care_takers(user_name)    ON DELETE CASCADE, 
     start_date      DATE            NOT NULL,
     end_date        DATE            NOT NULL,
     pet_type        pet_type        NOT NULL,
-    price           NUMERIC(10, 2)  NOT NULL CHECK (price > 0),
+    daily_price     NUMERIC(10, 2)  NOT NULL CHECK (daily_price > 0),
     is_oudated      BOOLEAN         NOT NULL DEFAULT false,
         -- become true when this period become split up when reach max num pets or care taker apply leave
     PRIMARY KEY (care_taker, start_date, end_date, pet_type),
@@ -91,9 +91,9 @@ CREATE TABLE bids (
     pet             VARCHAR(255)    NOT NULL,
     owner           VARCHAR(255)    NOT NULL,
     care_taker      VARCHAR(255)    NOT NULL,
-    care_taker_availabiltiy_start
+    care_taker_availability_start
                     DATE            NOT NULL,
-    care_taker_availabiltiy_end
+    care_taker_availability_end
                     DATE            NOT NULL,
     pet_type        pet_type        NOT NULL,         
     start_date      DATE            NOT NULL,
@@ -106,8 +106,8 @@ CREATE TABLE bids (
     review_text     VARCHAR,
     PRIMARY KEY (pet, care_taker, start_date, end_date),
     FOREIGN KEY (pet, owner) REFERENCES pets(name, owner),
-    FOREIGN KEY (care_taker, care_taker_availabiltiy_start, care_taker_availabiltiy_end, pet_type)
-        REFERENCES care_takers_availabiltiy(care_taker, start_date, end_date, pet_type),
+    FOREIGN KEY (care_taker, care_taker_availability_start, care_taker_availability_end, pet_type)
+        REFERENCES care_takers_availability(care_taker, start_date, end_date, pet_type),
     CONSTRAINT valid_date_range CHECK (start_date <= end_date),
     CONSTRAINT successful_bid_constraint CHECK 
         ((NOT is_successful) OR (payment_type IS NOT NULL AND transfer_method IS NOT NULL))
