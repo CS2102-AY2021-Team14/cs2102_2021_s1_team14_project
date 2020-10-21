@@ -32,7 +32,7 @@ CREATE TABLE care_takers (
     user_name       VARCHAR(255)    PRIMARY KEY REFERENCES users(user_name),
     is_part_time    BOOLEAN         NOT NULL,
     introduction    VARCHAR
-)
+);
 
 CREATE TABLE pcs_admins (
     user_name       VARCHAR(255)    PRIMARY KEY REFERENCES users(user_name)
@@ -41,7 +41,7 @@ CREATE TABLE pcs_admins (
 CREATE TABLE pets (
     name            VARCHAR(255)    NOT NULL,
     owner           VARCHAR(255)    NOT NULL REFERENCES pet_owners(user_name)     ON DELETE CASCADE,
-    type            pet_type        NOT NULL  
+    type            pet_type        NOT NULL,
     PRIMARY KEY (name, owner)
 );
 
@@ -82,13 +82,14 @@ CREATE TABLE care_takers_availabiltiy (
     is_oudated      BOOLEAN         NOT NULL DEFAULT false,
         -- become true when this period become split up when reach max num pets or care taker apply leave
     PRIMARY KEY (care_taker, start_date, end_date, pet_type),
-    CONSTRAINT valid_date_range CHECK (start_date, end_date)
+    CONSTRAINT valid_date_range CHECK (start_date <= end_date)
 );
 
 -- need trigger for constraint where care taker is holding on to max num of pets already
 -- trigger to auto accept acceptable bid for full timers
 CREATE TABLE bids (
-    pet             VARCHAR(255)    NOT NULL REFERENCES pets(name),
+    pet             VARCHAR(255)    NOT NULL,
+    owner           VARCHAR(255)    NOT NULL,
     care_taker      VARCHAR(255)    NOT NULL,
     care_taker_availabiltiy_start
                     DATE            NOT NULL,
@@ -104,9 +105,10 @@ CREATE TABLE bids (
     rating          INT             CHECK (rating >= 0),
     review_text     VARCHAR,
     PRIMARY KEY (pet, care_taker, start_date, end_date),
+    FOREIGN KEY (pet, owner) REFERENCES pets(name, owner),
     FOREIGN KEY (care_taker, care_taker_availabiltiy_start, care_taker_availabiltiy_end, pet_type)
         REFERENCES care_takers_availabiltiy(care_taker, start_date, end_date, pet_type),
-    CONSTRAINT valid_date_range CHECK (start_date, end_date),
+    CONSTRAINT valid_date_range CHECK (start_date <= end_date),
     CONSTRAINT successful_bid_constraint CHECK 
         ((NOT is_successful) OR (payment_type IS NOT NULL AND transfer_method IS NOT NULL))
 );
