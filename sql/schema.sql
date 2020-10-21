@@ -79,7 +79,7 @@ CREATE TABLE care_takers_availability (
     end_date        DATE            NOT NULL,
     pet_type        pet_type        NOT NULL,
     daily_price     NUMERIC(10, 2)  NOT NULL CHECK (daily_price > 0),
-    is_oudated      BOOLEAN         NOT NULL DEFAULT false,
+    is_outdated      BOOLEAN         NOT NULL DEFAULT false,
         -- become true when this period become split up when reach max num pets or care taker apply leave
     PRIMARY KEY (care_taker, start_date, end_date, pet_type),
     CONSTRAINT valid_date_range CHECK (start_date <= end_date)
