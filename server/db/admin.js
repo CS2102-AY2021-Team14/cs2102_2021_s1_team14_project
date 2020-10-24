@@ -1,7 +1,6 @@
 const pool = require("./dbPool");
 
 class Admin {
-
   static getUnderperforming() {
     // Define shit here
     return pool.query("SELECT 1");
@@ -13,7 +12,7 @@ class Admin {
   }
 
   static getTotalSalaryToBePaid(month) {
-      return pool.query("SELECT 1");
+    return pool.query("SELECT 1");
   }
 
   static getMonthWithHighestNumberOfJobs() {

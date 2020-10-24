@@ -1,25 +1,31 @@
 import React from "react";
 import Sidebar from "./Sidebar";
 import ROUTES from "../../routes/Routes";
+import * as FaIcons from "react-icons/fa";
 
-const links = [
+const sideBarData = [
     {
+        icon: <FaIcons.FaHome />,
         key: "Home",
         link: ROUTES.PET_OWNER_HOME
     },
     {
+        icon: <FaIcons.FaSearch />,
         key: "Search",
         link: "#"
     },
     {
+        icon: <FaIcons.FaHammer />,
         key: "Bid",
         link: "#"
     },
     {
+        icon: <FaIcons.FaUser />,
         key: "Caretakers",
         link: "#"
     },
     {
+        icon: <FaIcons.FaPaw />,
         key: "Pets",
         link: "#"
     }
@@ -29,7 +35,7 @@ const links = [
 const PetOwnerSidebar = ({ defaultKey }) => {
     return (
         <>
-            <Sidebar defaultKey={defaultKey} links={links} />
+            <Sidebar defaultKey={defaultKey} sideBarData={sideBarData} />
         </>
     );
 };

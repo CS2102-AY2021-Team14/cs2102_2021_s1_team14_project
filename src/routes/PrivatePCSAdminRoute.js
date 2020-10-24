@@ -1,29 +1,59 @@
-import React from "react";
-import { Route, Redirect } from "react-router-dom";
+import React, { useState, useEffect, useContext } from "react";
+import { Route, Redirect, Switch } from "react-router-dom";
+
+import { UserContext } from "../utils/UserProvider";
 
 import ROUTES from "./Routes";
 
-export const PrivatePCSAdminRoute = ({ component: Component, ...rest }) => {
-  let auth = localStorage.getItem("yogapets-token");
+import PcsAdminHome from "../pages/pcsadmin/PcsAdminHome";
+import PcsAdminCareTaker from "../pages/pcsadmin/PcsAdminCareTaker";
 
-  // const token = jwt.decode(auth);
-  // if (!token) {
-  //   return <Redirect to={CONFIG.SIGN_IN_PAGE} />;
-  // }
+const PrivatePCSAdminRoute = props => {
+  const { username, authToken, roles } = useContext(UserContext);
+  // ^ use these to determine whether logged in or not and what role (roles is an array)
+  // roles can be an array containing these stuff ["Pet Owner", "Full-time Care Taker", "Part-time Care Taker", "PCS Admin"]
 
-  const isPCSAdmin = true; //token.role === "pcsadmin";
+  const [auth, setAuth] = useState(null);
+  const [userRoles, setUserRoles] = useState([]);
+
+  useEffect(() => {
+    if (username && authToken) {
+      setAuth({ username, authToken });
+    }
+  }, [username, authToken]);
+
+  useEffect(() => {
+    setUserRoles(roles);
+  }, [roles]);
+
+  const isAuthenticated = () => {
+    return auth != null;
+  };
+
+  const isPcsAdmin = () => {
+    return userRoles.includes("PCS Admin");
+  };
+
   return (
     <Route
-      {...rest}
-      component={(props) =>
-        isPCSAdmin ? (
-          <div>
-            <Component {...props} />
-          </div>
-        ) : (
-          <Redirect to={ROUTES.HOME} />
-        )
-      }
+      {...props}
+      render={props => {
+        if (isAuthenticated() && isPcsAdmin()) {
+          return (
+            <Switch>
+              <Route exact path={ROUTES.ADMIN_HOME}>
+                <PcsAdminHome />
+              </Route>
+
+              <Route exact path={ROUTES.ADMIN_CARE_TAKER}>
+                <PcsAdminCareTaker />
+              </Route>
+            </Switch>
+          );
+        } else {
+          return <div>You are unauthorized!</div>; // TODO: Have a nice looking unauthorized page
+        }
+      }}
     />
   );
 };

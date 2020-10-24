@@ -1,21 +1,26 @@
 import React from "react";
 import Sidebar from "./Sidebar";
 import ROUTES from "../../routes/Routes";
+import * as FaIcons from "react-icons/fa";
 
-const links = [
+const sideBarData = [
     {
+        icon: <FaIcons.FaHome />,
         key: "Home",
         link: ROUTES.ADMIN_HOME
     },
     {
+        icon: <FaIcons.FaBook />,
         key: "Overview",
         link: "#"
     },
     {
+        icon: <FaIcons.FaUser />,
         key: "Caretakers",
         link: "#"
     },
     {
+        icon: <FaIcons.FaPaw />,
         key: "Pets",
         link: "#"
     }
@@ -25,7 +30,7 @@ const links = [
 const AdminSidebar = ({ defaultKey }) => {
     return (
         <>
-            <Sidebar defaultKey={defaultKey} links={links} />
+            <Sidebar defaultKey={defaultKey} sideBarData={sideBarData} />
         </>
     );
 };
