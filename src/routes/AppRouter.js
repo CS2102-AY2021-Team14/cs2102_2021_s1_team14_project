@@ -14,6 +14,9 @@ import Register from "../pages/Register";
 import { UserContext } from "../utils/UserProvider";
 
 import PetOwnerHome from "../pages/petowner/PetOwnerHome";
+import CareTakerHome from '../pages/caretaker/CareTakerHome';
+import CareTakerHistory from '../pages/caretaker/CareTakerHistory';
+import PrivateCareTakerRoute from "./PrivateCareTakerRoute";
 
 const AppRouter = () => {
   const { username, authToken, roles } = useContext(UserContext);
@@ -66,6 +69,12 @@ const AppRouter = () => {
               )
             }
           />
+          <PrivateCareTakerRoute 
+            path={ROUTES.CARE_TAKER_HOME}
+            component={CareTakerHome} />
+          <PrivateCareTakerRoute
+            path={ROUTES.CARE_TAKER_HISTORY}
+            component={CareTakerHistory} />
           <PublicRoute path={ROUTES.HOME} exact={true} component={Home} />
         </Switch>
       </BrowserRouter>

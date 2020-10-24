@@ -9,7 +9,7 @@ const links = [
     },
     {
         key: "History",
-        link: "#"
+        link: ROUTES.CARE_TAKER_HISTORY
     },
     {
         key: "Salary",

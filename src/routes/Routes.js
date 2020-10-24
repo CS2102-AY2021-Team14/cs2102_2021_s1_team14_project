@@ -6,6 +6,7 @@ const ROUTES = {
   PET_OWNER_HOME: '/petowner',
 
   CARE_TAKER_HOME: '/caretaker',
+  CARE_TAKER_HISTORY: '/caretakerhistory',
 
   ADMIN_HOME: '/admin',
 };
