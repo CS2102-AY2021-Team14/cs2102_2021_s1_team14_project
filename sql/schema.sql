@@ -1,4 +1,6 @@
--- -- CREATE DATABASE yogapets;
+-- Uncomment to recreate your database
+-- DROP DATABASE yogapets;
+-- CREATE DATABASE yogapets;
 
 -- changed to separate table as pet owner and care taker may use the same account
 -- CREATE TYPE pcs_user_role AS ENUM ('ADMIN', 'CARETAKER', 'OWNER');
@@ -9,7 +11,7 @@ CREATE TYPE pet_type AS ENUM ('cat', 'dog', 'bird', 'rabbit', 'rodent', 'fish', 
 -- all these 'sub-type' will be category
 
 -- Users
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     user_name       VARCHAR(255)    PRIMARY KEY NOT NULL,
     name            VARCHAR(255),
     user_email      VARCHAR(255),
@@ -24,17 +26,17 @@ CREATE TABLE users (
 -- Example acceptable with bcrypt
 -- INSERT INTO users (user_name, user_email, user_password, user_country, user_address, user_role) VALUES ('rob', 'sean@jon.com', 'zy', 'singapore', 'nus', 'OWNER');
 
-CREATE TABLE pet_owners (
+CREATE TABLE IF NOT EXISTS pet_owners (
     user_name       VARCHAR(255)    PRIMARY KEY REFERENCES users(user_name)
 );
 
-CREATE TABLE care_takers (
+CREATE TABLE IF NOT EXISTS care_takers (
     user_name       VARCHAR(255)    PRIMARY KEY REFERENCES users(user_name),
     is_part_time    BOOLEAN         NOT NULL,
     introduction    VARCHAR
 );
 
-CREATE TABLE pcs_admins (
+CREATE TABLE IF NOT EXISTS pcs_admins (
     user_name       VARCHAR(255)    PRIMARY KEY REFERENCES users(user_name)
 );
 
@@ -49,14 +51,14 @@ CREATE VIEW user_roles (user_name, role, is_part_time) AS
         is_part_time
     FROM users LEFT JOIN care_takers ON users.user_name = care_takers.user_name;
 
-CREATE TABLE pets (
+CREATE TABLE IF NOT EXISTS pets (
     name            VARCHAR(255)    NOT NULL,
     owner           VARCHAR(255)    NOT NULL REFERENCES pet_owners(user_name)     ON DELETE CASCADE,
     type            pet_type        NOT NULL,
     PRIMARY KEY (name, owner)
 );
 
-CREATE TABLE pet_category ( -- used for browsing, can be breed, specific details about the type, etc
+CREATE TABLE IF NOT EXISTS pet_category ( -- used for browsing, can be breed, specific details about the type, etc
     name            VARCHAR(255),
     owner           VARCHAR(255),
     category        VARCHAR(255)    NOT NULL,
@@ -64,7 +66,7 @@ CREATE TABLE pet_category ( -- used for browsing, can be breed, specific details
     PRIMARY KEY (name, owner, category)
 );
 
-CREATE TABLE pet_special_requirements (
+CREATE TABLE IF NOT EXISTS pet_special_requirements (
     name            VARCHAR(255),
     owner           VARCHAR(255),
     requirement     VARCHAR         NOT NULL,
@@ -73,7 +75,7 @@ CREATE TABLE pet_special_requirements (
     PRIMARY KEY (name, owner, requirement)
 );
 
-CREATE TABLE base_prices (
+CREATE TABLE IF NOT EXISTS base_prices (
     specified_by    VARCHAR(255)    REFERENCES pcs_admins(user_name),
     pet_type        pet_type        PRIMARY KEY,
     base_price      NUMERIC(10, 2)  NOT NULL CHECK (base_price > 0) -- max 2 d.p.
@@ -84,21 +86,23 @@ CREATE TABLE base_prices (
 -- for part timer, price is part timer set one
 -- for full timer, price is based on base_prices + avg rating proportion
 -- when we INSERT price i think can use CASE or smthg to set price by case
-CREATE TABLE care_takers_availability (
+CREATE TABLE IF NOT EXISTS care_takers_availability (
     care_taker      VARCHAR(255)    NOT NULL REFERENCES care_takers(user_name)    ON DELETE CASCADE, 
-    start_date      DATE            NOT NULL,
-    end_date        DATE            NOT NULL,
-    pet_type        pet_type        NOT NULL,
+    available_date  DATE            NOT NULL,
     daily_price     NUMERIC(10, 2)  NOT NULL CHECK (daily_price > 0),
-    is_outdated      BOOLEAN         NOT NULL DEFAULT false,
-        -- become true when this period become split up when reach max num pets or care taker apply leave
-    PRIMARY KEY (care_taker, start_date, end_date, pet_type),
-    CONSTRAINT valid_date_range CHECK (start_date <= end_date)
+    PRIMARY KEY (care_taker, available_date),
+);
+
+-- Table takes care of relation between a pet_type and care_takers
+CREATE TABLE IF NOT EXISTS care_takers_pet_preferences (
+    care_taker      VARCHAR(255)    NOT NULL REFERENCES care_takers(user_name)      ON DELETE CASCADE,
+    pet_type        pet_type        NOT NULL, 
+    PRIMARY KEY (care_taker, pet_type)
 );
 
 -- need trigger for constraint where care taker is holding on to max num of pets already
 -- trigger to auto accept acceptable bid for full timers
-CREATE TABLE bids (
+CREATE TABLE IF NOT EXISTS bids (
     pet             VARCHAR(255)    NOT NULL,
     owner           VARCHAR(255)    NOT NULL,
     care_taker      VARCHAR(255)    NOT NULL,
@@ -125,7 +129,7 @@ CREATE TABLE bids (
 );
 
 -- trigger to update amount and pet day
-CREATE TABLE salary (
+CREATE TABLE IF NOT EXISTS salary (
     care_taker      VARCHAR(255)    NOT NULL REFERENCES care_takers(user_name)    ON DELETE CASCADE,
     month           CHAR(3)         NOT NULL, -- 3 letter month
     year            CHAR(4)         NOT NULL, -- 4 letter year
