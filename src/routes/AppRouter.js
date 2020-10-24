@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useContext } from "react";
+import React, { Fragment, useState, useContext, useEffect } from "react";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -20,11 +20,24 @@ const AppRouter = () => {
   // ^ use these to determine whether logged in or not and what role (roles is an array)
   // roles can be an array containing these stuff ["Pet Owner", "Full-time Care Taker", "Part-time Care Taker", "PCS Admin"]
 
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [auth, setAuth] = useState(null);
+  const [userRoles, setUserRoles] = useState([]);
 
-  const setAuth = boolean => {
-    setIsAuthenticated(boolean);
-  };
+  useEffect(() => {
+    setAuth({ username, authToken });
+  }, [username, authToken]);
+
+  useEffect(() => {
+    setUserRoles(roles);
+  }, [roles]);
+
+  const isAuthenticated = () => auth != null;
+
+  const isPetOwner = () => userRoles.includes("Pet Owner");
+  const isCareTaker = () =>
+    userRoles.includes("Full-time Care Taker") ||
+    userRoles.includes("Part-time Care Taker");
+  const isPcsAdmin = () => userRoles.includes("PCS Admin");
 
   return (
     <Fragment>
@@ -39,8 +52,8 @@ const AppRouter = () => {
           <Route
             path={ROUTES.REGISTER}
             render={props =>
-              !isAuthenticated ? (
-                <Register {...props} setAuth={setAuth} />
+              !isAuthenticated() ? (
+                <Register {...props} />
               ) : (
                 <Redirect to={ROUTES.SIGN_IN} />
               )
@@ -49,8 +62,8 @@ const AppRouter = () => {
           <Route
             path={ROUTES.SIGN_IN}
             render={props =>
-              !isAuthenticated ? (
-                <SignIn {...props} setAuth={setAuth} />
+              !isAuthenticated() ? (
+                <SignIn {...props} />
               ) : (
                 <Redirect to={ROUTES.PET_OWNER_HOME} />
               )
@@ -59,7 +72,7 @@ const AppRouter = () => {
           <Route
             path={ROUTES.PET_OWNER_HOME}
             render={props =>
-              isAuthenticated ? (
+              isAuthenticated() ? (
                 <PetOwnerHome {...props} />
               ) : (
                 <Redirect to={ROUTES.SIGN_IN} />
