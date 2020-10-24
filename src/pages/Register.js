@@ -12,7 +12,7 @@ import { UserContext } from "../utils/UserProvider";
 import styles from "./Register.module.css";
 
 const Register = () => {
-  const { setUsername, setAuthToken } = useContext(UserContext);
+  const { setUsername, setAuthToken, setRoles } = useContext(UserContext);
 
   const [inputs, setInputs] = useState({
     username: "",
@@ -21,7 +21,7 @@ const Register = () => {
     confirmPassword: "",
     country: "",
     address: "",
-    role: "ADMIN",
+    role: "Pet Owner",
   });
 
   const {
@@ -59,11 +59,14 @@ const Register = () => {
       .then(response => {
         const { data } = response;
 
+        console.log(response); // TODO: remove this line
+
         setAuthToken(data.token);
         setUsername(data.username);
+        setRoles([data.role]);
       })
       .catch(error => {
-        toast.error(error);
+        toast.error(error.response.data);
       });
 
     console.log(
@@ -175,9 +178,15 @@ const Register = () => {
             </Form.Label>
             <Col sm="10">
               <Form.Control as="select" name="role" onChange={e => onChange(e)}>
-                <option value="ADMIN">ADMIN</option>
-                <option value="CARETAKER">CARETAKER</option>
-                <option value="OWNER">OWNER</option>
+                <option value="PCS Admin">PCS Admin</option>
+                <option value="Full-time Care Taker">
+                  Full-time Care Taker
+                </option>
+                <option value="Part-time Care Taker">
+                  Part-time Care Taker
+                </option>
+
+                <option value="Pet Owner">Pet Owner</option>
               </Form.Control>
             </Col>
           </Form.Group>

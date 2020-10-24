@@ -12,9 +12,11 @@ import { UserContext } from "../utils/UserProvider";
 import styles from "./SignIn.module.css";
 
 const SignIn = () => {
-  const { setUsername: setContextUsername, setAuthToken } = useContext(
-    UserContext
-  );
+  const {
+    setUsername: setContextUsername,
+    setAuthToken,
+    setRoles,
+  } = useContext(UserContext);
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -26,7 +28,6 @@ const SignIn = () => {
     console.log(`Form submitted, Username: ${username}, Password: ${password}`);
 
     const body = { username, password };
-
     axios
       .post("/api/auth/login", body)
       .then(response => {
@@ -34,11 +35,12 @@ const SignIn = () => {
 
         setAuthToken(data.token);
         setContextUsername(data.username);
+        setRoles(data.roles);
 
         // Decode token and check for petowner/caretaker/admin
       })
       .catch(error => {
-        toast.error(error);
+        toast.error(error.response.data);
       });
   };
 
