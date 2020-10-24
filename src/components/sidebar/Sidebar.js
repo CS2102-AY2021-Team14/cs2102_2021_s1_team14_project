@@ -14,7 +14,7 @@ const Sidebar = ({
                     {sideBarData.map(item => 
                         {return (
                             <Fragment>
-                                <Nav.Link key={item.key} eventKey={item.key} href={item.link}>{item.icon} {item.key}</Nav.Link>
+                                <Nav.Link key={item.key} eventKey={item.key} href={item.link}> <div className="sidebar-tag">{item.icon} {item.key}</div></Nav.Link>
                             </Fragment>
                         );}
                     )}
