@@ -11,7 +11,7 @@ const PetOwnerSearch = () => {
       <Container fluid>
         <Row className="justify-content-md-center">
           <Col xs={3} id="sidebar">
-            <PetOwnerSidebar defaultKey={"Home"} />
+            <PetOwnerSidebar defaultKey={"Search"} />
           </Col>
           <Col xs={9} id="page-content">
             Page Content Goes Into Here. test

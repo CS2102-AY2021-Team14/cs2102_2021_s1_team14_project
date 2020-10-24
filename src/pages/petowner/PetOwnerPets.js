@@ -22,15 +22,11 @@ const MOCK_DATA = [
   },
   {
     petName: "doggow00f",
-    petType: "Cat",
-    petOwner: "owner username",
-    petOwnerName: "owner name",
-    petCategories: ["Small Cat", "Four-legged"],
-    petSpecialRequirements: [
-      "Requires 10 feedings per day",
-      "Only eats $100 cat food",
-      "Hates rats",
-    ],
+    petType: "Dog",
+    petOwner: "owner2 username",
+    petOwnerName: "owner2 name",
+    petCategories: ["Big Dog", "Chihuahua"],
+    petSpecialRequirements: ["Needs collar"],
   },
 ];
 
@@ -41,7 +37,7 @@ const PetOwnerPets = () => {
       <Container fluid>
         <Row className="justify-content-md-center">
           <Col xs={3} id="sidebar">
-            <PetOwnerSidebar defaultKey={"Home"} />
+            <PetOwnerSidebar defaultKey={"Pets"} />
           </Col>
           <Col>
             <Card style={{ margin: 10 }}>
