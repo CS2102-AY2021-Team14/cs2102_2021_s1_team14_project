@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS care_takers_availability (
     care_taker      VARCHAR(255)    NOT NULL REFERENCES care_takers(user_name)    ON DELETE CASCADE, 
     available_date  DATE            NOT NULL,
     daily_price     NUMERIC(10, 2)  NOT NULL CHECK (daily_price > 0),
-    PRIMARY KEY (care_taker, available_date),
+    PRIMARY KEY (care_taker, available_date)
 );
 
 -- Table takes care of relation between a pet_type and care_takers
@@ -106,10 +106,6 @@ CREATE TABLE IF NOT EXISTS bids (
     pet             VARCHAR(255)    NOT NULL,
     owner           VARCHAR(255)    NOT NULL,
     care_taker      VARCHAR(255)    NOT NULL,
-    care_taker_availability_start
-                    DATE            NOT NULL,
-    care_taker_availability_end
-                    DATE            NOT NULL,
     pet_type        pet_type        NOT NULL,         
     start_date      DATE            NOT NULL,
     end_date        DATE            NOT NULL,
@@ -121,8 +117,8 @@ CREATE TABLE IF NOT EXISTS bids (
     review_text     VARCHAR,
     PRIMARY KEY (pet, care_taker, start_date, end_date),
     FOREIGN KEY (pet, owner) REFERENCES pets(name, owner),
-    FOREIGN KEY (care_taker, care_taker_availability_start, care_taker_availability_end, pet_type)
-        REFERENCES care_takers_availability(care_taker, start_date, end_date, pet_type),
+    FOREIGN KEY (care_taker, pet_type)
+        REFERENCES care_takers_pet_preferences(care_taker, pet_type),
     CONSTRAINT valid_date_range CHECK (start_date <= end_date),
     CONSTRAINT successful_bid_constraint CHECK 
         ((NOT is_successful) OR (payment_type IS NOT NULL AND transfer_method IS NOT NULL))
@@ -138,10 +134,11 @@ CREATE TABLE IF NOT EXISTS salary (
     PRIMARY KEY (care_taker, month, year)
 );
 
-CREATE VIEW ratings AS
+CREATE VIEW ratings AS (
     SELECT care_taker, pet_type, rating, review_text
     FROM bids
-    WHERE rating IS NOT NULL;
+    WHERE rating IS NOT NULL
+);
 
 CREATE VIEW care_takers_rating AS
     SELECT care_taker, AVG(rating) AS avg_rating
