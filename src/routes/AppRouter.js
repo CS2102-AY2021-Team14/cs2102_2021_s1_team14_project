@@ -14,16 +14,6 @@ import Home from "../pages/Home";
 import SignIn from "../pages/SignIn";
 import Register from "../pages/Register";
 
-<<<<<<< HEAD
-import { UserContext } from "../utils/UserProvider";
-
-import PetOwnerHome from "../pages/petowner/PetOwnerHome";
-import CareTakerHome from '../pages/caretaker/CareTakerHome';
-import CareTakerHistory from '../pages/caretaker/CareTakerHistory';
-import PrivateCareTakerRoute from "./PrivateCareTakerRoute";
-
-=======
->>>>>>> 81df8a3946881114a6012ecc30a2e6e96be4034a
 const AppRouter = () => {
   return (
     <Fragment>
