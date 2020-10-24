@@ -1,29 +1,62 @@
-import React from "react";
-import { Route, Redirect } from "react-router-dom";
+import React, { useState, useEffect, useContext } from "react";
+import { Route, Redirect, Switch } from "react-router-dom";
+
+import { UserContext } from "../utils/UserProvider";
 
 import ROUTES from "./Routes";
 
-export const PrivateCareTakerRoute = ({ component: Component, ...rest }) => {
-  let auth = localStorage.getItem("yogapets-token");
+import CareTakerHome from "../pages/caretaker/CareTakerHome";
+import CareTakerSalary from "../pages/caretaker/CareTakerSalary";
 
-  // const token = jwt.decode(auth);
-  // if (!token) {
-  //   return <Redirect to={CONFIG.SIGN_IN_PAGE} />;
-  // }
+const PrivateCareTakerRoute = props => {
+  const { username, authToken, roles } = useContext(UserContext);
+  // ^ use these to determine whether logged in or not and what role (roles is an array)
+  // roles can be an array containing these stuff ["Pet Owner", "Full-time Care Taker", "Part-time Care Taker", "PCS Admin"]
 
-  const isCareTaker = true; //token.role === "caretaker";
+  const [auth, setAuth] = useState(null);
+  const [userRoles, setUserRoles] = useState([]);
+
+  useEffect(() => {
+    if (username && authToken) {
+      setAuth({ username, authToken });
+    }
+  }, [username, authToken]);
+
+  useEffect(() => {
+    setUserRoles(roles);
+  }, [roles]);
+
+  const isAuthenticated = () => {
+    return auth != null;
+  };
+
+  const isCareTaker = () => {
+    return (
+      userRoles.includes("Full-time Care Taker") ||
+      userRoles.includes("Part-time Care Taker")
+    );
+  };
+
   return (
     <Route
-      {...rest}
-      component={props =>
-        isCareTaker ? (
-          <div>
-            <Component {...props} />
-          </div>
-        ) : (
-          <Redirect to={ROUTES.HOME} />
-        )
-      }
+      {...props}
+      render={props => {
+        if (isAuthenticated() && isCareTaker()) {
+          return (
+            <Switch>
+              <Route exact path={ROUTES.CARE_TAKER_HOME}>
+                <CareTakerHome />
+              </Route>
+
+              <Route exact path={ROUTES.CARE_TAKER_SALARY}>
+                <CareTakerSalary />
+              </Route>
+            </Switch>
+          );
+        } else {
+          return <div>You are unauthorized!</div>; // TODO: Have a nice looking unauthorized page
+        }
+      }}
     />
   );
 };

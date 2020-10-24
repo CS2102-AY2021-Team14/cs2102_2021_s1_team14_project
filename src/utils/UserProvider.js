@@ -14,7 +14,10 @@ function UserProvider(props) {
 
     setUsername(storageUsername);
     setAuthToken(storageAuthToken);
-    setRoles(storageRoles);
+
+    if (storageRoles) {
+      setRoles(storageRoles);
+    }
   }, []);
 
   return (

@@ -4,7 +4,27 @@ import { Container, Row, Col } from "react-bootstrap";
 import PetOwnerSidebar from "../../components/sidebar/PetOwnerSidebar";
 import Navbar from "../../components/Navbar";
 
-const PetOwnerHome = () => {
+const PetOwnerSearch = () => {
+  let isPetOwner;
+  async function getRole() {
+    try {
+      const response = await fetch("/api/dashboard", {
+        method: "GET",
+        headers: { token: localStorage.token },
+      });
+
+      const parseRes = await response.json();
+
+      isPetOwner = parseRes.user_role === "OWNER";
+      // console.log(parseRes.user_role.toString());
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  useEffect(() => {
+    getRole();
+  }, []);
 
   return (
     <div>
@@ -23,4 +43,4 @@ const PetOwnerHome = () => {
   );
 };
 
-export default PetOwnerHome;
+export default PetOwnerSearch;

@@ -1,18 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React,  { useState, useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
-
-import PetOwnerSidebar from "../../components/sidebar/PetOwnerSidebar";
 import Navbar from "../../components/Navbar";
+import AdminSidebar from "../../components/sidebar/AdminSidebar";
 
-const PetOwnerHome = () => {
-
+const PcsAdminHome = () => {
   return (
     <div>
       <Navbar />
       <Container fluid>
         <Row className="justify-content-md-center">
           <Col xs={3} id="sidebar">
-            <PetOwnerSidebar defaultKey={"Home"} />
+          <AdminSidebar defaultKey={"Home"} />
           </Col>
           <Col xs={9} id="page-content">
             Page Content Goes Into Here.
@@ -23,4 +21,4 @@ const PetOwnerHome = () => {
   );
 };
 
-export default PetOwnerHome;
+export default PcsAdminHome;
