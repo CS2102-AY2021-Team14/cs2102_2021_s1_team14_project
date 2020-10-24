@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
-// import { useHistory } from 'react-router-dom';
 
 import PetOwnerSidebar from "../../components/sidebar/PetOwnerSidebar";
 import Navbar from "../../components/Navbar";
 
 const PetOwnerSearch = () => {
-  // const history = useHistory();
   let isPetOwner;
   async function getRole() {
     try {

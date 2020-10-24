@@ -48,7 +48,6 @@ export const PublicRoute = ({ path, component: Component, ...rest }) => {
       {...rest}
       path={path}
       render={props =>
-        // !isAuthenticated() || path == ROUTES.HOME ? (
         !isAuthenticated() ? (
           <Component {...props} />
         ) : (
