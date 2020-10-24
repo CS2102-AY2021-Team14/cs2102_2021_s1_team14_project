@@ -38,6 +38,17 @@ CREATE TABLE pcs_admins (
     user_name       VARCHAR(255)    PRIMARY KEY REFERENCES users(user_name)
 );
 
+CREATE VIEW user_roles (user_name, role, is_part_time) AS
+    SELECT users.user_name, CASE 
+            WHEN EXISTS (SELECT user_name FROM pet_owners WHERE user_name = users.user_name) AND 
+                EXISTS (SELECT user_name FROM care_takers WHERE user_name = users.user_name) THEN 'Pet Owner and Care Taker'
+            WHEN EXISTS (SELECT user_name FROM pet_owners WHERE user_name = users.user_name) THEN 'Pet Owner'
+            WHEN EXISTS (SELECT user_name FROM care_takers WHERE user_name = users.user_name) THEN 'Care Taker'
+            WHEN EXISTS (SELECT user_name FROM pcs_admins WHERE user_name = users.user_name) THEN 'PCS Admin'
+        END AS role,
+        is_part_time
+    FROM users LEFT JOIN care_takers ON users.user_name = care_takers.user_name;
+
 CREATE TABLE pets (
     name            VARCHAR(255)    NOT NULL,
     owner           VARCHAR(255)    NOT NULL REFERENCES pet_owners(user_name)     ON DELETE CASCADE,
