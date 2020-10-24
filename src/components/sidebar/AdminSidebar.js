@@ -22,7 +22,7 @@ const sideBarData = [
     {
         icon: <FaIcons.FaPaw />,
         key: "Pets",
-        link: "#"
+        link: ROUTES.ADMIN_PET_INFO
     }
 
 ];

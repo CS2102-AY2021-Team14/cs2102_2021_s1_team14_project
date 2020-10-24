@@ -7,6 +7,7 @@ import ROUTES from "./Routes";
 
 import PcsAdminHome from "../pages/pcsadmin/PcsAdminHome";
 import PcsAdminCareTaker from "../pages/pcsadmin/PcsAdminCareTaker";
+import PcsAdminPetInfo from "../pages/pcsadmin/PcsAdminPetInfo";
 
 const PrivatePCSAdminRoute = props => {
   const { username, authToken, roles } = useContext(UserContext);
@@ -44,7 +45,9 @@ const PrivatePCSAdminRoute = props => {
               <Route exact path={ROUTES.ADMIN_HOME}>
                 <PcsAdminHome />
               </Route>
-
+              <Route exact path={ROUTES.ADMIN_PET_INFO}>
+                <PcsAdminPetInfo />
+              </Route>
               <Route exact path={ROUTES.ADMIN_CARE_TAKER}>
                 <PcsAdminCareTaker />
               </Route>

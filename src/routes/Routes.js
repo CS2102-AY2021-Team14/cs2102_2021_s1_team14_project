@@ -10,6 +10,7 @@ const ROUTES = {
   CARE_TAKER_SALARY: "/careTaker/salary",
 
   ADMIN_HOME: "/admin",
+  ADMIN_PET_INFO: "/admin/petinfo",
   ADMIN_CARE_TAKER: "/admin/careTakers",
 };
 
