@@ -7,7 +7,7 @@
     border: 2px solid #364F6B;
 }
 
-#userinfo {
+.userinfo {
     text-align: left;
     margin-top: 2vh;
     padding: 1.5vh;
@@ -28,7 +28,7 @@
     font-weight: 600;
 }
 
-h4, p, h5 {
+.userinfo h4, .userinfo p, .userinfo h5 {
     margin: 0;
     padding: 0;
     color: white;
