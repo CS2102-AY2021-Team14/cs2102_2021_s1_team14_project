@@ -3,9 +3,9 @@ import { Button, Card, Badge } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import { MdPerson, MdPets, MdDateRange } from "react-icons/md";
 
-import "./BidCard.css";
+import "./PetCard.css";
 
-const BidCard = props => {
+const PetCard = props => {
   const {
     careTakerName,
     petName,
@@ -66,6 +66,7 @@ const BidCard = props => {
     }
   };
 
+  // TODO
   return (
     <Card className="container">
       <Card.Body className="bodyContainer">
@@ -104,4 +105,4 @@ const BidCard = props => {
   );
 };
 
-export default BidCard;
+export default PetCard;
