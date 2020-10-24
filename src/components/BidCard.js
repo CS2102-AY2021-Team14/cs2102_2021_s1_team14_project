@@ -67,8 +67,8 @@ const BidCard = props => {
   };
 
   return (
-    <Card className="container">
-      <Card.Body className="bodyContainer">
+    <Card className="bidCardContainer">
+      <Card.Body className="bidCardBodyContainer">
         <Card.Title>
           Bid
           <span className="badgeContainer">
