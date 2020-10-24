@@ -1,25 +1,31 @@
 import React from "react";
 import Sidebar from "./Sidebar";
 import ROUTES from "../../routes/Routes";
+import * as FaIcons from "react-icons/fa"
 
-const links = [
+const sideBarData = [
     {
+        icon: <FaIcons.FaHome />,
         key: "Home",
         link: ROUTES.CARE_TAKER_HOME
     },
     {
+        icon: <FaIcons.FaClock />,
         key: "History",
         link: "#"
     },
     {
+        icon: <FaIcons.FaDollarSign />,
         key: "Salary",
         link: "#"
     },
     {
+        icon: <FaIcons.FaBookOpen />,
         key: "Availability",
         link: "#"
     },
     {
+        icon: <FaIcons.FaCog />,
         key: "Settings",
         link: "#"
     }
@@ -29,7 +35,7 @@ const links = [
 const CaretakerSidebar = ({ defaultKey }) => {
     return (
         <>
-            <Sidebar defaultKey={defaultKey} links={links} />
+            <Sidebar defaultKey={defaultKey} sideBarData={sideBarData} />
         </>
     );
 };

@@ -5,6 +5,7 @@
   border: 2px solid black;
   border-radius: 10px;
   color: white;
+  z-index: 100;
 }
 
 a {
@@ -19,4 +20,8 @@ a {
 .nav-link:hover {
   color: white;
   background-color: lightblue;
+}
+
+.sidebar-tag {
+  display: inline;
 }
