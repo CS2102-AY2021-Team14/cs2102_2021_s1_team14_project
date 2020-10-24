@@ -25,7 +25,7 @@ const SignIn = ({ setAuth }) => {
 
         const token = JSON.parse(response.data).token;
         // setCurrentAuth(token);
-        
+
         // Decode token and check for petowner/caretaker/admin
 
       }).catch(error => {
