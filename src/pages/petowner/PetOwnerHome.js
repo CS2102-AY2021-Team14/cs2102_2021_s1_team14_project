@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col } from 'react-bootstrap';
 // import { useHistory } from 'react-router-dom';
 
@@ -7,6 +7,26 @@ import Navbar from "../../components/Navbar";
 
 const PetOwnerHome = () => {
   // const history = useHistory();
+  let isPetOwner;
+  async function getRole() {
+    try {
+      const response = await fetch("/api/dashboard", {
+        method: "GET",
+        headers: { token: localStorage.token }
+      });
+
+      const parseRes = await response.json();
+      
+      isPetOwner = parseRes.user_role === "OWNER"
+      // console.log(parseRes.user_role.toString());
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  useEffect(() => {
+    getRole();
+  }, []);
 
   return (
     <div>
