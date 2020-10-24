@@ -6,8 +6,18 @@ import AdminSidebar from "../../components/sidebar/AdminSidebar";
 const PcsAdminPetInfo = () => {
   return (
     <div>
-      hello
-    </div>
+    <Navbar />
+    <Container fluid>
+      <Row className="justify-content-md-center">
+        <Col xs={3} id="sidebar">
+        <AdminSidebar defaultKey={"Pets"} />
+        </Col>
+        <Col xs={9} id="page-content">
+          Page Content Goes Into Here.
+        </Col>
+      </Row>
+    </Container>
+  </div>
   );
 };
 
