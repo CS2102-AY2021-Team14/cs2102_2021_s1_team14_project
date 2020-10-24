@@ -13,9 +13,8 @@ class Bids {
     ]);
   }
 
-  static deleteBid(pet, care_taker, start_date, end_date) {
+  static setInactiveBid(pet, care_taker, start_date, end_date) {
     // Cannot delete successful bids
-
     pool.query(
       `
       UPDATE bids 
@@ -27,10 +26,6 @@ class Bids {
   }
 
   static addReview(pet, care_taker, start_date, end_date, rating, review_text) {
-    // TODO: proper SQL query
-    // return pool.query("SELECT avg_rating FROM care_takers_rating care_taker = $1;", [user_name]);
-    // return pool.query("SELECT 1");
-
     pool.query(
       `
       UPDATE bids
@@ -49,8 +44,7 @@ class Bids {
     payment_type,
     transfer_method
   ) {
-    // Trigger to update salary of care_taker
-
+    // Trigger to update salary of care_taker?
     pool.query(
       `
       UPDATE bids

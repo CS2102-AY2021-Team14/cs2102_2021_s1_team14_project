@@ -287,16 +287,3 @@ END IF;
 RETURN NEW;
 END; $$ LANGUAGE plpgsql;
 
--- INSERT INTO users VALUES ('seanlowjk', 'seanlowjk', 'seanlowjk', 'seanlowjk', 'seanlowjk', 'seanlowjk');
--- INSERT INTO care_takers VALUES ('seanlowjk', false, 'sample.txt');
--- INSERT INTO care_takers_availability VALUES ('seanlowjk', '28-10-1999', 69);
--- INSERT INTO care_takers_availability VALUES ('seanlowjk', '29-10-1999', 69);
--- INSERT INTO care_takers_availability VALUES ('seanlowjk', '30-10-1999', 69);
--- INSERT INTO pet_owners VALUES ('seanlowjk');
--- INSERT INTO pets VALUES ('seanlowjk', 'seanlowjk', 'dog');
--- INSERT INTO bids VALUES ('seanlowjk', 'seanlowjk', 'seanlowjk', 'dog', '28-10-1999', '28-10-1999');
--- INSERT INTO bids VALUES ('seanlowjk', 'seanlowjk', 'seanlowjk', 'dog', '28-10-1999', '31-10-1999');
--- INSERT INTO care_takers_pet_preferences VALUES ('seanlowjk', 'dog');
--- SELECT COUNT(*) 
---     FROM care_takers_availability
---     WHERE care_taker = 'seanlowjk' AND available_date >= '28-10-1999' AND available_date <= '28-10-1999';
