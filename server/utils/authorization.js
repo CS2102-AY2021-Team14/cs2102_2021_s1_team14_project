@@ -1,5 +1,4 @@
 const jwt = require("jsonwebtoken");
-require("dotenv").config();
 
 // Check if JWT is valid
 module.exports = async (req, res, next) => {
