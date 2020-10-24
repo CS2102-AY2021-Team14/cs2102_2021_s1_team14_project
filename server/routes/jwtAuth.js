@@ -14,12 +14,12 @@ router.post("/register", validator, async (req, res) => {
         // Destructure the req body
         const {
             username,
+            name,
             email,
             password,
             confirmPassword,
             country,
-            address,
-            role
+            address
         } = req.body;
 
         if (password !== confirmPassword) {
@@ -47,27 +47,27 @@ router.post("/register", validator, async (req, res) => {
 
         const newUser = await pool.query(
             `INSERT INTO users (
-                user_name, 
+                user_name,
+                name, 
                 user_email, 
                 user_password, 
                 user_country,
-                user_address,
-                user_role
+                user_address
             ) VALUES (
                 $1,
                 $2,
                 $3,
                 $4,
                 $5,
-                $6 
+                $6
             ) RETURNING *`,
             [
                 username,
+                name,
                 email,
                 bcryptPassword,
                 country,
-                address,
-                role
+                address
             ]
         );
 

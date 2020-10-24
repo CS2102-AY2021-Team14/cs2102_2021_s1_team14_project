@@ -2,12 +2,12 @@ module.exports = async (req, res, next) => {
     // const { email, name, password } = req.body;
     const {
         username,
+        name,
         email,
         password,
         confirmPassword,
         country,
-        address,
-        role
+        address
     } = req.body;
 
     // check if email provided is valid
