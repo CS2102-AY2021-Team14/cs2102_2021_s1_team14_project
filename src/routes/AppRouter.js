@@ -30,11 +30,11 @@ const AppRouter = () => {
 
           <PublicRoute path={ROUTES.SIGN_IN} exact={true} component={SignIn} />
 
-          <PrivatePetOwnerRoute path={ROUTES.PET_OWNER_HOME} exact={true} />
+          <PrivatePetOwnerRoute path={ROUTES.PET_OWNER_HOME} />
 
-          <PrivateCareTakerRoute path={ROUTES.CARE_TAKER_HOME} exact={true} />
+          <PrivateCareTakerRoute path={ROUTES.CARE_TAKER_HOME} />
 
-          <PrivatePCSAdminRoute path={ROUTES.ADMIN_HOME} exact={true} />
+          <PrivatePCSAdminRoute path={ROUTES.ADMIN_HOME} />
         </Switch>
       </BrowserRouter>
     </Fragment>
