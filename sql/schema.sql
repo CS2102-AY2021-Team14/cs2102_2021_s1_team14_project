@@ -155,8 +155,8 @@ CREATE VIEW care_takers_rating AS
     GROUP BY care_taker;
 
 -- Trigger to check if 2 * 150 consecutive days is fulfilled when adding a leave 
-INSERT INTO care_taker_leaves VALUES('seanlowjk', '2020-01-02');
-INSERT INTO care_taker_leaves VALUES('seanlowjk', '2020-09-01');
+-- INSERT INTO care_taker_leaves VALUES('seanlowjk', '2020-01-02');
+-- INSERT INTO care_taker_leaves VALUES('seanlowjk', '2020-09-01');
 
 CREATE TRIGGER checkAbleToTakeLeave
 BEFORE INSERT ON care_taker_leaves
@@ -173,7 +173,7 @@ RETURN NULL;
 END; $$ LANGUAGE plpgsql;
 
 -- See if the caretaker can take the leave on the date specified or not. 
-SELECT canTakeLeave('seanlowjk', '2020-01-01');
+-- SELECT canTakeLeave('seanlowjk', '2020-01-01');
 CREATE OR REPLACE FUNCTION canTakeLeave(the_care_taker VARCHAR(255), the_leave_date date) 
 RETURNS BOOLEAN
 AS
@@ -273,3 +273,30 @@ EXECUTE PROCEDURE autoAcceptFullTimerBidFunction();
 CREATE OR REPLACE FUNCTION autoAcceptFullTimerBidFunction()
 RETURNS TRIGGER AS 
 $$ BEGIN
+IF (((SELECT COUNT(*)
+    FROM bids 
+    WHERE care_taker = NEW.care_taker AND start_date >= NEW.start_date AND end_date <= NEW.end_date AND is_successful) < 5)
+    AND 
+    (SELECT is_part_time FROM care_takers WHERE user_name = NEW.care_taker)
+    )
+THEN
+NEW.is_successful := TRUE;
+NEW.payment_type := 'Cash';
+NEW.transfer_method := 'Pet Owner Deliver';
+END IF;
+RETURN NEW;
+END; $$ LANGUAGE plpgsql;
+
+-- INSERT INTO users VALUES ('seanlowjk', 'seanlowjk', 'seanlowjk', 'seanlowjk', 'seanlowjk', 'seanlowjk');
+-- INSERT INTO care_takers VALUES ('seanlowjk', false, 'sample.txt');
+-- INSERT INTO care_takers_availability VALUES ('seanlowjk', '28-10-1999', 69);
+-- INSERT INTO care_takers_availability VALUES ('seanlowjk', '29-10-1999', 69);
+-- INSERT INTO care_takers_availability VALUES ('seanlowjk', '30-10-1999', 69);
+-- INSERT INTO pet_owners VALUES ('seanlowjk');
+-- INSERT INTO pets VALUES ('seanlowjk', 'seanlowjk', 'dog');
+-- INSERT INTO bids VALUES ('seanlowjk', 'seanlowjk', 'seanlowjk', 'dog', '28-10-1999', '28-10-1999');
+-- INSERT INTO bids VALUES ('seanlowjk', 'seanlowjk', 'seanlowjk', 'dog', '28-10-1999', '31-10-1999');
+-- INSERT INTO care_takers_pet_preferences VALUES ('seanlowjk', 'dog');
+-- SELECT COUNT(*) 
+--     FROM care_takers_availability
+--     WHERE care_taker = 'seanlowjk' AND available_date >= '28-10-1999' AND available_date <= '28-10-1999';
