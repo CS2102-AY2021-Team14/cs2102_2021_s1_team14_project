@@ -4,10 +4,14 @@
 }
 
 .badgeContainer {
-  margin: 6px;
+  margin: 12px;
 }
 
 .button {
   float: right;
   margin: 0 0 0 10px;
+}
+
+.iconContainer {
+  margin: 0 4px 0 0;
 }

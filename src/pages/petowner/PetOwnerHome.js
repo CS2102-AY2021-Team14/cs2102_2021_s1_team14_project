@@ -16,7 +16,15 @@ const PetOwnerHome = () => {
           </Col>
           <Col xs={9} id="page-content">
             <Col>
-              <BidCard />
+              <BidCard
+                careTakerName="care taker"
+                petName="meowzers"
+                petType="Cat"
+                startDate="20/10/2020"
+                endDate="24/10/20202"
+                isSuccessful={true}
+                isActive={true}
+              />
             </Col>
           </Col>
         </Row>

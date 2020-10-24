@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Card, Badge } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
+import { MdPerson, MdPets, MdDateRange } from "react-icons/md";
 
 import ROUTES from "../routes/Routes";
 
@@ -69,6 +70,7 @@ const BidCard = props => {
     }
   };
 
+  // add icons
   return (
     <Card>
       <Card.Body className="container">
@@ -79,9 +81,25 @@ const BidCard = props => {
           </span>
         </Card.Title>
         <Card.Text>
-          <div>Care Taker: {careTakerName}</div>
-          <div>Pet: {petName}</div>
           <div>
+            <span className="iconContainer">
+              <MdPerson />
+            </span>
+            Care Taker: {careTakerName}
+          </div>
+          <div>
+            <span className="iconContainer">
+              <MdPets />
+            </span>
+            Pet: {petName}
+            <span className="badgeContainer">
+              <Badge variant="light">{petType}</Badge>
+            </span>
+          </div>
+          <div>
+            <span className="iconContainer">
+              <MdDateRange />
+            </span>
             Date: {startDate} - {endDate}
           </div>
         </Card.Text>
