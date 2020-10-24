@@ -1,6 +1,6 @@
 -- Uncomment to recreate your database
 -- DROP DATABASE yogapets;
--- CREATE DATABASE yogapets;
+CREATE DATABASE yogapets;
 
 -- changed to separate table as pet owner and care taker may use the same account
 -- CREATE TYPE pcs_user_role AS ENUM ('ADMIN', 'CARETAKER', 'OWNER');
@@ -81,16 +81,24 @@ CREATE TABLE IF NOT EXISTS base_prices (
     base_price      NUMERIC(10, 2)  NOT NULL CHECK (base_price > 0) -- max 2 d.p.
 );
 
+-- INSERT INTO base_prices VALUES ('seanlowjk', 'cat', 40);
+-- INSERT INTO base_prices VALUES ('seanlowjk', 'dog', 60);
+-- INSERT INTO base_prices VALUES ('seanlowjk', 'bird', 70);
+-- INSERT INTO base_prices VALUES ('seanlowjk', 'rabbit', 100);
+-- INSERT INTO base_prices VALUES ('seanlowjk', 'rodent', 10);
+-- INSERT INTO base_prices VALUES ('seanlowjk', 'fish', 50);
+-- INSERT INTO base_prices VALUES ('seanlowjk', 'insect', 30);
+-- INSERT INTO base_prices VALUES ('seanlowjk', 'turtle', 20);
+
 -- take leave means minus from availability, must check whether the leave dates are they having pets
 -- also need some way (maybe trigger) to enforce constraint where full time care taker need min of 2x150 days availability
 -- for part timer, price is part timer set one
 -- for full timer, price is based on base_prices + avg rating proportion
 -- when we INSERT price i think can use CASE or smthg to set price by case
-CREATE TABLE IF NOT EXISTS care_takers_availability (
+CREATE TABLE IF NOT EXISTS care_taker_leaves (
     care_taker      VARCHAR(255)    NOT NULL REFERENCES care_takers(user_name)    ON DELETE CASCADE, 
-    available_date  DATE            NOT NULL,
-    daily_price     NUMERIC(10, 2)  NOT NULL CHECK (daily_price > 0),
-    PRIMARY KEY (care_taker, available_date)
+    leave_date      DATE            NOT NULL,
+    PRIMARY KEY (care_taker, leave_date)
 );
 
 -- Table takes care of relation between a pet_type and care_takers
@@ -125,6 +133,7 @@ CREATE TABLE IF NOT EXISTS bids (
 );
 
 -- trigger to update amount and pet day
+-- when do you insert and do you need to update? 
 CREATE TABLE IF NOT EXISTS salary (
     care_taker      VARCHAR(255)    NOT NULL REFERENCES care_takers(user_name)    ON DELETE CASCADE,
     month           CHAR(3)         NOT NULL, -- 3 letter month
@@ -144,3 +153,123 @@ CREATE VIEW care_takers_rating AS
     SELECT care_taker, AVG(rating) AS avg_rating
     FROM ratings
     GROUP BY care_taker;
+
+-- Trigger to check if 2 * 150 consecutive days is fulfilled when adding a leave 
+INSERT INTO care_taker_leaves VALUES('seanlowjk', '2020-01-02');
+INSERT INTO care_taker_leaves VALUES('seanlowjk', '2020-09-01');
+
+CREATE TRIGGER checkAbleToTakeLeave
+BEFORE INSERT ON care_taker_leaves
+FOR EACH ROW
+EXECUTE PROCEDURE checkAbleToTakeLeaveFunction();
+
+CREATE OR REPLACE FUNCTION checkAbleToTakeLeaveFunction()
+RETURNS TRIGGER AS 
+$$ BEGIN
+IF (SELECT canTakeLeave(NEW.care_taker, NEW.leave_date)) THEN 
+RETURN NEW;
+END IF;
+RETURN NULL;
+END; $$ LANGUAGE plpgsql;
+
+-- See if the caretaker can take the leave on the date specified or not. 
+SELECT canTakeLeave('seanlowjk', '2020-01-01');
+CREATE OR REPLACE FUNCTION canTakeLeave(the_care_taker VARCHAR(255), the_leave_date date) 
+RETURNS BOOLEAN
+AS
+$$ BEGIN   
+IF ((SELECT getBlocks(the_care_taker, the_leave_date)) >= 1)
+THEN 
+RETURN TRUE;
+END IF;
+RETURN FALSE;
+END; $$
+LANGUAGE plpgsql;
+
+-- Create blocks of 2 *  150 days
+CREATE OR REPLACE FUNCTION getBlocks(the_care_taker VARCHAR(255), the_leave_date date) 
+RETURNS BIGINT
+AS
+$$ BEGIN   
+RETURN (
+SELECT COUNT(*)
+  FROM (
+SELECT COUNT(a.free_day) AS days_free, b.free_day AS start_day, c.free_day AS end_day
+  FROM 
+    availableDates(the_care_taker, the_leave_date) AS a, 
+    availableDates(the_care_taker, the_leave_date) AS b, 
+    availableDates(the_care_taker, the_leave_date) AS c
+  WHERE date(c.free_day) - date(b.free_day) = 149
+    AND a.free_day >= b.free_day 
+    AND a.free_day <= c.free_day
+  GROUP BY b.free_day, c.free_day
+  HAVING COUNT(a.free_day) = 150
+  ORDER BY b.free_day, c.free_day
+) AS X, (
+SELECT COUNT(a.free_day) AS days_free, b.free_day AS start_day, c.free_day AS end_day
+  FROM 
+    availableDates(the_care_taker, the_leave_date) AS a, 
+    availableDates(the_care_taker, the_leave_date) AS b, 
+    availableDates(the_care_taker, the_leave_date) AS c
+  WHERE date(c.free_day) - date(b.free_day) = 149
+    AND a.free_day >= b.free_day 
+    AND a.free_day <= c.free_day
+  GROUP BY b.free_day, c.free_day
+  HAVING COUNT(a.free_day) = 150
+  ORDER BY b.free_day, c.free_day
+) AS Y
+  WHERE date(Y.start_day) >= date(X.end_day));
+END; $$
+LANGUAGE plpgsql;
+
+
+-- Create function to get list of available dates for any given caretaker
+SELECT availableDates('seanlowjk', '2020-09-02');
+CREATE OR REPLACE FUNCTION availableDates(the_care_taker VARCHAR(255), the_leave_date date) 
+RETURNS TABLE ( free_day date ) 
+AS
+$$ BEGIN   
+RETURN QUERY
+SELECT * 
+FROM 
+(SELECT date_trunc('day', all_dates):: date AS d
+    FROM generate_series
+        ( (date_trunc('year', now()))::timestamp
+        , (date_trunc('year', now()) + interval '1 year' - interval '1 day')::timestamp
+        , '1 day'::interval) AS all_dates
+EXCEPT 
+SELECT leave_date 
+    FROM care_taker_leaves c
+    WHERE c.care_taker = the_care_taker
+ORDER BY d) AS free_dates
+WHERE free_dates.d <> the_leave_date;
+END; $$
+LANGUAGE plpgsql;
+
+-- Trigger to check if bid falls between available dates of care taker
+CREATE TRIGGER checkBidAvailability
+BEFORE INSERT ON bids
+FOR EACH ROW
+EXECUTE PROCEDURE checkBidAvailabilityFunction();
+
+CREATE OR REPLACE FUNCTION checkBidAvailabilityFunction()
+RETURNS TRIGGER AS 
+$$ BEGIN
+IF ((SELECT COUNT(*) 
+           FROM care_taker_leaves 
+           WHERE care_taker = NEW.care_taker AND leave_date >= NEW.start_date AND leave_date <= NEW.end_date)
+           = 0) THEN 
+RETURN NEW;
+END IF;
+RETURN NULL;
+END; $$ LANGUAGE plpgsql;
+
+-- Trigger for full time care-taker to auto accept bid if it falls between available dates of care taker
+CREATE TRIGGER autoAcceptFullTimerBid
+BEFORE INSERT ON bids
+FOR EACH ROW
+EXECUTE PROCEDURE autoAcceptFullTimerBidFunction();
+
+CREATE OR REPLACE FUNCTION autoAcceptFullTimerBidFunction()
+RETURNS TRIGGER AS 
+$$ BEGIN
