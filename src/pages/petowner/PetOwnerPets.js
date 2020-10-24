@@ -3,37 +3,30 @@ import { Container, Row, Col, Card } from "react-bootstrap";
 
 import PetOwnerSidebar from "../../components/sidebar/PetOwnerSidebar";
 import Navbar from "../../components/Navbar";
-import BidCard from "../../components/BidCard";
+import PetCard from "../../components/PetCard";
 
 import { MdPets } from "react-icons/md";
 
 const MOCK_DATA = [
   {
-    careTakerName: "care taker",
-    petName: "meowzers",
+    petName: "kittieee",
     petType: "Cat",
-    startDate: "20 Oct 2020",
-    endDate: "22 Oct 20202",
-    isSuccessful: true,
-    isActive: true,
+    petOwner: "owner username",
+    petOwnerName: "owner name",
+    petCategories: ["Small Cat", "Four-legged"],
+    petSpecialRequirements: [
+      "Requires 10 feedings per day",
+      "Only eats $100 cat food",
+      "Hates rats",
+    ],
   },
   {
-    careTakerName: "care taker 2",
-    petName: "doggo",
+    petName: "doggow00f",
     petType: "Dog",
-    startDate: "23 Oct 2020",
-    endDate: "29 Oct 20202",
-    isSuccessful: false,
-    isActive: true,
-  },
-  {
-    careTakerName: "care taker three 3",
-    petName: "snek",
-    petType: "Snake",
-    startDate: "03 Nov 2020",
-    endDate: "19 Nov 2020",
-    isSuccessful: false,
-    isActive: false,
+    petOwner: "owner2 username",
+    petOwnerName: "owner2 name",
+    petCategories: ["Big Dog", "Chihuahua"],
+    petSpecialRequirements: ["Needs collar"],
   },
 ];
 
@@ -44,7 +37,7 @@ const PetOwnerPets = () => {
       <Container fluid>
         <Row className="justify-content-md-center">
           <Col xs={3} id="sidebar">
-            <PetOwnerSidebar defaultKey={"Home"} />
+            <PetOwnerSidebar defaultKey={"Pets"} />
           </Col>
           <Col>
             <Card style={{ margin: 10 }}>
@@ -56,23 +49,7 @@ const PetOwnerPets = () => {
               </Card.Header>
               <Card.Body>
                 {MOCK_DATA.map((data, index) => (
-                  <BidCard {...data} key={index} />
-                ))}
-              </Card.Body>
-            </Card>
-          </Col>
-          <Col>
-            <Card style={{ margin: 10 }}>
-              <Card.Header>
-                <span style={{ margin: 10 }}>
-                  <MdPets />
-                </span>
-                Care Taker Status
-              </Card.Header>
-              <Card.Body>
-                {/* TODO CareTakerBidStatusCard? */}
-                {MOCK_DATA.map((data, index) => (
-                  <BidCard {...data} key={index} />
+                  <PetCard {...data} key={index} />
                 ))}
               </Card.Body>
             </Card>

@@ -1,8 +1,8 @@
-.container {
+.bidCardContainer {
   margin: 12px 0 12px 0;
 }
 
-.bodyContainer {
+.bidCardBodyContainer {
   justify-content: flex-start;
   text-align: justify;
 }
