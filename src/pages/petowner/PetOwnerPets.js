@@ -37,7 +37,7 @@ const MOCK_DATA = [
   },
 ];
 
-const PetOwnerHome = () => {
+const PetOwnerPets = () => {
   return (
     <div>
       <Navbar />
@@ -83,4 +83,4 @@ const PetOwnerHome = () => {
   );
 };
 
-export default PetOwnerHome;
+export default PetOwnerPets;

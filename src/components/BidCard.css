@@ -1,0 +1,21 @@
+.container {
+  margin: 12px 0 12px 0;
+}
+
+.bodyContainer {
+  justify-content: flex-start;
+  text-align: justify;
+}
+
+.badgeContainer {
+  margin: 12px;
+}
+
+.button {
+  float: right;
+  margin: 10px 0 0 10px;
+}
+
+.iconContainer {
+  margin: 0 4px 0 0;
+}
