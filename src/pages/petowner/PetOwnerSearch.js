@@ -5,27 +5,6 @@ import PetOwnerSidebar from "../../components/sidebar/PetOwnerSidebar";
 import Navbar from "../../components/Navbar";
 
 const PetOwnerSearch = () => {
-  let isPetOwner;
-  async function getRole() {
-    try {
-      const response = await fetch("/api/dashboard", {
-        method: "GET",
-        headers: { token: localStorage.token },
-      });
-
-      const parseRes = await response.json();
-
-      isPetOwner = parseRes.user_role === "OWNER";
-      // console.log(parseRes.user_role.toString());
-    } catch (error) {
-      console.log(error.message);
-    }
-  }
-
-  useEffect(() => {
-    getRole();
-  }, []);
-
   return (
     <div>
       <Navbar />
@@ -35,7 +14,7 @@ const PetOwnerSearch = () => {
             <PetOwnerSidebar defaultKey={"Home"} />
           </Col>
           <Col xs={9} id="page-content">
-            Page Content Goes Into Here.
+            Page Content Goes Into Here. test
           </Col>
         </Row>
       </Container>

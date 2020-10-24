@@ -1,0 +1,36 @@
+.avatar {
+    margin: 2vh 2vw 2vh 2vw;
+}
+
+#avatarimage {
+    border-radius: 10px;   
+    border: 2px solid #364F6B;
+}
+
+.userinfo {
+    text-align: left;
+    margin-top: 2vh;
+    padding: 1.5vh;
+    font-size: 1em;
+    background-color: #364F6B;
+    border-radius: 10px;
+}
+
+.employment {
+    background-color: #2FA01C;
+    text-align: center;
+    padding: 1.5vh;
+    margin-top: 1.5vh;
+    border-radius: 10px;
+}
+
+#employmentstatus {
+    font-weight: 600;
+}
+
+.userinfo h4, .userinfo p, .userinfo h5 {
+    margin: 0;
+    padding: 0;
+    color: white;
+    font-weight: 400;
+}
