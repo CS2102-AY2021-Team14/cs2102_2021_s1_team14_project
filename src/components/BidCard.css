@@ -1,0 +1,13 @@
+.container {
+  justify-content: flex-start;
+  text-align: justify;
+}
+
+.badgeContainer {
+  margin: 6px;
+}
+
+.button {
+  float: right;
+  margin: 0 0 0 10px;
+}
