@@ -5,7 +5,7 @@ import PetOwnerSidebar from "../../components/sidebar/PetOwnerSidebar";
 import Navbar from "../../components/Navbar";
 import BidCard from "../../components/BidCard";
 
-import { RiAuctionFill } from "react-icons/ri";
+import { MdPets } from "react-icons/md";
 
 const MOCK_DATA = [
   {
@@ -50,9 +50,9 @@ const PetOwnerPets = () => {
             <Card style={{ margin: 10 }}>
               <Card.Header>
                 <span style={{ margin: 10 }}>
-                  <RiAuctionFill />
+                  <MdPets />
                 </span>
-                Bids Overview
+                My Pets
               </Card.Header>
               <Card.Body>
                 {MOCK_DATA.map((data, index) => (
@@ -65,7 +65,7 @@ const PetOwnerPets = () => {
             <Card style={{ margin: 10 }}>
               <Card.Header>
                 <span style={{ margin: 10 }}>
-                  <RiAuctionFill />
+                  <MdPets />
                 </span>
                 Care Taker Status
               </Card.Header>

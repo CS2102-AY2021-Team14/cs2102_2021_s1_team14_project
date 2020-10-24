@@ -6,6 +6,7 @@ import { UserContext } from "../utils/UserProvider";
 import ROUTES from "./Routes";
 import PetOwnerHome from "../pages/petowner/PetOwnerHome";
 import PetOwnerSearch from "../pages/petowner/PetOwnerSearch";
+import PetOwnerPets from "../pages/petowner/PetOwnerPets";
 
 const PrivatePetOwnerRoute = props => {
   const { username, authToken, roles } = useContext(UserContext);
@@ -46,6 +47,10 @@ const PrivatePetOwnerRoute = props => {
 
               <Route exact path={ROUTES.PET_OWNER_SEARCH}>
                 <PetOwnerSearch />
+              </Route>
+
+              <Route exact path={ROUTES.PET_OWNER_PETS}>
+                <PetOwnerPets />
               </Route>
             </Switch>
           );

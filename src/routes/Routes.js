@@ -5,6 +5,7 @@ const ROUTES = {
 
   PET_OWNER_HOME: "/petOwner",
   PET_OWNER_SEARCH: "/petOwner/search",
+  PET_OWNER_PETS: "/petOwner/pets",
 
   CARE_TAKER_HOME: "/careTaker",
   CARE_TAKER_SALARY: "/careTaker/salary",
