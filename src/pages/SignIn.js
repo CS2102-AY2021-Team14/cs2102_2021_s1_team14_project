@@ -32,6 +32,7 @@ const SignIn = () => {
       .post("/api/auth/login", body)
       .then(response => {
         const { data } = response;
+        // console.log(response); // TODO: remove this
 
         setAuthToken(data.token);
         setContextUsername(data.username);

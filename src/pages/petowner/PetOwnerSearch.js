@@ -4,7 +4,7 @@ import { Container, Row, Col } from "react-bootstrap";
 import PetOwnerSidebar from "../../components/sidebar/PetOwnerSidebar";
 import Navbar from "../../components/Navbar";
 
-const PetOwnerHome = () => {
+const PetOwnerSearch = () => {
   let isPetOwner;
   async function getRole() {
     try {
@@ -43,4 +43,4 @@ const PetOwnerHome = () => {
   );
 };
 
-export default PetOwnerHome;
+export default PetOwnerSearch;

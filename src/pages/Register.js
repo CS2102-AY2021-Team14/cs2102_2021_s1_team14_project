@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
+
 import { toast } from "react-toastify";
 import axios from "axios";
 
@@ -178,15 +179,14 @@ const Register = () => {
             </Form.Label>
             <Col sm="10">
               <Form.Control as="select" name="role" onChange={e => onChange(e)}>
-                <option value="PCS Admin">PCS Admin</option>
+                <option value="Pet Owner">Pet Owner</option>
                 <option value="Full-time Care Taker">
                   Full-time Care Taker
                 </option>
                 <option value="Part-time Care Taker">
                   Part-time Care Taker
                 </option>
-
-                <option value="Pet Owner">Pet Owner</option>
+                <option value="PCS Admin">PCS Admin</option>
               </Form.Control>
             </Col>
           </Form.Group>
