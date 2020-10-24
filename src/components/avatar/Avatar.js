@@ -2,10 +2,6 @@ import React, {useEffect} from 'react';
 import './Avatar.css';
 
 const Avatar = ({user: user}) => {
-
-    useEffect(() => {
-        console.log(user.name);
-    })
     return (
         <>
             <div className="avatar">
@@ -14,7 +10,7 @@ const Avatar = ({user: user}) => {
                     id="avatarimage"
                     class="img-thumbnail"
                 />
-                <div id="userinfo">
+                <div className="userinfo">
                     <h4>{user.name}</h4>
                     <p>{user.job}</p>
                     <p>Joined on {user.join}</p>
