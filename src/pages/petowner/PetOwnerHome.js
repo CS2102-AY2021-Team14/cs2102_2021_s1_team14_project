@@ -55,8 +55,8 @@ const PetOwnerHome = () => {
                 Bids Overview
               </Card.Header>
               <Card.Body>
-                {MOCK_DATA.map(data => (
-                  <BidCard {...data} />
+                {MOCK_DATA.map((data, index) => (
+                  <BidCard {...data} key={index} />
                 ))}
               </Card.Body>
             </Card>
@@ -71,8 +71,8 @@ const PetOwnerHome = () => {
               </Card.Header>
               <Card.Body>
                 {/* TODO CareTakerBidStatusCard? */}
-                {MOCK_DATA.map(data => (
-                  <BidCard {...data} />
+                {MOCK_DATA.map((data, index) => (
+                  <BidCard {...data} key={index} />
                 ))}
               </Card.Body>
             </Card>
