@@ -12,7 +12,7 @@ const sideBarData = [
     {
         icon: <FaIcons.FaClock />,
         key: "History",
-        link: "#"
+        link: ROUTES.CARE_TAKER_HISTORY
     },
     {
         icon: <FaIcons.FaDollarSign />,

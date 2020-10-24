@@ -1,29 +1,64 @@
 const pool = require("./dbPool");
 
 class Bids {
-  static addBid(pet, owner, care_taker, start_date, end_date) {
-      // owner is bidding for care_taker to take care of pet. 
-
-      // Need to check if it's possible, else return error? 
-      pool.query("INSERT INTO bids")
+  static addBid(pet, owner, care_taker, pet_type, start_date, end_date) {
+    // Trigger here to check bid dates with availability
+    pool.query("INSERT INTO bids VALUES ($1, $2, $3, $4, $5, $6);", [
+      pet,
+      owner,
+      care_taker,
+      pet_type,
+      start_date,
+      end_date,
+    ]);
   }
 
-  static deleteBid() {
-      // Cannot delete successful bids
+  static deleteBid(pet, care_taker, start_date, end_date) {
+    // Cannot delete successful bids
+
+    pool.query(
+      `
+      UPDATE bids 
+        SET is_active = false
+        WHERE pet = $1 AND care_taker = $2 AND start_date = $3 AND end_date = $4
+    `,
+      [pet, care_taker, start_date, end_date]
+    );
   }
 
-  static addReview(care_taker, rating, review_text) {
-    // TODO: proper SQL query 
+  static addReview(pet, care_taker, start_date, end_date, rating, review_text) {
+    // TODO: proper SQL query
     // return pool.query("SELECT avg_rating FROM care_takers_rating care_taker = $1;", [user_name]);
-
     // return pool.query("SELECT 1");
+
+    pool.query(
+      `
+      UPDATE bids
+        SET rating = $5, review_text = $6
+        WHERE pet = $1 AND care_taker = $2 AND start_date = $3 AND end_date = $4
+    `,
+      [pet, care_taker, start_date, end_date, rating, review_text]
+    );
   }
 
-  static setSuccessfulBid(care_taker, payment_type, transfer_method) {
-    // TODO: proper SQL query 
-    // return pool.query("SELECT avg_rating FROM care_takers_rating care_taker = $1;", [user_name]);
+  static setSuccessfulBid(
+    pet,
+    care_taker,
+    start_date,
+    end_date,
+    payment_type,
+    transfer_method
+  ) {
+    // Trigger to update salary of care_taker
 
-    // return pool.query("SELECT 1");
+    pool.query(
+      `
+      UPDATE bids
+        SET payment_type = $5, transfer_method = $6
+        WHERE pet = $1 AND care_taker = $2 AND start_date = $3 AND end_date = $4
+    `,
+      [pet, care_taker, start_date, end_date, payment_type, transfer_method]
+    );
   }
 }
 
