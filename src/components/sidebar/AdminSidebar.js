@@ -12,12 +12,12 @@ const sideBarData = [
     {
         icon: <FaIcons.FaBook />,
         key: "Overview",
-        link: "#"
+        link: ROUTES.ADMIN_OVERVIEW
     },
     {
         icon: <FaIcons.FaUser />,
         key: "Caretakers",
-        link: "#"
+        link: ROUTES.ADMIN_CARE_TAKER
     },
     {
         icon: <FaIcons.FaPaw />,

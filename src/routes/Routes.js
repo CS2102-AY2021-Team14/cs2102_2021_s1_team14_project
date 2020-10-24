@@ -12,8 +12,9 @@ const ROUTES = {
   CARE_TAKER_HISTORY: "/careTaker/history",
 
   ADMIN_HOME: "/admin",
+  ADMIN_OVERVIEW: "/admin/overview",
   ADMIN_PET_INFO: "/admin/petinfo",
-  ADMIN_CARE_TAKER: "/admin/careTakers",
+  ADMIN_CARE_TAKER: "/admin/caretakers",
 };
 
 module.exports = ROUTES;
