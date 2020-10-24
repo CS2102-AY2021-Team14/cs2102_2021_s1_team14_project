@@ -76,7 +76,7 @@ const PetCard = props => {
             <Badge variant={getBadgeVariant()}>{getBadgeText()}</Badge>
           </span>
         </Card.Title>
-        <Card.Text>
+        <div>
           <div>
             <span className="iconContainer">
               <MdPerson />
@@ -98,7 +98,7 @@ const PetCard = props => {
             </span>
             Date: {startDate} - {endDate}
           </div>
-        </Card.Text>
+        </div>
         {getButtonComponent()}
       </Card.Body>
     </Card>
