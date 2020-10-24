@@ -10,7 +10,7 @@ import "./Navbar.css";
 const NavBar = () => {
   const history = useHistory();
   return (
-    <Navbar bg="dark" variant="dark">
+    <Navbar style={{backgroundColor: "#364F6B"}} variant="dark">
       <Navbar.Brand onClick={() => history.push(ROUTES.HOME)}>
         <img
           alt=""
@@ -22,7 +22,11 @@ const NavBar = () => {
         YogaPets
       </Navbar.Brand>
       <Nav.Item>
-        <Button className="ml-auto" variant="secondary">
+        <Button className="ml-auto" 
+          style={{
+            backgroundColor: "#fc0303",
+            border: "none"
+            }}>
           Logout
       </Button>
       </Nav.Item>
