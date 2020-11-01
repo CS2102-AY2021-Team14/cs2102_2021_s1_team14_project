@@ -158,33 +158,30 @@ CREATE VIEW care_takers_rating AS
 -- INSERT INTO care_taker_leaves VALUES('seanlowjk', '2020-01-02');
 -- INSERT INTO care_taker_leaves VALUES('seanlowjk', '2020-09-01');
 
-CREATE TRIGGER checkAbleToTakeLeave
-BEFORE INSERT ON care_taker_leaves
-FOR EACH ROW
-EXECUTE PROCEDURE checkAbleToTakeLeaveFunction();
 
-CREATE OR REPLACE FUNCTION checkAbleToTakeLeaveFunction()
-RETURNS TRIGGER AS 
-$$ BEGIN
-IF (SELECT canTakeLeave(NEW.care_taker, NEW.leave_date)) THEN 
-RETURN NEW;
-END IF;
-RETURN NULL;
-END; $$ LANGUAGE plpgsql;
-
--- See if the caretaker can take the leave on the date specified or not. 
--- SELECT canTakeLeave('seanlowjk', '2020-01-01');
-CREATE OR REPLACE FUNCTION canTakeLeave(the_care_taker VARCHAR(255), the_leave_date date) 
-RETURNS BOOLEAN
+-- Create function to get list of available dates for any given caretaker
+SELECT availableDates('seanlowjk', '2020-09-02');
+CREATE OR REPLACE FUNCTION availableDates(the_care_taker VARCHAR(255), the_leave_date date) 
+RETURNS TABLE ( free_day date ) 
 AS
 $$ BEGIN   
-IF ((SELECT getBlocks(the_care_taker, the_leave_date)) >= 1)
-THEN 
-RETURN TRUE;
-END IF;
-RETURN FALSE;
+RETURN QUERY
+SELECT * 
+FROM 
+(SELECT date_trunc('day', all_dates):: date AS d
+    FROM generate_series
+        ( (date_trunc('year', now()))::timestamp
+        , (date_trunc('year', now()) + interval '1 year' - interval '1 day')::timestamp
+        , '1 day'::interval) AS all_dates
+EXCEPT 
+SELECT leave_date 
+    FROM care_taker_leaves c
+    WHERE c.care_taker = the_care_taker
+ORDER BY d) AS free_dates
+WHERE free_dates.d <> the_leave_date;
 END; $$
 LANGUAGE plpgsql;
+
 
 -- Create blocks of 2 *  150 days
 CREATE OR REPLACE FUNCTION getBlocks(the_care_taker VARCHAR(255), the_leave_date date) 
@@ -222,35 +219,32 @@ SELECT COUNT(a.free_day) AS days_free, b.free_day AS start_day, c.free_day AS en
 END; $$
 LANGUAGE plpgsql;
 
-
--- Create function to get list of available dates for any given caretaker
-SELECT availableDates('seanlowjk', '2020-09-02');
-CREATE OR REPLACE FUNCTION availableDates(the_care_taker VARCHAR(255), the_leave_date date) 
-RETURNS TABLE ( free_day date ) 
+-- See if the caretaker can take the leave on the date specified or not. 
+CREATE OR REPLACE FUNCTION canTakeLeave(the_care_taker VARCHAR(255), the_leave_date date) 
+RETURNS BOOLEAN
 AS
 $$ BEGIN   
-RETURN QUERY
-SELECT * 
-FROM 
-(SELECT date_trunc('day', all_dates):: date AS d
-    FROM generate_series
-        ( (date_trunc('year', now()))::timestamp
-        , (date_trunc('year', now()) + interval '1 year' - interval '1 day')::timestamp
-        , '1 day'::interval) AS all_dates
-EXCEPT 
-SELECT leave_date 
-    FROM care_taker_leaves c
-    WHERE c.care_taker = the_care_taker
-ORDER BY d) AS free_dates
-WHERE free_dates.d <> the_leave_date;
+IF ((SELECT getBlocks(the_care_taker, the_leave_date)) >= 1)
+THEN 
+RETURN TRUE;
+END IF;
+RETURN FALSE;
 END; $$
 LANGUAGE plpgsql;
 
--- Trigger to check if bid falls between available dates of care taker
-CREATE TRIGGER checkBidAvailability
-BEFORE INSERT ON bids
+CREATE OR REPLACE FUNCTION checkAbleToTakeLeaveFunction()
+RETURNS TRIGGER AS 
+$$ BEGIN
+IF (SELECT canTakeLeave(NEW.care_taker, NEW.leave_date)) THEN 
+RETURN NEW;
+END IF;
+RETURN NULL;
+END; $$ LANGUAGE plpgsql;
+
+CREATE TRIGGER checkAbleToTakeLeave
+BEFORE INSERT ON care_taker_leaves
 FOR EACH ROW
-EXECUTE PROCEDURE checkBidAvailabilityFunction();
+EXECUTE PROCEDURE checkAbleToTakeLeaveFunction();
 
 CREATE OR REPLACE FUNCTION checkBidAvailabilityFunction()
 RETURNS TRIGGER AS 
@@ -264,11 +258,11 @@ END IF;
 RETURN NULL;
 END; $$ LANGUAGE plpgsql;
 
--- Trigger for full time care-taker to auto accept bid if it falls between available dates of care taker
-CREATE TRIGGER autoAcceptFullTimerBid
+-- Trigger to check if bid falls between available dates of care taker
+CREATE TRIGGER checkBidAvailability
 BEFORE INSERT ON bids
 FOR EACH ROW
-EXECUTE PROCEDURE autoAcceptFullTimerBidFunction();
+EXECUTE PROCEDURE checkBidAvailabilityFunction();
 
 CREATE OR REPLACE FUNCTION autoAcceptFullTimerBidFunction()
 RETURNS TRIGGER AS 
@@ -287,3 +281,9 @@ END IF;
 RETURN NEW;
 END; $$ LANGUAGE plpgsql;
 
+
+-- Trigger for full time care-taker to auto accept bid if it falls between available dates of care taker
+CREATE TRIGGER autoAcceptFullTimerBid
+BEFORE INSERT ON bids
+FOR EACH ROW
+EXECUTE PROCEDURE autoAcceptFullTimerBidFunction();
