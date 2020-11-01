@@ -160,7 +160,6 @@ CREATE VIEW care_takers_rating AS
 
 
 -- Create function to get list of available dates for any given caretaker
-SELECT availableDates('seanlowjk', '2020-09-02');
 CREATE OR REPLACE FUNCTION availableDates(the_care_taker VARCHAR(255), the_leave_date date) 
 RETURNS TABLE ( free_day date ) 
 AS
