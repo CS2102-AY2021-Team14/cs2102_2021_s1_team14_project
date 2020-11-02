@@ -7,7 +7,7 @@ router.get("/", async (req, res) => {
   try {
     const result = await Pets.getAll();
 
-    res.json({ count: result.rowCount, data: result.rows });
+    res.status(200).json({ count: result.rowCount, data: result.rows });
   } catch (error) {
     console.error("Error getting pets", error);
 
@@ -20,12 +20,12 @@ router.get("/:owner", async (req, res) => {
     const result = await Pets.getPetsOfOwner(req.params.owner);
 
     if (result.rowCount === 0) {
-      return res.status(404).json({
+      return res.status(404).send({
         message: `Pets from owner ${req.params.owner} not found`,
       });
     }
 
-    res.json({ count: result.rowCount, data: result.rows });
+    res.status(200).json({ count: result.rowCount, data: result.rows });
   } catch (error) {
     console.error(`Error getting pets from owner ${req.params.owner}`, error);
 
@@ -41,7 +41,7 @@ router.get("/:owner/:name", async (req, res) => {
     const result = await Pets.get(req.params.name, req.params.owner);
 
     if (result.rowCount === 0) {
-      return res.status(404).json({
+      return res.status(404).send({
         message: `Pet ${req.params.name} from owner ${req.params.owner} not found`,
       });
     }
@@ -84,12 +84,10 @@ router.put("/:owner/:name", async (req, res) => {
     );
 
     if (result.rowCount === 0) {
-      return res.status(404).json({
+      return res.status(404).send({
         message: `Error changing pet ${req.params.name} from ${req.params.owner}`,
       });
     }
-
-    console.log(result.rowCount);
 
     res.status(200).send({
       message: `Successfully changed pet ${req.params.name} from ${req.params.owner} to ${newName} and type ${newType}`,
@@ -108,7 +106,7 @@ router.delete("/:owner/:name", async (req, res) => {
     const result = await Pets.delete(req.params.name, req.params.owner);
 
     if (result.rowCount === 0) {
-      return res.status(404).json({
+      return res.status(404).send({
         message: `Error deleting pet ${req.params.name} from ${req.params.owner}`,
       });
     }

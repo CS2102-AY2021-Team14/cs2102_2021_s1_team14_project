@@ -4,6 +4,7 @@ const jwtAuthRouter = require("./routes/jwtAuth");
 const dashboardRouter = require("./routes/dashboard");
 const adminRouter = require("./routes/admin");
 const caretakerRouter = require("./routes/caretaker");
+const bidsRouter = require("./routes/bids");
 
 const apiRouter = express.Router();
 
@@ -11,6 +12,9 @@ const apiRouter = express.Router();
 
 // Admin Routes
 apiRouter.use("/admin", adminRouter);
+
+// Bid Routes
+apiRouter.use("/bids", bidsRouter);
 
 // Caretaker Routes
 apiRouter.use("/caretaker", caretakerRouter);
