@@ -57,8 +57,8 @@ router.get("/:username/leaves", async (req, res) => {
 
 router.post("/:username/leaves", async (req, res) => {
   try {
-    const { leaveDate } = req.body;
-    const date = new Date(leaveDate);
+    const { leave_date } = req.body;
+    const date = new Date(leave_date);
     const result = await Caretaker.addLeave(req.params.username, date);
 
     if (result.rowCount === 0) {
@@ -68,7 +68,7 @@ router.post("/:username/leaves", async (req, res) => {
     }
 
     res.status(200).send({
-      message: `Successfully added ${leaveDate} to caretaker ${req.params.username}`,
+      message: `Successfully added ${leave_date} to caretaker ${req.params.username}`,
     });
   } catch (error) {
     console.error(
@@ -175,8 +175,8 @@ router.get("/:username/avgrating", async (req, res) => {
 
 router.post("/:username/pettype", async (req, res) => {
   try {
-    const { petType } = req.body;
-    const result = await Caretaker.addPetType(req.params.username, petType);
+    const { pet_type } = req.body;
+    const result = await Caretaker.addPetType(req.params.username, pet_type);
 
     if (result.rowCount === 0) {
       return res.status(404).send({
@@ -185,7 +185,7 @@ router.post("/:username/pettype", async (req, res) => {
     }
 
     res.status(201).send({
-      message: `Successfully added pet type ${petType} to care taker ${req.params.username}`,
+      message: `Successfully added pet type ${pet_type} to care taker ${req.params.username}`,
     });
   } catch (error) {
     console.error(
@@ -202,8 +202,8 @@ router.post("/:username/pettype", async (req, res) => {
 
 router.delete("/:username/pettype", async (req, res) => {
   try {
-    const { petType } = req.body;
-    const result = await Caretaker.removePetType(req.params.username, petType);
+    const { pet_type } = req.body;
+    const result = await Caretaker.removePetType(req.params.username, pet_type);
 
     if (result.rowCount === 0) {
       return res.status(404).send({
@@ -212,7 +212,7 @@ router.delete("/:username/pettype", async (req, res) => {
     }
 
     res.status(200).send({
-      message: `Successfully removed pet type ${petType} from care taker ${req.params.username}`,
+      message: `Successfully removed pet type ${pet_type} from care taker ${req.params.username}`,
     });
   } catch (error) {
     console.error(
