@@ -32,9 +32,23 @@ class Pets {
     ]);
   }
 
+  static put(name, owner, newName, newType) {
+    return pool.query(
+      "UPDATE pets SET name = $1, type = $2 WHERE name = $3 AND owner = $4;",
+      [newName, newType, name, owner]
+    );
+  }
+
+  static delete(name, owner) {
+    return pool.query("DELETE FROM pets WHERE name = $1 AND owner = $2;", [
+      name,
+      owner,
+    ]);
+  }
+
   static addSpecialRequirement(name, owner, requirement, description) {
     return pool.query(
-      "INSERT INTO pet_special_requirements VALUES ($1, $2, $3, %4);",
+      "INSERT INTO pet_special_requirements VALUES ($1, $2, $3, $4);",
       [name, owner, requirement, description]
     );
   }

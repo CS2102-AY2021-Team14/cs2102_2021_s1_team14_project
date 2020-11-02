@@ -62,6 +62,10 @@ class Caretaker {
       [user_name, pet_type]
     );
   }
+
+  static getAll() {
+    return pool.query("SELECT * FROM care_takers;");
+  }
 }
 
 module.exports = Caretaker;
