@@ -12,6 +12,7 @@ const ROUTES = {
   CARE_TAKER_HISTORY: "/careTaker/history",
 
   ADMIN_HOME: "/admin",
+  ADMIN_PET_INFO: "/admin/petinfo",
   ADMIN_CARE_TAKER: "/admin/careTakers",
 };
 

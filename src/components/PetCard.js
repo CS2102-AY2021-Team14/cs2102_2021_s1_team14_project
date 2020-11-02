@@ -2,104 +2,74 @@ import React from "react";
 import { Button, Card, Badge } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import { MdPerson, MdPets, MdDateRange } from "react-icons/md";
+import { FaRegStickyNote } from "react-icons/fa";
 
 import "./PetCard.css";
 
 const PetCard = props => {
   const {
-    careTakerName,
     petName,
     petType,
-    startDate,
-    endDate,
-    isSuccessful,
-    isActive,
+    petOwner,
+    petOwnerName,
+    petCategories,
+    petSpecialRequirements,
   } = props;
 
-  const getBadgeVariant = () => {
-    if (isSuccessful) {
-      return "success";
-    } else if (isActive) {
-      return "info";
-    } else {
-      return "secondary";
-    }
-  };
-
-  // check if date is over current date to show fail too?
-  const getBadgeText = () => {
-    if (isSuccessful) {
-      return "Successful";
-    } else if (isActive) {
-      return "Active";
-    } else {
-      return "Failed";
-    }
-  };
-
-  const isReviewable = () => {
-    const todaysDate = new Date().setHours(0, 0, 0, 0);
-    return isSuccessful && endDate >= todaysDate;
-  };
-
-  const getButtonComponent = () => {
-    if (isReviewable()) {
-      return (
-        <Button className="button" variant="primary">
-          Review
-        </Button>
-      );
-    } else if (isSuccessful) {
-      return (
-        <Button className="button" variant="primary">
-          Change Arrangement
-        </Button>
-      );
-    } else if (isActive) {
-      return (
-        <Button className="button" variant="danger">
-          Cancel Bid
-        </Button>
-      );
-    } else {
-      return null;
-    }
-  };
-
-  // TODO
   return (
-    <Card className="container">
-      <Card.Body className="bodyContainer">
-        <Card.Title>
-          Bid
-          <span className="badgeContainer">
-            <Badge variant={getBadgeVariant()}>{getBadgeText()}</Badge>
-          </span>
-        </Card.Title>
+    <Card className="petCardContainer">
+      <Card.Body className="petCardBodyContainer">
+        <Card.Title>{petName}</Card.Title>
         <div>
-          <div>
-            <span className="iconContainer">
-              <MdPerson />
-            </span>
-            Care Taker: {careTakerName}
-          </div>
           <div>
             <span className="iconContainer">
               <MdPets />
             </span>
-            Pet: {petName}
-            <span className="badgeContainer">
-              <Badge variant="light">{petType}</Badge>
-            </span>
+            Pet Type: {petType}
           </div>
+
           <div>
             <span className="iconContainer">
-              <MdDateRange />
+              <MdPets />
             </span>
-            Date: {startDate} - {endDate}
+            Pet Categories:
+            <span className="badgeContainer">
+              {petCategories?.map((category, index) => (
+                <Badge key={index} variant="light" style={{ margin: 4 }}>
+                  {category}
+                </Badge>
+              ))}
+            </span>
+          </div>
+
+          <div>
+            <span className="iconContainer">
+              <MdPerson />
+            </span>
+            Pet Owner: {petOwnerName ?? petOwner}
+          </div>
+
+          <div>
+            <span className="iconContainer">
+              <FaRegStickyNote />
+            </span>
+            Special Requirements:
+            <span className="badgeContainer">
+              {petSpecialRequirements?.map((requirement, index) => (
+                <Badge key={index} variant="light" style={{ margin: 4 }}>
+                  {requirement}
+                </Badge>
+              ))}
+            </span>
           </div>
         </div>
-        {getButtonComponent()}
+
+        <Button className="button" variant="primary">
+          Edit
+        </Button>
+        <Button className="button" variant="danger">
+          Remove
+        </Button>
       </Card.Body>
     </Card>
   );
