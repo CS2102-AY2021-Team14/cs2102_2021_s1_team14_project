@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Card } from "react-bootstrap";
+import { Button, Container, Row, Col, Card } from "react-bootstrap";
+
+import { toast } from "react-toastify";
+import axios from "axios";
 
 import PetOwnerSidebar from "../../components/sidebar/PetOwnerSidebar";
 import Navbar from "../../components/Navbar";
@@ -30,7 +33,22 @@ const MOCK_DATA = [
   },
 ];
 
-const PetOwnerPets = () => {
+const PetOwnerPets = ( { username } ) => {
+
+  const [pets, setPets] = useState([]);
+
+  const getPets = async event => {   
+    axios
+      .get(`/api/pets/${username}`)
+      .then(response => {
+        const { data } = response;
+        console.log(data); // TODO: remove this line
+      })
+      .catch(error => {
+        toast.error(error.response.data.message);
+      });
+  };
+
   return (
     <div>
       <Navbar />
