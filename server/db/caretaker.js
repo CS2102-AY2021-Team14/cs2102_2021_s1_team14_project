@@ -1,17 +1,17 @@
 const pool = require("./dbPool");
 
 class Caretaker {
-  static getAvailability(user_name) {
+  static getLeaves(user_name) {
     return pool.query(
-      "SELECT * FROM care_takers_availability WHERE care_taker = $1;",
+      "SELECT * FROM care_taker_leaves WHERE care_taker = $1;",
       [user_name]
     );
   }
 
-  static addAvailability(user_name, available_date) {
-    return pool.query("INSERT INTO care_takers_availability VALUES ($1, $2);", [
+  static addLeave(user_name, leave_date) {
+    return pool.query("INSERT INTO care_taker_leaves VALUES ($1, $2);", [
       user_name,
-      available_date,
+      leave_date,
     ]);
   }
 
@@ -42,7 +42,7 @@ class Caretaker {
 
   static getAvgRating(user_name) {
     return pool.query(
-      "SELECT avg_rating FROM care_takers_rating care_taker = $1;",
+      "SELECT avg_rating FROM care_takers_rating WHERE care_taker = $1;",
       [user_name]
     );
   }
@@ -58,9 +58,13 @@ class Caretaker {
   // Remove a pet type caretaker can take care of
   static removePetType(user_name, pet_type) {
     return pool.query(
-      "DELETE FROM care_takers_pet_preferences WHERE user_name = $1 AND pet_type = $2;",
+      "DELETE FROM care_takers_pet_preferences WHERE care_taker = $1 AND pet_type = $2;",
       [user_name, pet_type]
     );
+  }
+
+  static getAll() {
+    return pool.query("SELECT * FROM care_takers;");
   }
 }
 

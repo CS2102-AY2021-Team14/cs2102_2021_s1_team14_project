@@ -18,7 +18,7 @@ class Admin {
       SELECT care_taker
         FROM bids 
         GROUP BY care_taker, date_part('month', end_date)
-        HAVING AVG(rating) < 2; 
+        HAVING AVG(rating) < 2;
     `);
   }
 
@@ -28,7 +28,7 @@ class Admin {
     return pool.query(`
       SELECT care_taker
         FROM bids
-        GROUP BY care_taker, date_part('month', end_date);
+        GROUP BY care_taker, date_part('month', end_date)
         HAVING date_part('month', end_date) = date_part('month', now())
         ORDER BY SUM(date(end_date) - date(start_date) + 1) DESC, AVG(rating) DESC, COUNT(owner) DESC
         LIMIT 1; 

@@ -2,10 +2,22 @@ const express = require("express");
 const petsRouter = require("./routes/pets");
 const jwtAuthRouter = require("./routes/jwtAuth");
 const dashboardRouter = require("./routes/dashboard");
+const adminRouter = require("./routes/admin");
+const caretakerRouter = require("./routes/caretaker");
+const bidsRouter = require("./routes/bids");
 
 const apiRouter = express.Router();
 
 // Add new routes here
+
+// Admin Routes
+apiRouter.use("/admin", adminRouter);
+
+// Bid Routes
+apiRouter.use("/bids", bidsRouter);
+
+// Caretaker Routes
+apiRouter.use("/caretaker", caretakerRouter);
 
 // Pet Routes
 apiRouter.use("/pets", petsRouter);
