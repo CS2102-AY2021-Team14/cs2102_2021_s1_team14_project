@@ -286,3 +286,19 @@ CREATE TRIGGER autoAcceptFullTimerBid
 BEFORE INSERT ON bids
 FOR EACH ROW
 EXECUTE PROCEDURE autoAcceptFullTimerBidFunction();
+
+
+-- Drop table commands for reset
+-- DROP TABLE care_takers_availability;
+-- DROP TABLE pet_special_requirements;
+-- DROP TABLE pet_category;
+-- DROP TABLE base_prices;
+-- DROP TABLE salary;
+-- DROP TABLE bids CASCADE;
+-- DROP TABLE care_taker_leaves CASCADE;
+-- DROP TABLE care_taker CASCADE;
+-- DROP TABLE care_takers_pet_preferences CASCADE;
+-- DROP TABLE pcs_admins CASCADE;
+-- DROP TABLE pet_owners CASCADE;
+-- DROP TABLE pets CASCADE;
+-- DROP TABLE users CASCADE;

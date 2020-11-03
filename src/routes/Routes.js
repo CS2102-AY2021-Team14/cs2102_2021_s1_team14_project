@@ -14,6 +14,7 @@ const ROUTES = {
   ADMIN_HOME: "/admin",
   ADMIN_PET_INFO: "/admin/petinfo",
   ADMIN_CARE_TAKER: "/admin/careTakers",
+  ADMIN_OVERVIEW: "/admin/overview"
 };
 
 module.exports = ROUTES;
