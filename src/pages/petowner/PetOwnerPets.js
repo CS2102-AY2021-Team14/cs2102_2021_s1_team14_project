@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Container, Modal, Row, Col, Card } from "react-bootstrap";
+import { Button, Container, Row, Col, Card } from "react-bootstrap";
 
 import { toast } from "react-toastify";
 import axios from "axios";
@@ -116,7 +116,7 @@ const PetOwnerPets = ( { username } ) => {
                 isOpen={isOpen} handleClose={handleClose} onChange={onChange} />
               <Card.Body>
                 {pets.map((data, index) => (
-                  <PetCard {...data} deletePet={deletePet} key={index} />
+                  <PetCard {...data} getPets={getPets} deletePet={deletePet} key={index} />
                 ))}
               </Card.Body>
             </Card>

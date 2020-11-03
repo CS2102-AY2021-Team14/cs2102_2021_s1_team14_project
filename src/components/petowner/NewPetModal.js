@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Button, Container, Form, Modal, Row, Col, Card } from "react-bootstrap";
+import React from "react";
+import { Button, Form, Modal, Row, Col } from "react-bootstrap";
 
 const NewPetModal = ( props ) => {
 
@@ -13,8 +13,7 @@ const NewPetModal = ( props ) => {
     } = props;
 
     const {
-      name, 
-      type
+      name
     } = petInfo;
 
     return (
