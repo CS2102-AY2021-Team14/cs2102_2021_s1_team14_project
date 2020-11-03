@@ -1,0 +1,54 @@
+.jobcontainer {
+    margin-top: 2vh;   
+}
+
+.jobcontainer h2 {
+    background-color: #364F6B;
+    color: white;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em; 
+    font-size: 1.3em;
+    border-radius: 10px 10px 0px 0px;
+    margin: 0;
+}
+
+.jobsitems {
+    border: 2px solid #364F6B;
+    border-radius: 0px 0px 10px 10px;
+}
+
+.ownerinfo {
+    display: flex;
+    align-items: center;
+}
+
+.ownername {
+    background-color: #3FC1C9;
+    padding: 0.5em 1em 0.5em 1em;
+    margin: 0px 10px 5px 10px;
+    border-radius: 5px;
+}
+
+.jobcard {
+    margin: 2vh;
+    background-color: #364F6B;
+    padding: 10px 20px 10px 20px;
+    text-align: left;
+    border-radius: 10px;
+
+}
+
+.jobcard h4, .jobcard h3, .jobcard p {
+    padding: 0px;
+    margin: 0px;
+    color: white;
+    font-size: 1em;
+}
+
+.ownerinfo {
+
+}
+
+.ownername {
+
+}
