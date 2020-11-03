@@ -20,7 +20,7 @@ router.get("/:owner", async (req, res) => {
     const result = await Pets.getPetsOfOwner(req.params.owner);
 
     if (result.rowCount === 0) {
-      return res.status(404).send({
+      return res.status(500).send({
         message: `Pets from owner ${req.params.owner} not found`,
       });
     }
@@ -41,7 +41,7 @@ router.get("/:owner/:name", async (req, res) => {
     const result = await Pets.get(req.params.name, req.params.owner);
 
     if (result.rowCount === 0) {
-      return res.status(404).send({
+      return res.status(500).send({
         message: `Pet ${req.params.name} from owner ${req.params.owner} not found`,
       });
     }

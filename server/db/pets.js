@@ -9,6 +9,10 @@ class Pets {
     return pool.query("SELECT * FROM pets WHERE owner = $1;", [owner]);
   }
 
+  static getPetTypes() {
+    return post.query("SELECT unnest(enum_range(NULL::pet_type))::text AS pet_types;");
+  }
+
   static get(name, owner) {
     return pool.query("SELECT * FROM pets WHERE name = $1 AND owner = $2;", [
       name,
