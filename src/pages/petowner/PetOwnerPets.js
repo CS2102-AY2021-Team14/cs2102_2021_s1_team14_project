@@ -21,7 +21,7 @@ const PetOwnerPets = ( { username } ) => {
   const [newPet, setNewPet] = useState({
     name: '', 
     owner: username, 
-    type: 'dog'
+    type: 'cat', 
   });
 
   const handleClose = () => setOpen(false);

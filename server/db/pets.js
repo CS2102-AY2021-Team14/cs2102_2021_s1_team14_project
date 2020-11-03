@@ -2,7 +2,7 @@ const pool = require("./dbPool");
 
 class Pets {
   static getAll() {
-    return pool.query("SELECT * FROM pets;");
+    return pool.query("SELECT * FROM pets_full_information;");
   }
 
   static getAllPetTypes() {
@@ -10,7 +10,7 @@ class Pets {
   }
 
   static getPetsOfOwner(owner) {
-    return pool.query("SELECT * FROM pets WHERE owner = $1;", [owner]);
+    return pool.query("SELECT * FROM pets_full_information WHERE pet_owner = $1;", [owner]);
   }
 
   static get(name, owner) {

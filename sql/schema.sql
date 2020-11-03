@@ -154,6 +154,17 @@ CREATE VIEW care_takers_rating AS
     FROM ratings
     GROUP BY care_taker;
 
+CREATE VIEW pets_full_information AS 
+    SELECT P.name AS pet_name, P.owner AS pet_owner, P.type AS pet_type, 
+        U.name AS pet_owner_name, ARRAY_AGG(PC.category) AS pet_categories, ARRAY_AGG(PR.requirement) AS pet_special_requirement
+    FROM ( 
+        pets P
+        LEFT OUTER JOIN users U ON P.owner = U.user_name
+        LEFT OUTER JOIN pet_category PC ON P.name = PC.name 
+        LEFT OUTER JOIN pet_special_requirements PR ON P.name = PR.name 
+    )
+    GROUP BY (P.name, P.owner, P.type, U.name);
+
 -- Trigger to check if 2 * 150 consecutive days is fulfilled when adding a leave
 -- INSERT INTO care_taker_leaves VALUES('seanlowjk', '2020-01-02');
 -- INSERT INTO care_taker_leaves VALUES('seanlowjk', '2020-09-01');
