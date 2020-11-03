@@ -5,11 +5,13 @@ import CaretakerSidebar from '../../components/sidebar/CaretakerSidebar';
 import Avatar from '../../components/avatar/Avatar';
 import Navbar from '../../components/Navbar';
 import Job from '../../components/job/Job';
+import Calendar from '../../components/availability/Calendar';
 
 import Image from '../../images/logo.png';
 
 const CareTakerHome = () => {
 
+    // TODO use API calls
     const caretaker = {
         name: "Jan Low",
         image: Image,
@@ -19,6 +21,7 @@ const CareTakerHome = () => {
         employment: "EMPLOYED"
     }
 
+    // TODO use API calls
     const jobs = [
         {
             owner: "JanLu",
@@ -35,22 +38,25 @@ const CareTakerHome = () => {
     ]
 
     useEffect(() => {
-        console.log(caretaker);
     })
+    
     return (
         <div>
             <Navbar />
             <Container fluid>
                 <Row className="justify-content-md-center">
-                <Col xs={2} id="sidebar">
-                    <CaretakerSidebar defaultKey={"Home"} />
-                </Col>
-                <Col xs={8} id="page-content">
-                    <Job jobs={jobs} /> 
-                </Col>
-                <Col xs={2} id="avatar">
-                    <Avatar user={caretaker} />
-                </Col>
+                    <Col xs={2} id="sidebar">
+                        <CaretakerSidebar defaultKey={"Home"} />
+                    </Col>
+                    <Col xs={3} id="availability">
+                        <Calendar />
+                    </Col>
+                    <Col xs={5} id="jobs">
+                        <Job jobs={jobs} />
+                    </Col>
+                    <Col xs={2} id="avatar">
+                        <Avatar user={caretaker} />
+                    </Col>
                 </Row>
             </Container>
         </div>
