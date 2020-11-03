@@ -4,7 +4,7 @@ import { Button, Container, Modal, Row, Col, Card } from "react-bootstrap";
 import { toast } from "react-toastify";
 import axios from "axios";
 
-import { mapPetInfoToPetData } from '../../utils/PetsHelper';
+import { mapPetInfoToPetData, unwrapPetType } from '../../utils/PetsHelper';
 import NewPetModal from "../../components/petowner/NewPetModal";
 import PetOwnerSidebar from "../../components/sidebar/PetOwnerSidebar";
 import Navbar from "../../components/Navbar";
@@ -47,12 +47,31 @@ const PetOwnerPets = ( { username } ) => {
       });
   };
 
+  const getPetTypes = async () => {   
+    axios
+      .get(`/api/pets/types`)
+      .then(response => {
+        const { data } = response;
+        const petTypes = data.data.map(petInfo => unwrapPetType(petInfo));
+        setTypes(petTypes);
+      })
+      .catch(error => {
+        toast.error(error.response.data.message);
+      });
+  };
+
   const addPet = async () => {   
+    if (newPet.name.length <= 0) {
+      toast.error("Please enter a pet name!");
+      return;
+    }
+
     axios
       .post(`/api/pets/add/`, newPet)
       .then(() => {
         toast.success(`Let's welcome ${newPet.name}!`); 
         handleClose();
+        getPets();
       })
       .catch(error => {
         toast.error(`You already have a pet called ${newPet.name}!\nLet's give another name!`); 
@@ -61,7 +80,8 @@ const PetOwnerPets = ( { username } ) => {
 
   useEffect(() => {
     getPets();
-  }, [getPets]);
+    getPetTypes();
+  }, []);
 
   return (
     <div>
@@ -80,7 +100,8 @@ const PetOwnerPets = ( { username } ) => {
                 My Pets
               </Card.Header>
               <Button onClick={handleOpen} size="lg" > Add a New Pet </Button>
-              <NewPetModal petInfo={newPet} addPet={addPet} isOpen={isOpen} handleClose={handleClose} onChange={onChange} />
+              <NewPetModal petInfo={newPet} petTypes ={types} addPet={addPet} 
+                isOpen={isOpen} handleClose={handleClose} onChange={onChange} />
               <Card.Body>
                 {pets.map((data, index) => (
                   <PetCard {...data} key={index} />

@@ -15,6 +15,18 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/types", async (req, res) => {
+  try {
+    const result = await Pets.getAllPetTypes();
+
+    res.status(200).json({ count: result.rowCount, data: result.rows });
+  } catch (error) {
+    console.error("Error getting pets", error);
+
+    res.status(404).json({ message: "Pets not found", error });
+  }
+});
+
 router.get("/:owner", async (req, res) => {
   try {
     const result = await Pets.getPetsOfOwner(req.params.owner);

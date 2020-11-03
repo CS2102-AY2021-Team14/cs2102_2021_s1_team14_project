@@ -18,3 +18,7 @@ export const mapPetInfoToPetData = ( petInfo ) => {
         ],
     }
 };
+
+export const unwrapPetType = ( wrappedPetType ) => {
+    return wrappedPetType.unnest;
+}

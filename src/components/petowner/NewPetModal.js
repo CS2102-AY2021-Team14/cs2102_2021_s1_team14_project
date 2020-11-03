@@ -8,7 +8,8 @@ const NewPetModal = ( props ) => {
       isOpen, 
       handleClose, 
       onChange, 
-      petInfo
+      petInfo, 
+      petTypes
     } = props;
 
     const {
@@ -22,7 +23,9 @@ const NewPetModal = ( props ) => {
           <Modal.Title>Add a New Pet</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+
         <Form className="mt-4 mb-3" onSubmit={() => {}}>
+
           <Form.Group as={Row} controlId="formPlaintextName">
             <Form.Label className="text-right" column sm="3">
               Pet Name:
@@ -36,7 +39,21 @@ const NewPetModal = ( props ) => {
               />
             </Col>
           </Form.Group>
+
+          <Form.Group as={Row} controlId="formDropdown">
+            <Form.Label className="text-right" column sm="3">
+              Pet Type:
+            </Form.Label>
+            <Col sm="9">
+              <Form.Control as="select" name="type" onChange={e => onChange(e)}>
+                {petTypes.map(type => 
+                  <option value={type}>{type}</option>
+                )}
+              </Form.Control>
+            </Col>
+          </Form.Group>
         </Form>
+
         </Modal.Body>
         <Modal.Footer>
           <Button variant="danger" onClick={handleClose}>
