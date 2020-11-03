@@ -73,9 +73,21 @@ const PetOwnerPets = ( { username } ) => {
         handleClose();
         getPets();
       })
-      .catch(error => {
+      .catch(() => {
         toast.error(`You already have a pet called ${newPet.name}!\nLet's give another name!`); 
       });
+  };
+
+  const deletePet = async (petName) => {
+    axios
+    .delete(`/api/pets/${username}/${petName}`)
+    .then(response => {
+      toast.success(`${petName} has been removed.`)
+      getPets();
+    })
+    .catch(error => {
+      console.error(error);
+    });
   };
 
   useEffect(() => {
@@ -104,7 +116,7 @@ const PetOwnerPets = ( { username } ) => {
                 isOpen={isOpen} handleClose={handleClose} onChange={onChange} />
               <Card.Body>
                 {pets.map((data, index) => (
-                  <PetCard {...data} key={index} />
+                  <PetCard {...data} deletePet={deletePet} key={index} />
                 ))}
               </Card.Body>
             </Card>

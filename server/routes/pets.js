@@ -31,12 +31,6 @@ router.get("/:owner", async (req, res) => {
   try {
     const result = await Pets.getPetsOfOwner(req.params.owner);
 
-    if (result.rowCount === 0) {
-      return res.status(500).send({
-        message: `Pets from owner ${req.params.owner} not found`,
-      });
-    }
-
     res.status(200).json({ count: result.rowCount, data: result.rows });
   } catch (error) {
     console.error(`Error getting pets from owner ${req.params.owner}`, error);

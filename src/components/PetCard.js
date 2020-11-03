@@ -1,13 +1,13 @@
 import React from "react";
-import { Button, Card, Badge } from "react-bootstrap";
-import { useHistory } from "react-router-dom";
-import { MdPerson, MdPets, MdDateRange } from "react-icons/md";
+import { Button, Card, Badge, OverlayTrigger, Popover } from "react-bootstrap";
+import { MdPerson, MdPets } from "react-icons/md";
 import { FaRegStickyNote } from "react-icons/fa";
 
 import "./PetCard.css";
 
 const PetCard = props => {
   const {
+    deletePet, 
     petName,
     petType,
     petOwner,
@@ -15,6 +15,28 @@ const PetCard = props => {
     petCategories,
     petSpecialRequirements,
   } = props;
+
+  const deleteWarning = (
+    <Popover id="popover-basic">
+      <Popover.Title>
+        <h3> Warning! </h3>
+      </Popover.Title>
+      <Popover.Content>
+        <p>
+        Are you sure you want to delete this pet? 
+        This action is <strong>irreversible</strong>!
+         </p>
+
+        <Button className="button" variant="danger" onClick={() => deletePet(petName)}>
+          Remove
+        </Button>
+        <Button className="button" variant="secondary" onClick={() => document.body.click()}>
+          Cancel
+        </Button>
+      </Popover.Content>
+    </Popover>
+  );
+  
 
   return (
     <Card className="petCardContainer">
@@ -67,9 +89,11 @@ const PetCard = props => {
         <Button className="button" variant="primary">
           Edit
         </Button>
-        <Button className="button" variant="danger">
+        <OverlayTrigger trigger="click" placement="top" overlay={deleteWarning} rootClose >
+        <Button className="button" variant="danger" >
           Remove
         </Button>
+        </OverlayTrigger>
       </Card.Body>
     </Card>
   );
