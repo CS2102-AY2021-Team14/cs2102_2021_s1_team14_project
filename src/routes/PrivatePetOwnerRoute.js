@@ -50,7 +50,7 @@ const PrivatePetOwnerRoute = props => {
               </Route>
 
               <Route exact path={ROUTES.PET_OWNER_PETS}>
-                <PetOwnerPets />
+                <PetOwnerPets username={username} />
               </Route>
             </Switch>
           );
