@@ -27,10 +27,10 @@ router.get("/employeeofmonth", async (req, res) => {
   }
 });
 
-router.get("/petinfo", async (req, res) => {
+router.get("/petsinfo", async (req, res) => {
   try {
     const result = await Admin.getPetTypesByMonth();
-    res.json(result);
+    res.json({ count: result.rowCount, data: result.rows });
   } catch (error) {
     console.error("Could not obtain pet info", error);
     res.status(404).json({ message: "Get Pet Types of All Months error", error });

@@ -35,9 +35,10 @@ class Admin {
     `);
   }
 
-  static getPetTypesByMonth(){
+  // Output: month_year | type | count
+  static getPetTypesByMonth() {
     return pool.query(`
-      SELECT to_char(date_trunc('month', start_date), 'Mon-YYYY'), 
+      SELECT to_char(date_trunc('month', start_date), 'Mon-YYYY') AS month_year, 
         pet_type AS type, 
         COUNT(*) as count 
       FROM bids 

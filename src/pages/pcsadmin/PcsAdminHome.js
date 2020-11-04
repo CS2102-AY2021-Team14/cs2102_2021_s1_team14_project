@@ -4,8 +4,6 @@ import Navbar from "../../components/Navbar";
 import AdminSidebar from "../../components/sidebar/AdminSidebar";
 
 const PcsAdminHome = () => {
-
-  
   return (
     <div>
       <Navbar />
@@ -15,7 +13,7 @@ const PcsAdminHome = () => {
           <AdminSidebar defaultKey={"Home"} />
           </Col>
           <Col xs={9} id="page-content">
-            
+            Page content here
           </Col>
         </Row>
       </Container>

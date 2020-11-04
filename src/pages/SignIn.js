@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { Button, Container, Form, Row, Col } from "react-bootstrap";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
 
@@ -20,8 +20,6 @@ const SignIn = () => {
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
-  const history = useHistory();
 
   const handleSubmit = async event => {
     event.preventDefault();

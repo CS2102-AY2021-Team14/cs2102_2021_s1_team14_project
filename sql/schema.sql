@@ -302,7 +302,6 @@ END IF;
 RETURN NEW;
 END; $$ LANGUAGE plpgsql;
 
-
 -- Trigger for full time care-taker to auto accept bid if it falls between available dates of care taker
 CREATE TRIGGER autoAcceptFullTimerBid
 BEFORE INSERT ON bids
