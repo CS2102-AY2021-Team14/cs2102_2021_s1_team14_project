@@ -40,7 +40,7 @@ const PetCard = props => {
     axios
     .post(`/api/pets/${petOwner}/${petName}/requirement`, newRequirement)
     .then(() => {
-      toast.success(`Wow!`); 
+      toast.success(`Added New Requirement for ${petName}!`); 
       setEditingRequirements(false);
       getPets();
     })
@@ -111,7 +111,7 @@ const PetCard = props => {
             <span className="badgeContainer">
               {petSpecialRequirements?.map((requirement, index) => (
                 <Badge key={index} variant="light" style={{ margin: 4 }}>
-                  {requirement}
+                  {requirement.requirement}
                 </Badge>
               ))}
             </span>
