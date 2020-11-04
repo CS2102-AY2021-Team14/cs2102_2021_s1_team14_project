@@ -7,7 +7,8 @@ import BidCard from "../../components/BidCard";
 
 import { RiAuctionFill } from "react-icons/ri";
 
-const MOCK_DATA = [
+// TODO: link with backend
+export const MOCK_DATA = [
   {
     careTakerName: "care taker",
     petName: "meowzers",
