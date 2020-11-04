@@ -45,7 +45,7 @@ const PetCard = props => {
       getPets();
     })
     .catch(error => {
-      console.error(error);
+      toast.error(`Requirement of ${newRequirement.requirement} already exists!`); 
     });
   };
 
@@ -57,7 +57,7 @@ const PetCard = props => {
       setEditingRequirements(false);
       getPets();
     })
-    .catch(error => {
+    .catch((error) => {
       console.error(error);
     });
   };
