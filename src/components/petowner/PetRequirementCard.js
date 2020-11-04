@@ -3,6 +3,7 @@ import { Button, Card, Form, Modal, Row, Col } from "react-bootstrap";
 
 const PetRequirementCard = ( props ) => {
   const {
+    deleteRequirement, 
     req 
   } = props;
 
@@ -35,7 +36,7 @@ const PetRequirementCard = ( props ) => {
 
         <Row>
           <Col className="text-right" sm="12">
-            <Button size="sm" variant="danger" onClick={() => { }}>
+            <Button size="sm" variant="danger" onClick={() => { deleteRequirement(requirement) }}>
               Delete
                 </Button>
           </Col>

@@ -56,6 +56,13 @@ class Pets {
       [name, owner, requirement, description]
     );
   }
+
+  static deleteSpecialRequirement(name, owner, requirement) {
+    return pool.query(
+      "DELETE FROM pet_special_requirements WHERE name = $1 AND owner = $2 AND requirement = $3;",
+      [name, owner, requirement]
+    );
+  }
 }
 
 module.exports = Pets;

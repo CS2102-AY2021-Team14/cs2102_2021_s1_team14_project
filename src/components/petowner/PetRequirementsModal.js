@@ -10,6 +10,7 @@ const PetRequirementsModal = ( props ) => {
       handleClose, 
       requirements, 
       addRequirement, 
+      deleteRequirement, 
       newRequirement, 
       setNewRequirement, 
     } = props;
@@ -39,12 +40,14 @@ const PetRequirementsModal = ( props ) => {
         <Modal.Body>
 
         {requirements.map(req => 
-          <PetRequirementCard req={req}/> 
+          <PetRequirementCard deleteRequirement={deleteRequirement} req={req}/> 
         )}
 
         <br />
 
-        <EditPetRequirementCard requirement={requirement} description={description} onChange={onChange} addRequirementHandler={addRequirementHandler}/>
+        <EditPetRequirementCard requirement={requirement} 
+          description={description} onChange={onChange} addRequirementHandler={addRequirementHandler}
+        />
 
         </Modal.Body>
       </Modal>

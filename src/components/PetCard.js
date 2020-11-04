@@ -49,6 +49,19 @@ const PetCard = props => {
     });
   };
 
+  const deleteRequirement = async (requirement) => {
+    axios
+    .delete(`/api/pets/${petOwner}/${petName}/${requirement}`)
+    .then(() => {
+      toast.success(`Delete Requirement of ${requirement} for ${petName}!`); 
+      setEditingRequirements(false);
+      getPets();
+    })
+    .catch(error => {
+      console.error(error);
+    });
+  };
+
   const deleteWarning = (
     <Popover id="popover-basic">
       <Popover.Title>
@@ -121,7 +134,7 @@ const PetCard = props => {
         <Button className="button" variant="primary" onClick={()=> setEditingRequirements(true)}>
           Edit Requirements
         </Button>
-        <PetRequirementsModal addRequirement={addRequirement} newRequirement={newRequirement} setNewRequirement={setNewRequirement}
+        <PetRequirementsModal addRequirement={addRequirement} deleteRequirement={deleteRequirement} newRequirement={newRequirement} setNewRequirement={setNewRequirement}
           requirements={petSpecialRequirements} isOpen={isEditingRequirements} handleClose={() => setEditingRequirements(false)}  />
         <Button className="button" variant="primary">
           Edit Categories
