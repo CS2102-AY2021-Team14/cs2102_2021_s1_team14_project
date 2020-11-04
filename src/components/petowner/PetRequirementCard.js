@@ -1,14 +1,14 @@
 import React from "react";
 import { Button, Card, Form, Modal, Row, Col } from "react-bootstrap";
 
-const PetRequirementCard = ( props ) => {
+const PetRequirementCard = (props) => {
   const {
-    deleteRequirement, 
-    req 
+    deleteRequirement,
+    req
   } = props;
 
   const {
-    requirement, 
+    requirement,
     description
   } = req;
 
@@ -21,15 +21,15 @@ const PetRequirementCard = ( props ) => {
                 </Col>
           <Col sm="8">
             {requirement}
-                </Col>
+          </Col>
         </Row>
         <Row>
           <Col className="text-right" sm="4">
             Description:
                 </Col>
           <Col sm="8">
-             {description}
-                </Col>
+            {description}
+          </Col>
         </Row>
 
         <br />

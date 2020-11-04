@@ -12,8 +12,8 @@ import "./PetCard.css";
 
 const PetCard = props => {
   const {
-    deletePet, 
-    getPets, 
+    deletePet,
+    getPets,
     petName,
     petType,
     petOwner,
@@ -26,11 +26,11 @@ const PetCard = props => {
   const [isEditingCategories, setEditingCategories] = useState(false);
 
   const [newRequirement, setNewRequirement] = useState({
-    requirement: '', 
+    requirement: '',
     description: ''
   });
   const [isEditingRequirements, setEditingRequirements] = useState(false);
-  
+
   const deletePetAndClosePopover = () => {
     deletePet(petName);
     document.body.click();
@@ -38,28 +38,28 @@ const PetCard = props => {
 
   const addRequirement = async () => {
     axios
-    .post(`/api/pets/${petOwner}/${petName}/requirement`, newRequirement)
-    .then(() => {
-      toast.success(`Added New Requirement for ${petName}!`); 
-      setEditingRequirements(false);
-      getPets();
-    })
-    .catch(error => {
-      toast.error(`Requirement of ${newRequirement.requirement} already exists!`); 
-    });
+      .post(`/api/pets/${petOwner}/${petName}/requirement`, newRequirement)
+      .then(() => {
+        toast.success(`Added New Requirement for ${petName}!`);
+        setEditingRequirements(false);
+        getPets();
+      })
+      .catch(error => {
+        toast.error(`Requirement of ${newRequirement.requirement} already exists!`);
+      });
   };
 
   const deleteRequirement = async (requirement) => {
     axios
-    .delete(`/api/pets/${petOwner}/${petName}/${requirement}`)
-    .then(() => {
-      toast.success(`Delete Requirement of ${requirement} for ${petName}!`); 
-      setEditingRequirements(false);
-      getPets();
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+      .delete(`/api/pets/${petOwner}/${petName}/${requirement}`)
+      .then(() => {
+        toast.success(`Delete Requirement of ${requirement} for ${petName}!`);
+        setEditingRequirements(false);
+        getPets();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   const deleteWarning = (
@@ -69,7 +69,7 @@ const PetCard = props => {
       </Popover.Title>
       <Popover.Content>
         <p>
-        Are you sure you want to delete this pet? 
+          Are you sure you want to delete this pet?
         This action is <strong>irreversible</strong>!
          </p>
 
@@ -131,17 +131,17 @@ const PetCard = props => {
           </div>
         </div>
 
-        <Button className="button" variant="primary" onClick={()=> setEditingRequirements(true)}>
+        <Button className="button" variant="primary" onClick={() => setEditingRequirements(true)}>
           Edit Requirements
         </Button>
         <PetRequirementsModal addRequirement={addRequirement} deleteRequirement={deleteRequirement} newRequirement={newRequirement} setNewRequirement={setNewRequirement}
-          requirements={petSpecialRequirements} isOpen={isEditingRequirements} handleClose={() => setEditingRequirements(false)}  />
+          requirements={petSpecialRequirements} isOpen={isEditingRequirements} handleClose={() => setEditingRequirements(false)} />
         <Button className="button" variant="primary">
           Edit Categories
         </Button>
         <OverlayTrigger trigger="click" placement="top" overlay={deleteWarning} rootClose >
-        <Button className="button" variant="danger" >
-          Remove
+          <Button className="button" variant="danger" >
+            Remove
         </Button>
         </OverlayTrigger>
       </Card.Body>
