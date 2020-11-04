@@ -15,7 +15,7 @@
     "bcrypt": "^5.0.0",
     "bootstrap": "^4.5.3",
     "chart.js": "^2.9.4",
-    "classname": "0.0.0",
+    "classnames": "^2.2.6",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",

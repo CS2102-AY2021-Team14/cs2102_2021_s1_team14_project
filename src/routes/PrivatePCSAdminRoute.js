@@ -5,11 +5,6 @@ import { UserContext } from "../utils/UserProvider";
 
 import ROUTES from "./Routes";
 
-// import PcsAdminHome from "../pages/pcsadmin/PcsAdminHome";
-// import PcsAdminCareTaker from "../pages/pcsadmin/PcsAdminCareTaker";
-// import PcsAdminPetInfo from "../pages/pcsadmin/PcsAdminPetInfo";
-// import PcsAdminOverview from "../pages/pcsadmin/PcsAdminOverview";
-
 import { PcsAdminHome, PcsAdminCareTaker, PcsAdminPetInfo, PcsAdminOverview } from "../pages/pcsadmin"
 
 const PrivatePCSAdminRoute = props => {

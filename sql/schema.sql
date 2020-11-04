@@ -263,6 +263,28 @@ BEFORE INSERT ON bids
 FOR EACH ROW
 EXECUTE PROCEDURE checkBidAvailabilityFunction();
 
+-- CREATE TABLE IF NOT EXISTS bids (
+--     pet             VARCHAR(255)    NOT NULL,
+--     owner           VARCHAR(255)    NOT NULL,
+--     care_taker      VARCHAR(255)    NOT NULL,
+--     pet_type        pet_type        NOT NULL,
+--     start_date      DATE            NOT NULL,
+--     end_date        DATE            NOT NULL,
+--     is_active       BOOLEAN         NOT NULL DEFAULT true,
+--     is_successful   BOOLEAN         NOT NULL DEFAULT false,
+--     payment_type    VARCHAR(255),
+--     transfer_method VARCHAR(255),
+--     rating          INT             CHECK (rating >= 0),
+--     review_text     VARCHAR,
+--     PRIMARY KEY (pet, care_taker, start_date, end_date),
+--     FOREIGN KEY (pet, owner) REFERENCES pets(name, owner),
+--     FOREIGN KEY (care_taker, pet_type)
+--         REFERENCES care_takers_pet_preferences(care_taker, pet_type),
+--     CONSTRAINT valid_date_range CHECK (start_date <= end_date),
+--     CONSTRAINT successful_bid_constraint CHECK
+--         ((NOT is_successful) OR (payment_type IS NOT NULL AND transfer_method IS NOT NULL))
+-- );
+
 CREATE OR REPLACE FUNCTION autoAcceptFullTimerBidFunction()
 RETURNS TRIGGER AS
 $$ BEGIN
@@ -288,7 +310,7 @@ FOR EACH ROW
 EXECUTE PROCEDURE autoAcceptFullTimerBidFunction();
 
 
--- Drop table commands for reset
+-- Drop table commands for resetting all tables 
 -- DROP TABLE care_takers_availability;
 -- DROP TABLE pet_special_requirements;
 -- DROP TABLE pet_category;
@@ -302,3 +324,12 @@ EXECUTE PROCEDURE autoAcceptFullTimerBidFunction();
 -- DROP TABLE pet_owners CASCADE;
 -- DROP TABLE pets CASCADE;
 -- DROP TABLE users CASCADE;
+
+
+
+-- Clarence query test
+-- SELECT to_char(date_trunc('month', start_date), 'Mon-YY' ), 
+--         pet_type AS type, 
+--         COUNT(*) as count 
+-- FROM bids 
+-- GROUP BY pet_type, date_trunc('month', start_date);
