@@ -150,4 +150,26 @@ router.post("/:owner/:name/requirement", async (req, res) => {
   }
 });
 
+router.delete("/:owner/:name/:requirement", async (req, res) => {
+  try {
+    console.log(req.params.requirement);
+
+    const result = await Pets.deleteSpecialRequirement(
+      req.params.name,
+      req.params.owner,
+      req.params.requirement,
+    );
+
+    res.status(201).send({
+      message: `Successfully delete ${req.params.requirement} from pet ${req.params.name} from ${req.params.owner}`,
+    });
+  } catch (error) {
+    console.error("Error deleting special requirement", error);
+
+    res
+      .status(400)
+      .json({ message: "Error deleting special requirement", error });
+  }
+});
+
 module.exports = router;

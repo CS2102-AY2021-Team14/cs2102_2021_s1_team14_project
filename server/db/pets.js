@@ -2,7 +2,7 @@ const pool = require("./dbPool");
 
 class Pets {
   static getAll() {
-    return pool.query("SELECT * FROM pets;");
+    return pool.query("SELECT * FROM pets_full_information;");
   }
 
   static getAllPetTypes() {
@@ -10,7 +10,7 @@ class Pets {
   }
 
   static getPetsOfOwner(owner) {
-    return pool.query("SELECT * FROM pets WHERE owner = $1;", [owner]);
+    return pool.query("SELECT * FROM pets_full_information WHERE pet_owner = $1;", [owner]);
   }
 
   static get(name, owner) {
@@ -54,6 +54,13 @@ class Pets {
     return pool.query(
       "INSERT INTO pet_special_requirements VALUES ($1, $2, $3, $4);",
       [name, owner, requirement, description]
+    );
+  }
+
+  static deleteSpecialRequirement(name, owner, requirement) {
+    return pool.query(
+      "DELETE FROM pet_special_requirements WHERE name = $1 AND owner = $2 AND requirement = $3;",
+      [name, owner, requirement]
     );
   }
 }

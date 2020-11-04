@@ -1,13 +1,19 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Card, Badge, OverlayTrigger, Popover } from "react-bootstrap";
 import { MdPerson, MdPets } from "react-icons/md";
 import { FaRegStickyNote } from "react-icons/fa";
+
+import { toast } from "react-toastify";
+import axios from "axios";
+
+import PetRequirementsModal from './petowner/PetRequirementsModal';
 
 import "./PetCard.css";
 
 const PetCard = props => {
   const {
-    deletePet, 
+    deletePet,
+    getPets,
     petName,
     petType,
     petOwner,
@@ -16,6 +22,46 @@ const PetCard = props => {
     petSpecialRequirements,
   } = props;
 
+  const [newCategory, setNewCategory] = useState('');
+  const [isEditingCategories, setEditingCategories] = useState(false);
+
+  const [newRequirement, setNewRequirement] = useState({
+    requirement: '',
+    description: ''
+  });
+  const [isEditingRequirements, setEditingRequirements] = useState(false);
+
+  const deletePetAndClosePopover = () => {
+    deletePet(petName);
+    document.body.click();
+  };
+
+  const addRequirement = async () => {
+    axios
+      .post(`/api/pets/${petOwner}/${petName}/requirement`, newRequirement)
+      .then(() => {
+        toast.success(`Added New Requirement for ${petName}!`);
+        setEditingRequirements(false);
+        getPets();
+      })
+      .catch(error => {
+        toast.error(`Requirement of ${newRequirement.requirement} already exists!`);
+      });
+  };
+
+  const deleteRequirement = async (requirement) => {
+    axios
+      .delete(`/api/pets/${petOwner}/${petName}/${requirement}`)
+      .then(() => {
+        toast.success(`Delete Requirement of ${requirement} for ${petName}!`);
+        setEditingRequirements(false);
+        getPets();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
   const deleteWarning = (
     <Popover id="popover-basic">
       <Popover.Title>
@@ -23,11 +69,11 @@ const PetCard = props => {
       </Popover.Title>
       <Popover.Content>
         <p>
-        Are you sure you want to delete this pet? 
+          Are you sure you want to delete this pet?
         This action is <strong>irreversible</strong>!
          </p>
 
-        <Button className="button" variant="danger" onClick={() => deletePet(petName)}>
+        <Button className="button" variant="danger" onClick={deletePetAndClosePopover}>
           Remove
         </Button>
         <Button className="button" variant="secondary" onClick={() => document.body.click()}>
@@ -36,7 +82,6 @@ const PetCard = props => {
       </Popover.Content>
     </Popover>
   );
-  
 
   return (
     <Card className="petCardContainer">
@@ -79,19 +124,24 @@ const PetCard = props => {
             <span className="badgeContainer">
               {petSpecialRequirements?.map((requirement, index) => (
                 <Badge key={index} variant="light" style={{ margin: 4 }}>
-                  {requirement}
+                  {requirement.requirement}
                 </Badge>
               ))}
             </span>
           </div>
         </div>
 
+        <Button className="button" variant="primary" onClick={() => setEditingRequirements(true)}>
+          Edit Requirements
+        </Button>
+        <PetRequirementsModal addRequirement={addRequirement} deleteRequirement={deleteRequirement} newRequirement={newRequirement} setNewRequirement={setNewRequirement}
+          requirements={petSpecialRequirements} isOpen={isEditingRequirements} handleClose={() => setEditingRequirements(false)} />
         <Button className="button" variant="primary">
-          Edit
+          Edit Categories
         </Button>
         <OverlayTrigger trigger="click" placement="top" overlay={deleteWarning} rootClose >
-        <Button className="button" variant="danger" >
-          Remove
+          <Button className="button" variant="danger" >
+            Remove
         </Button>
         </OverlayTrigger>
       </Card.Body>
