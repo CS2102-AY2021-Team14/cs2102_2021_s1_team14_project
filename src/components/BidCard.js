@@ -1,6 +1,5 @@
 import React from "react";
 import { Button, Card, Badge } from "react-bootstrap";
-import { useHistory } from "react-router-dom";
 import { MdPerson, MdPets, MdDateRange } from "react-icons/md";
 
 import "./BidCard.css";
