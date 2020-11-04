@@ -14,7 +14,6 @@ const SummaryChart = ({ displayInfo }) => {
     }
     
     useEffect(() => {
-        console.log(displayInfo);
         setCounts(displayInfo.map(info => info.count));
         setLabels(displayInfo.map(info => info.type));
         const displayColors = [];
