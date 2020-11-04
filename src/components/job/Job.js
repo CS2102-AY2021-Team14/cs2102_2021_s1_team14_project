@@ -2,6 +2,7 @@ import React from 'react';
 import './Job.css';
 
 const Job = ({jobs}) => {
+
     return (
         <div className="jobcontainer">
             <h2>Current jobs</h2>

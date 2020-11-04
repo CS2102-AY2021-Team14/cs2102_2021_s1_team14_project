@@ -16,13 +16,22 @@
     border-radius: 10px;
 }
 
-.employment {
+.employment-employed {
     background-color: #2FA01C;
     text-align: center;
     padding: 1.5vh;
     margin-top: 1.5vh;
     border-radius: 10px;
 }
+
+.employment-unemployed {
+    background-color: #b62222;
+    text-align: center;
+    padding: 1.5vh;
+    margin-top: 1.5vh;
+    border-radius: 10px;
+}
+
 
 #employmentstatus {
     font-weight: 600;
