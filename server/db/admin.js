@@ -35,6 +35,16 @@ class Admin {
     `);
   }
 
+  static getPetTypesByMonth(){
+    return pool.query(`
+      SELECT to_char(date_trunc('month', start_date), 'Mon-YYYY'), 
+        pet_type AS type, 
+        COUNT(*) as count 
+      FROM bids 
+      GROUP BY pet_type, date_trunc('month', start_date)
+    `);
+  }
+
   // static getTotalNumberOfPetsTakenCare(month) {
   //   return pool.query("SELECT 1");
   // }
