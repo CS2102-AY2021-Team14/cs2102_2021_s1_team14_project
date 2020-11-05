@@ -12,7 +12,7 @@ import "./Navbar.css";
 const NavBar = () => {
   const history = useHistory();
 
-  const { setUsername, setAuthToken, setRoles } = useContext(UserContext);
+  const { authToken, setUsername, setAuthToken, setRoles } = useContext(UserContext);
 
   const logout = () => {
     setUsername(null);
@@ -21,6 +21,19 @@ const NavBar = () => {
 
     history.push(ROUTES.HOME);
   };
+
+  const logoutButton =  ( authToken ? <Nav.Item>
+    <Button
+      className="ml-auto"
+      style={{
+        backgroundColor: "#fc0303",
+        border: "none",
+      }}
+      onClick={logout}
+    >
+      Logout
+    </Button>
+  </Nav.Item> : null );
 
   return (
     <Navbar style={{ backgroundColor: "#364F6B" }} variant="dark">
@@ -34,18 +47,7 @@ const NavBar = () => {
         />
         YogaPets
       </Navbar.Brand>
-      <Nav.Item>
-        <Button
-          className="ml-auto"
-          style={{
-            backgroundColor: "#fc0303",
-            border: "none",
-          }}
-          onClick={logout}
-        >
-          Logout
-        </Button>
-      </Nav.Item>
+        {logoutButton}
     </Navbar>
   );
 };
