@@ -1,5 +1,9 @@
 import React from "react";
 import { Modal } from "react-bootstrap";
+import { toast } from "react-toastify";
+
+import EditPetCategoryCard from "./EditPetCategoryCard";
+import PetCategoryCard from "./PetCategoryCard";
 
 const PetCategoriesModal = (props) => {
   const {
@@ -17,6 +21,11 @@ const PetCategoriesModal = (props) => {
   }
 
   const addCategoryHandler = () => {
+    if (/^\s+$/.test(newCategory)) {
+      toast.error('Category Cannot be empty!');
+      return;
+    }
+
     addCategory();
     handleClose();
   }
@@ -27,6 +36,17 @@ const PetCategoriesModal = (props) => {
         <Modal.Title>Edit categories</Modal.Title>
       </Modal.Header>
       <Modal.Body>
+
+        {categories.map(cat =>
+          <PetCategoryCard deleteCategory={deleteCategory} category={cat} />
+        )}
+
+        <br />
+
+        <EditPetCategoryCard category={newCategory}
+          onChange={onChange} addCategoryHandler={addCategoryHandler}
+        />
+
 
       </Modal.Body>
     </Modal>

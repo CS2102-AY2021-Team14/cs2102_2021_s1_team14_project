@@ -52,7 +52,7 @@ const PetCard = props => {
 
   const deleteRequirement = async (requirement) => {
     axios
-      .delete(`/api/pets/${petOwner}/${petName}/${requirement}`)
+      .delete(`/api/pets/${petOwner}/${petName}/requirement/${requirement}`)
       .then(() => {
         toast.success(`Delete Requirement of ${requirement} for ${petName}!`);
         setEditingRequirements(false);
@@ -65,22 +65,22 @@ const PetCard = props => {
 
   const addCategory = async () => {
     axios
-      .post(`/api/pets/${petOwner}/${petName}/category`, newCategory)
+      .post(`/api/pets/${petOwner}/${petName}/category`, { category: newCategory })
       .then(() => {
         toast.success(`Added New Category for ${petName}!`);
         setEditingCategories(false);
         getPets();
       })
       .catch(error => {
-        toast.error(`Requirement of ${newCategory} already exists!`);
+        toast.error(`Category of ${newCategory} already exists!`);
       });
   };
 
   const deleteCategory = async (category) => {
     axios
-      .delete(`/api/pets/${petOwner}/${petName}/category`, category)
+      .delete(`/api/pets/${petOwner}/${petName}/category/${category}`)
       .then(() => {
-        toast.success(`Delete Requirement of ${category} for ${petName}!`);
+        toast.success(`Delete Category of ${category} for ${petName}!`);
         setEditingCategories(false);
         getPets();
       })

@@ -65,7 +65,7 @@ class Pets {
   }
 
   static deletePetCategory(name, owner, category) {
-    return pool.query("DELETE FROM pet_category VALUES name = $1 AND owner = $2 AND category = $3;", [
+    return pool.query("DELETE FROM pet_category WHERE name = $1 AND owner = $2 AND category = $3;", [
       name,
       owner,
       category,

@@ -1,5 +1,6 @@
 import React from "react";
 import { Modal } from "react-bootstrap";
+import { toast } from "react-toastify";
 
 import EditPetRequirementCard from "./EditPetRequirementCard";
 import PetRequirementCard from "./PetRequirementCard";
@@ -28,6 +29,15 @@ const PetRequirementsModal = (props) => {
   }
 
   const addRequirementHandler = () => {
+    if (/^\s+$/.test(requirement)) {
+      toast.error('Requirement Cannot be empty!');
+      return;
+    }
+
+    if (/^\s+$/.test(description)) {
+      toast.error('Description Cannot be empty!');
+      return;
+    }
     addRequirement();
     handleClose();
   }
