@@ -1,12 +1,13 @@
 import React from "react";
-import { Button, Card, Form, Modal, Row, Col } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
+import { toast } from "react-toastify";
 
 import EditPetRequirementCard from "./EditPetRequirementCard";
 import PetRequirementCard from "./PetRequirementCard";
 
 const PetRequirementsModal = (props) => {
   const {
-    isOpen,
+    isEditingRequirements,
     handleClose,
     requirements,
     addRequirement,
@@ -28,12 +29,21 @@ const PetRequirementsModal = (props) => {
   }
 
   const addRequirementHandler = () => {
+    if (requirement == '' || /^\s+$/.test(requirement)) {
+      toast.error('Requirement Cannot be empty!');
+      return;
+    }
+
+    if (description == '' || /^\s+$/.test(description)) {
+      toast.error('Description Cannot be empty!');
+      return;
+    }
     addRequirement();
     handleClose();
   }
 
   return (
-    <Modal show={isOpen} onHide={handleClose}>
+    <Modal show={isEditingRequirements} onHide={handleClose}>
       <Modal.Header closeButton>
         <Modal.Title>Edit Requirements</Modal.Title>
       </Modal.Header>

@@ -6,6 +6,7 @@ import { FaRegStickyNote } from "react-icons/fa";
 import { toast } from "react-toastify";
 import axios from "axios";
 
+import PetCategoriesModal from './petowner/PetCategoriesModal';
 import PetRequirementsModal from './petowner/PetRequirementsModal';
 
 import "./PetCard.css";
@@ -51,7 +52,7 @@ const PetCard = props => {
 
   const deleteRequirement = async (requirement) => {
     axios
-      .delete(`/api/pets/${petOwner}/${petName}/${requirement}`)
+      .delete(`/api/pets/${petOwner}/${petName}/requirement/${requirement}`)
       .then(() => {
         toast.success(`Delete Requirement of ${requirement} for ${petName}!`);
         setEditingRequirements(false);
@@ -61,6 +62,33 @@ const PetCard = props => {
         console.error(error);
       });
   };
+
+  const addCategory = async () => {
+    axios
+      .post(`/api/pets/${petOwner}/${petName}/category`, { category: newCategory })
+      .then(() => {
+        toast.success(`Added New Category for ${petName}!`);
+        setEditingCategories(false);
+        getPets();
+      })
+      .catch(error => {
+        toast.error(`Category of ${newCategory} already exists!`);
+      });
+  };
+
+  const deleteCategory = async (category) => {
+    axios
+      .delete(`/api/pets/${petOwner}/${petName}/category/${category}`)
+      .then(() => {
+        toast.success(`Delete Category of ${category} for ${petName}!`);
+        setEditingCategories(false);
+        getPets();
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };
+
 
   const deleteWarning = (
     <Popover id="popover-basic">
@@ -134,11 +162,21 @@ const PetCard = props => {
         <Button className="button" variant="primary" onClick={() => setEditingRequirements(true)}>
           Edit Requirements
         </Button>
-        <PetRequirementsModal addRequirement={addRequirement} deleteRequirement={deleteRequirement} newRequirement={newRequirement} setNewRequirement={setNewRequirement}
-          requirements={petSpecialRequirements} isOpen={isEditingRequirements} handleClose={() => setEditingRequirements(false)} />
-        <Button className="button" variant="primary">
+        <PetRequirementsModal
+          isEditingRequirements={isEditingRequirements}
+          addRequirement={addRequirement} deleteRequirement={deleteRequirement}
+          newRequirement={newRequirement} setNewRequirement={setNewRequirement}
+          requirements={petSpecialRequirements} handleClose={() => setEditingRequirements(false)} />
+
+        <Button className="button" variant="primary" onClick={() => setEditingCategories(true)}>
           Edit Categories
         </Button>
+        <PetCategoriesModal
+          isEditingCategories={isEditingCategories}
+          addCategory={addCategory} deleteCategory={deleteCategory}
+          newCategory={newCategory} setNewCategory={setNewCategory}
+          categories={petCategories} handleClose={() => setEditingCategories(false)}
+        />
         <OverlayTrigger trigger="click" placement="top" overlay={deleteWarning} rootClose >
           <Button className="button" variant="danger" >
             Remove
