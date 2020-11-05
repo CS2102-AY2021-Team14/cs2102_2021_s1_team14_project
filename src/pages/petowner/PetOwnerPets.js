@@ -61,7 +61,7 @@ const PetOwnerPets = ({ username }) => {
   };
 
   const addPet = async () => {
-    if (newPet.name.length <= 0) {
+    if (newPet.name.length <= 0 || /^\s+$/.test(newPet.name)) {
       toast.error("Please enter a pet name!");
       return;
     }

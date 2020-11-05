@@ -29,12 +29,12 @@ const PetRequirementsModal = (props) => {
   }
 
   const addRequirementHandler = () => {
-    if (/^\s+$/.test(requirement)) {
+    if (requirement == '' || /^\s+$/.test(requirement)) {
       toast.error('Requirement Cannot be empty!');
       return;
     }
 
-    if (/^\s+$/.test(description)) {
+    if (description == '' || /^\s+$/.test(description)) {
       toast.error('Description Cannot be empty!');
       return;
     }
