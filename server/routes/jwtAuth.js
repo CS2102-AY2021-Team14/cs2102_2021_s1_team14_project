@@ -121,13 +121,13 @@ router.post("/login", validator, async (req, res) => {
 
     const fullRoleString = rolesQuery.rows[0].role;
     const isPartTime = rolesQuery.rows[0].is_part_time;
-    if (fullRoleString.includes("Pet Owner")) {
+    if (fullRoleString != null && fullRoleString.includes("Pet Owner")) {
       roles.push("Pet Owner");
     }
-    if (fullRoleString.includes("PCS Admin")) {
+    if (fullRoleString != null && fullRoleString.includes("PCS Admin")) {
       roles.push("PCS Admin");
     }
-    if (fullRoleString.includes("Care Taker")) {
+    if (fullRoleString != null && fullRoleString.includes("Care Taker")) {
       roles.push(isPartTime ? "Part-time Care Taker" : "Full-time Care Taker");
     }
 
