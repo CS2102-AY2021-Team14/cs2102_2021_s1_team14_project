@@ -1,12 +1,12 @@
 import React from "react";
-import { Button, Card, Form, Modal, Row, Col } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 
 import EditPetRequirementCard from "./EditPetRequirementCard";
 import PetRequirementCard from "./PetRequirementCard";
 
 const PetRequirementsModal = (props) => {
   const {
-    isOpen,
+    isEditingRequirements,
     handleClose,
     requirements,
     addRequirement,
@@ -33,7 +33,7 @@ const PetRequirementsModal = (props) => {
   }
 
   return (
-    <Modal show={isOpen} onHide={handleClose}>
+    <Modal show={isEditingRequirements} onHide={handleClose}>
       <Modal.Header closeButton>
         <Modal.Title>Edit Requirements</Modal.Title>
       </Modal.Header>

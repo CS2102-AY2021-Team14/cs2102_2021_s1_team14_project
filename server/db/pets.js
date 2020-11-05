@@ -20,14 +20,6 @@ class Pets {
     ]);
   }
 
-  static addPetCategory(name, owner, category) {
-    return pool.query("INSERT INTO pet_category VALUES ($1, $2, $3);", [
-      name,
-      owner,
-      category,
-    ]);
-  }
-
   static add(name, owner, type) {
     return pool.query("INSERT INTO pets VALUES ($1, $2, $3);", [
       name,
@@ -62,6 +54,22 @@ class Pets {
       "DELETE FROM pet_special_requirements WHERE name = $1 AND owner = $2 AND requirement = $3;",
       [name, owner, requirement]
     );
+  }
+
+  static addPetCategory(name, owner, category) {
+    return pool.query("INSERT INTO pet_category VALUES ($1, $2, $3);", [
+      name,
+      owner,
+      category,
+    ]);
+  }
+
+  static deletePetCategory(name, owner, category) {
+    return pool.query("DELETE FROM pet_category VALUES name = $1 AND owner = $2 AND category = $3;", [
+      name,
+      owner,
+      category,
+    ]);
   }
 }
 
