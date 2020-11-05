@@ -155,6 +155,11 @@ INSERT INTO care_takers_pet_preferences (care_taker, pet_type) VALUES ('ftct2', 
 INSERT INTO care_takers_pet_preferences (care_taker, pet_type) VALUES ('ftct2', 'cat');
 INSERT INTO care_takers_pet_preferences (care_taker, pet_type) VALUES ('ftct3', 'dog');
 
+------- care_taker_leaves ------------
+-- TODO
+
+------- salary ------------
+-- TODO
 
 ----------- bids ---------------
 INSERT INTO bids (pet, owner, care_taker, pet_type, start_date, end_date, is_active, is_successful, payment_type, transfer_method, rating, review_text)
