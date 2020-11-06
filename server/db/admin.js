@@ -6,19 +6,22 @@ class Admin {
     // AVERAGE < 60 pet-day per month OR
     // This month (< 2 stars)
     return pool.query(`
-      SELECT care_taker
-        FROM care_takers_rating 
-        WHERE avg_rating < 3
-      UNION
-      SELECT care_taker
-        FROM bids 
-        GROUP BY care_taker
-        HAVING SUM(date(end_date) - date(start_date) + 1) < 60
-      UNION 
-      SELECT care_taker
-        FROM bids 
-        GROUP BY care_taker, date_part('month', end_date)
-        HAVING AVG(rating) < 2;
+      SELECT users.user_name, is_part_time, name FROM (
+        SELECT care_taker
+          FROM care_takers_rating 
+          WHERE avg_rating < 3
+        UNION
+        SELECT care_taker
+          FROM bids 
+          GROUP BY care_taker
+          HAVING SUM(date(end_date) - date(start_date) + 1) < 60
+        UNION 
+        SELECT care_taker
+          FROM bids 
+          GROUP BY care_taker, date_part('month', end_date)
+          HAVING AVG(rating) < 2
+      ) AS t INNER JOIN care_takers ON t.care_taker = care_takers.user_name
+        INNER JOIN users ON t.care_taker = users.user_name;
     `);
   }
 
