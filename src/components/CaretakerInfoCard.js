@@ -50,7 +50,11 @@ const CaretakerInfoCard = props => {
               Cares for:
               <span className="badgeContainer">
                 {petTypes?.map((type, index) => (
-                  <Badge key={index} variant="light" style={{ margin: 4 }}>
+                  <Badge
+                    key={index}
+                    variant="light"
+                    style={{ margin: 4, fontSize: 16 }}
+                  >
                     {type}
                   </Badge>
                 ))}

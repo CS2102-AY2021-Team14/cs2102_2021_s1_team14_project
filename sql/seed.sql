@@ -154,6 +154,32 @@ INSERT INTO care_takers_pet_preferences (care_taker, pet_type) VALUES ('ftct1', 
 INSERT INTO care_takers_pet_preferences (care_taker, pet_type) VALUES ('ftct2', 'dog');
 INSERT INTO care_takers_pet_preferences (care_taker, pet_type) VALUES ('ftct2', 'cat');
 INSERT INTO care_takers_pet_preferences (care_taker, pet_type) VALUES ('ftct3', 'dog');
+INSERT INTO care_takers_pet_preferences (care_taker, pet_type) VALUES ('ftct3', 'rabbit');
+INSERT INTO care_takers_pet_preferences (care_taker, pet_type) VALUES ('ftct3', 'bird');
+INSERT INTO care_takers_pet_preferences (care_taker, pet_type) VALUES ('ftct3', 'turtle');
+INSERT INTO care_takers_pet_preferences (care_taker, pet_type) VALUES ('ftct4', 'turtle');
+INSERT INTO care_takers_pet_preferences (care_taker, pet_type) VALUES ('ftct4', 'dog');
+INSERT INTO care_takers_pet_preferences (care_taker, pet_type) VALUES ('ftct4', 'cat');
+INSERT INTO care_takers_pet_preferences (care_taker, pet_type) VALUES ('ftct5', 'insect');
+INSERT INTO care_takers_pet_preferences (care_taker, pet_type) VALUES ('ftct6', 'fish');
+
+INSERT INTO care_takers_pet_preferences (care_taker, pet_type, price) VALUES ('ptct1', 'cat', 29.4);
+INSERT INTO care_takers_pet_preferences (care_taker, pet_type, price) VALUES ('ptct1', 'dog', 23.4);
+INSERT INTO care_takers_pet_preferences (care_taker, pet_type, price) VALUES ('ptct1', 'rabbit', 16.8);
+INSERT INTO care_takers_pet_preferences (care_taker, pet_type, price) VALUES ('ptct1', 'rodent', 6.8);
+INSERT INTO care_takers_pet_preferences (care_taker, pet_type, price) VALUES ('ptct1', 'insect', 11.8);
+INSERT INTO care_takers_pet_preferences (care_taker, pet_type, price) VALUES ('ptct2', 'rodent', 7.8);
+INSERT INTO care_takers_pet_preferences (care_taker, pet_type, price) VALUES ('ptct2', 'dog', 47.8);
+INSERT INTO care_takers_pet_preferences (care_taker, pet_type, price) VALUES ('ptct2', 'cat', 88.8);
+INSERT INTO care_takers_pet_preferences (care_taker, pet_type, price) VALUES ('ptct3', 'cat', 24.5);
+INSERT INTO care_takers_pet_preferences (care_taker, pet_type, price) VALUES ('ptct3', 'rodent', 10.8);
+INSERT INTO care_takers_pet_preferences (care_taker, pet_type, price) VALUES ('ptct3', 'fish', 9.8);
+INSERT INTO care_takers_pet_preferences (care_taker, pet_type, price) VALUES ('ptct4', 'fish', 18.8);
+INSERT INTO care_takers_pet_preferences (care_taker, pet_type, price) VALUES ('ptct4', 'cat', 23.8);
+INSERT INTO care_takers_pet_preferences (care_taker, pet_type, price) VALUES ('ptct5', 'dog', 29.8);
+INSERT INTO care_takers_pet_preferences (care_taker, pet_type, price) VALUES ('ptct6', 'insect', 50);
+INSERT INTO care_takers_pet_preferences (care_taker, pet_type, price) VALUES ('ptct6', 'turtle', 123);
+
 
 ------- care_taker_leaves ------------
 -- TODO
