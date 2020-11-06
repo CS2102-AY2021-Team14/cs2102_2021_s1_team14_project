@@ -88,7 +88,7 @@ const ReviewCard = props => {
                       starDimension={24}
                       starSpacing={4}
                       starRatedColor="gold"
-                      rating={3}
+                      rating={rating}
                     />
 
                   </span>
