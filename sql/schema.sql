@@ -309,7 +309,7 @@ IF (((SELECT COUNT(*)
     FROM bids
     WHERE care_taker = NEW.care_taker AND start_date >= NEW.start_date AND end_date <= NEW.end_date AND is_successful) < 5)
     AND
-    (SELECT is_part_time FROM care_takers WHERE user_name = NEW.care_taker)
+    (SELECT NOT is_part_time FROM care_takers WHERE user_name = NEW.care_taker)
     )
 THEN
 NEW.is_successful := TRUE;
