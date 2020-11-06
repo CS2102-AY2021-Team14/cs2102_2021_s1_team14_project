@@ -183,8 +183,8 @@ CREATE VIEW pets_full_information AS
     SELECT P.name AS pet_name, P.owner AS pet_owner, P.type AS pet_type, 
         U.name AS pet_owner_name, 
         ARRAY_AGG(PC.category) AS pet_categories, 
-        ARRAY_AGG(PR.requirement) AS pet_special_requirement, 
-        ARRAY_AGG(PR.description) AS pet_requirements_description
+        ARRAY_AGG(DISTINCT PR.requirement) AS pet_special_requirement, 
+        ARRAY_AGG(DISTINCT PR.description) AS pet_requirements_description
     FROM ( 
         pets P
         LEFT OUTER JOIN users U ON P.owner = U.user_name
