@@ -56,7 +56,7 @@ const PrivatePetOwnerRoute = props => {
               </Route>
 
               <Route exact path={ROUTES.PET_OWNER_CARETAKERS}>
-                <PetOwnerCaretakers />
+                <PetOwnerCaretakers username={username} />
               </Route>
 
               <Route exact path={ROUTES.PET_OWNER_PETS}>

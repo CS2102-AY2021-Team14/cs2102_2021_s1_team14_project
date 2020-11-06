@@ -1,11 +1,11 @@
-export const mapPetInfoToPetData = ( petInfo ) => {
+export const mapPetInfoToPetData = (petInfo) => {
     const {
-        pet_name, 
-        pet_owner, 
-        pet_type, 
-        pet_owner_name, 
-        pet_categories, 
-        pet_special_requirement, 
+        pet_name,
+        pet_owner,
+        pet_type,
+        pet_owner_name,
+        pet_categories,
+        pet_special_requirement,
         pet_requirements_description
     } = petInfo;
 
@@ -28,7 +28,7 @@ const getPetSpecialRequirements = (pet_special_requirement, pet_requirements_des
 
     for (let i = 0; i < pet_special_requirement.length; i++) {
         specialRequirements[i] = {
-            requirement: pet_special_requirement[i], 
+            requirement: pet_special_requirement[i],
             description: pet_requirements_description[i]
         }
     }
@@ -36,6 +36,6 @@ const getPetSpecialRequirements = (pet_special_requirement, pet_requirements_des
     return specialRequirements;
 }
 
-export const unwrapPetType = ( wrappedPetType ) => {
+export const unwrapPetType = (wrappedPetType) => {
     return wrappedPetType.unnest;
 }
