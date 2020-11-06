@@ -45,7 +45,8 @@ const BidModal = props => {
       .diff(moment(startDate).startOf("day"), "days") + 1;
 
   const hasPrice = () => {
-    return getNumDays() >= 1 && pet != null;
+    const startsLaterThanToday = startDate >= new Date().setHours(0, 0, 0, 0);
+    return startsLaterThanToday && getNumDays() >= 1 && pet != null;
   };
 
   const getPrice = () => {
