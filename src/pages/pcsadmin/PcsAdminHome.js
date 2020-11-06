@@ -31,7 +31,7 @@ const PcsAdminHome = () => {
                 Employee of the Month
               </Typography>
               <Typography class="mt-5" variant="h4">
-                seanlowjk
+                {employeeOfTheMonth}
               </Typography>
 
               <Image
