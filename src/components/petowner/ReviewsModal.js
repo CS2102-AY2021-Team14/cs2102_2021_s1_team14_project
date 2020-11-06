@@ -32,7 +32,7 @@ const ReviewsModal = props => {
         <ListGroup>
           {reviews.map((review, index) => {
             return (
-              <ListGroup.Item>
+              <ListGroup.Item key={index}>
                 <Badge variant="info" style={{ marginRight: 10 }}>
                   {review.rating}
                 </Badge>

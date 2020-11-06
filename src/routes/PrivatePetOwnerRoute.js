@@ -7,7 +7,6 @@ import ROUTES from "./Routes";
 import PetOwnerHome from "../pages/petowner/PetOwnerHome";
 import PetOwnerSearch from "../pages/petowner/PetOwnerSearch";
 import PetOwnerPets from "../pages/petowner/PetOwnerPets";
-import PetOwnerCaretakers from "../pages/petowner/PetOwnerCaretakers";
 import PetOwnerBids from "../pages/petowner/PetOwnerBids";
 
 const PrivatePetOwnerRoute = props => {
@@ -53,10 +52,6 @@ const PrivatePetOwnerRoute = props => {
 
               <Route exact path={ROUTES.PET_OWNER_BIDS}>
                 <PetOwnerBids />
-              </Route>
-
-              <Route exact path={ROUTES.PET_OWNER_CARETAKERS}>
-                <PetOwnerCaretakers />
               </Route>
 
               <Route exact path={ROUTES.PET_OWNER_PETS}>

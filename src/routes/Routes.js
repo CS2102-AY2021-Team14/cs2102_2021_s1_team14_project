@@ -6,7 +6,6 @@ const ROUTES = {
   PET_OWNER_HOME: "/petOwner",
   PET_OWNER_SEARCH: "/petOwner/search",
   PET_OWNER_BIDS: "/petOwner/bids",
-  PET_OWNER_CARETAKERS: "/petOwner/caretakers",
   PET_OWNER_PETS: "/petOwner/pets",
 
   CARE_TAKER_HOME: "/careTaker",
@@ -16,7 +15,7 @@ const ROUTES = {
   ADMIN_HOME: "/admin",
   ADMIN_PET_INFO: "/admin/petinfo",
   ADMIN_CARE_TAKER: "/admin/careTakers",
-  ADMIN_OVERVIEW: "/admin/overview"
+  ADMIN_OVERVIEW: "/admin/overview",
 };
 
 module.exports = ROUTES;
