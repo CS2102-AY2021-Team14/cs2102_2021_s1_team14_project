@@ -14,7 +14,7 @@ const CaretakerInfoCard = props => {
     name,
     isPartTime,
     introduction,
-    petTypes,
+    petPrices, // { petType: price }
     avgRating,
   } = props;
 
@@ -49,13 +49,13 @@ const CaretakerInfoCard = props => {
               </span>
               Cares for:
               <span className="badgeContainer">
-                {petTypes?.map((type, index) => (
+                {Object.entries(petPrices ?? {}).map((petPrice, index) => (
                   <Badge
                     key={index}
                     variant="light"
                     style={{ margin: 4, fontSize: 16 }}
                   >
-                    {type}
+                    {petPrice[0]}: ${parseFloat(petPrice[1]).toFixed(2)} per day
                   </Badge>
                 ))}
               </span>
@@ -68,14 +68,18 @@ const CaretakerInfoCard = props => {
               Ratings:
               <span className="badgeContainer">
                 <StarRatings
-                  starDimension={24}
-                  starSpacing={4}
+                  starDimension={"24px"}
+                  starSpacing={"4px"}
                   starRatedColor="gold"
-                  rating={avgRating}
+                  rating={parseFloat(avgRating ?? 0)}
                 />
 
                 <Badge variant="light" style={{ marginLeft: 8 }}>
-                  <span style={{ fontSize: 20 }}>{avgRating}</span>
+                  <span style={{ fontSize: 18 }}>
+                    {avgRating
+                      ? parseFloat(avgRating).toFixed(2)
+                      : "No ratings yet"}
+                  </span>
                 </Badge>
               </span>
             </div>

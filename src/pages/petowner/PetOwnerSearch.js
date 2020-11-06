@@ -15,6 +15,8 @@ import CaretakerInfoCard from "../../components/CaretakerInfoCard";
 import { FaSearch } from "react-icons/fa";
 import PET_TYPES from "../../utils/PetTypes";
 
+import axios from "axios";
+
 const MOCK_DATA = [
   {
     username: "username 1",
@@ -34,7 +36,60 @@ const MOCK_DATA = [
   },
 ];
 
+/*
+{
+    username,
+    name,
+    isPartTime,
+    introduction,
+    petPrices, // { petType: price }
+    avgRating,
+  }
+*/
+
 const PetOwnerSearch = () => {
+  const [caretakers, setCaretakers] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("/api/caretaker")
+      .then(res => {
+        let data = res.data.data;
+
+        let caretakers = [];
+        // parse data
+        for (const rawCaretaker of data) {
+          const {
+            user_name,
+            name,
+            is_part_time,
+            introduction,
+            pet_prices,
+            avg_rating,
+          } = rawCaretaker;
+
+          const petPrices = {};
+          pet_prices.forEach(
+            petPrice => (petPrices[petPrice.pet_type] = petPrice.price)
+          );
+
+          const caretaker = {
+            username: user_name,
+            name,
+            isPartTime: is_part_time,
+            introduction,
+            petPrices,
+            avgRating: avg_rating,
+          };
+
+          caretakers.push(caretaker);
+        }
+
+        setCaretakers(caretakers);
+      })
+      .catch(err => console.log("Error getting caretakers", err));
+  }, []);
+
   return (
     <div>
       <Navbar />
@@ -98,7 +153,7 @@ const PetOwnerSearch = () => {
                   })}
                 </div>
 
-                {MOCK_DATA.map((data, index) => (
+                {caretakers.map((data, index) => (
                   <CaretakerInfoCard {...data} key={index} />
                 ))}
               </Card.Body>
