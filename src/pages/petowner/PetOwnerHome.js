@@ -132,22 +132,6 @@ const PetOwnerHome = () => {
               </Card.Body>
             </Card>
           </Col>
-          <Col>
-            <Card style={{ margin: 10 }}>
-              <Card.Header>
-                <span style={{ margin: 10 }}>
-                  <RiAuctionFill />
-                </span>
-                Care Taker Status
-              </Card.Header>
-              <Card.Body>
-                {/* TODO CareTakerBidStatusCard? */}
-                {MOCK_DATA.map((data, index) => (
-                  <BidCard {...data} key={index} showButtons={false} />
-                ))}
-              </Card.Body>
-            </Card>
-          </Col>
         </Row>
       </Container>
     </div>
