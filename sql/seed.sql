@@ -207,11 +207,11 @@ INSERT INTO bids (pet, owner, care_taker, pet_type, start_date, end_date, is_act
 VALUES ('dog3', 'po2', 'ftct3', 'dog', '2020-11-01', '2020-11-02', 'false', 'true', 'Cash', 'Pet Owner Delivery', 4, 'Ok not bad');
 
 -------- BASE PRICES -------
-INSERT INTO base_prices VALUES ('a1', 'cat', 88);
-INSERT INTO base_prices VALUES ('a1', 'dog', 77);
-INSERT INTO base_prices VALUES ('a1', 'bird', 68.5);
-INSERT INTO base_prices VALUES ('a1', 'rabbit', 72);
-INSERT INTO base_prices VALUES ('a1', 'rodent', 22);
-INSERT INTO base_prices VALUES ('a1', 'fish', 58);
-INSERT INTO base_prices VALUES ('a1', 'insect', 12.5);
-INSERT INTO base_prices VALUES ('a1', 'turtle', 62);
+INSERT INTO base_prices VALUES ('cat', 88);
+INSERT INTO base_prices VALUES ('dog', 77);
+INSERT INTO base_prices VALUES ('bird', 68.5);
+INSERT INTO base_prices VALUES ('rabbit', 72);
+INSERT INTO base_prices VALUES ('rodent', 22);
+INSERT INTO base_prices VALUES ('fish', 58);
+INSERT INTO base_prices VALUES ('insect', 12.5);
+INSERT INTO base_prices VALUES ('turtle', 62);
