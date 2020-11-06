@@ -13,6 +13,18 @@ class Bids {
     return pool.query("SELECT * FROM bids WHERE owner = $1;", [owner]);
   }
 
+  static getAllReviewableBids(owner) {
+    return pool.query("SELECT * FROM bids WHERE owner = $1 AND end_date <= $2 AND is_successful = true AND is_active = false", [owner, new Date()])
+  }
+
+  static addReview(petName, careTakerName, startDate, endDate, rating, reviewText) {
+    return pool.query(`
+      UPDATE bids 
+        SET rating = $1, review_text = $2
+        WHERE pet = $3 AND care_taker = $4 AND start_date = $5 AND end_date = $6
+    `, [rating, reviewText, petName, careTakerName, startDate, endDate])
+  }
+
   static addBid(pet, owner, care_taker, pet_type, start_date, end_date) {
     // Trigger here to check bid dates with availability
     return pool.query("INSERT INTO bids VALUES ($1, $2, $3, $4, $5, $6);", [

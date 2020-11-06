@@ -6,8 +6,8 @@ const pool = new Pool({
   ssl:
     process.env.DB_USESSL === "true"
       ? {
-          rejectUnauthorized: false,
-        }
+        rejectUnauthorized: false,
+      }
       : null,
   // sslmode: process.env.NODE_ENV === "production" ? "require" : "disable"
 });

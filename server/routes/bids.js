@@ -15,6 +15,19 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/reviews/:owner", async (req, res) => {
+  try {
+    const { owner } = req.params;
+    const result = await Bids.getAllReviewableBids(owner);
+
+    res.status(200).json({ count: result.rowCount, data: result.rows });
+  } catch (error) {
+    console.error("Error getting all reviews", error);
+
+    res.status(404).json({ message: "Error getting all reviews", error });
+  }
+});
+
 router.get("/active", async (req, res) => {
   try {
     const result = await Bids.getAllActive();
@@ -38,6 +51,28 @@ router.get("/owner/:owner", async (req, res) => {
     console.error("Error getting pet owner's bids", error);
 
     res.status(404).json({ message: "Error getting pet owner's bids", error });
+  }
+});
+
+router.post("/reviews/:owner", async (req, res) => {
+  try {
+    const { owner } = req.params;
+    const { petName, careTakerName, startDate, endDate, rating, reviewText } = req.body;
+    const result = await Bids.addReview(petName, careTakerName, startDate, endDate, rating, reviewText);
+
+    if (result.rowCount === 0) {
+      return res.status(400).send({
+        message: `Error posting review`,
+      });
+    }
+
+    res.status(200).send({
+      message: `Ok`,
+    });
+  } catch (error) {
+    console.error("Error posting review", error);
+
+    res.status(404).json({ message: "Error posting review", error });
   }
 });
 
