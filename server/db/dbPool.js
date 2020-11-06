@@ -2,17 +2,12 @@ const { Pool } = require("pg");
 
 // // Production
 const pool = new Pool({
-  user: "postgres",
-  password: "postgres",
-  host: "localhost",
-  port: 5432,
-  database: "yogapets",
-  // connectionString: process.env.DATABASE_URL,
+  connectionString: process.env.DATABASE_URL,
   ssl:
     process.env.DB_USESSL === "true"
       ? {
-          rejectUnauthorized: false,
-        }
+        rejectUnauthorized: false,
+      }
       : null,
   // sslmode: process.env.NODE_ENV === "production" ? "require" : "disable"
 });
