@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Button, Card, Badge } from "react-bootstrap";
 import { MdPerson, MdPets, MdStar } from "react-icons/md";
 import { RiAuctionFill } from "react-icons/ri";
@@ -7,6 +7,8 @@ import BidModal from "./petowner/BidModal";
 
 import "./CaretakerInfoCard.css";
 import ReviewsModal from "./petowner/ReviewsModal";
+import { UserContext } from "../utils/UserProvider";
+import axios from "axios";
 
 const CaretakerInfoCard = props => {
   const {
@@ -14,12 +16,35 @@ const CaretakerInfoCard = props => {
     name,
     isPartTime,
     introduction,
-    petTypes,
+    petPrices, // { petType: price }
     avgRating,
   } = props;
 
+  const { username: userUsername } = useContext(UserContext);
+
   const [isBidModalOpen, setIsBidModalOpen] = useState(false);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+
+  const [pets, setPets] = useState([]);
+
+  useEffect(() => {
+    if (username) {
+      axios
+        .get(`/api/pets/${userUsername}`)
+        .then(res => {
+          const data = res.data?.data ?? [];
+          setPets(
+            data.map(pet => {
+              return {
+                name: pet.pet_name,
+                type: pet.pet_type,
+              };
+            })
+          );
+        })
+        .catch(err => console.log("Error getting user's pets", err));
+    }
+  }, [username]);
 
   return (
     <>
@@ -49,13 +74,13 @@ const CaretakerInfoCard = props => {
               </span>
               Cares for:
               <span className="badgeContainer">
-                {petTypes?.map((type, index) => (
+                {Object.entries(petPrices ?? {}).map((petPrice, index) => (
                   <Badge
                     key={index}
                     variant="light"
                     style={{ margin: 4, fontSize: 16 }}
                   >
-                    {type}
+                    {petPrice[0]}: ${parseFloat(petPrice[1]).toFixed(2)} per day
                   </Badge>
                 ))}
               </span>
@@ -68,14 +93,18 @@ const CaretakerInfoCard = props => {
               Ratings:
               <span className="badgeContainer">
                 <StarRatings
-                  starDimension={24}
-                  starSpacing={4}
+                  starDimension={"24px"}
+                  starSpacing={"4px"}
                   starRatedColor="gold"
-                  rating={avgRating}
+                  rating={parseFloat(avgRating ?? 0)}
                 />
 
                 <Badge variant="light" style={{ marginLeft: 8 }}>
-                  <span style={{ fontSize: 20 }}>{avgRating}</span>
+                  <span style={{ fontSize: 18 }}>
+                    {avgRating
+                      ? parseFloat(avgRating).toFixed(2)
+                      : "No ratings yet"}
+                  </span>
                 </Badge>
               </span>
             </div>
@@ -106,6 +135,8 @@ const CaretakerInfoCard = props => {
         handleClose={() => setIsBidModalOpen(false)}
         caretakerUsername={username}
         caretakerName={name}
+        pets={pets}
+        careTakerPetPrices={petPrices}
       />
 
       <ReviewsModal
