@@ -6,22 +6,29 @@ class Admin {
     // AVERAGE < 60 pet-day per month OR
     // This month (< 2 stars)
     return pool.query(`
-      SELECT users.user_name, is_part_time, name FROM (
-        SELECT care_taker
+      SELECT users.user_name, is_part_time, name, ARRAY_AGG(error_type) AS error_types, ARRAY_AGG(error_data) AS error_datas FROM (
+        SELECT care_taker, 1 AS error_type, avg_rating AS error_data
           FROM care_takers_rating 
           WHERE avg_rating < 3
         UNION
-        SELECT care_taker
+        SELECT care_taker, 2 AS error_type, (
+          SUM(date(end_date) - date(start_date) + 1) / 
+          ((date_part('year', MAX(end_date)) - date_part('year', MIN(start_date))) * 12
+             + DATE_PART('month', MAX(end_date)) - DATE_PART('month', MIN(start_date)) + 1)
+        ) AS error_data
           FROM bids 
           GROUP BY care_taker
-          HAVING SUM(date(end_date) - date(start_date) + 1) < 60
+          HAVING SUM(date(end_date) - date(start_date) + 1) / 
+            ((date_part('year', MAX(end_date)) - date_part('year', MIN(start_date))) * 12
+             + DATE_PART('month', MAX(end_date)) - DATE_PART('month', MIN(start_date)) + 1) < 60 
         UNION 
-        SELECT care_taker
+        SELECT care_taker, 3 AS error_type, AVG(rating) AS error_data 
           FROM bids 
           GROUP BY care_taker, date_part('month', end_date)
           HAVING AVG(rating) < 2
       ) AS t INNER JOIN care_takers ON t.care_taker = care_takers.user_name
-        INNER JOIN users ON t.care_taker = users.user_name;
+        INNER JOIN users ON t.care_taker = users.user_name
+        GROUP BY (users.user_name, is_part_time, name);
     `);
   }
 
