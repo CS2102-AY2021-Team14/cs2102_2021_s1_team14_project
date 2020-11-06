@@ -1,52 +1,52 @@
 import React, { useState, useEffect } from "react";
 import { Card, Container, ToggleButtonGroup, ToggleButton, Row, Col } from "react-bootstrap";
 
+import { toast } from "react-toastify";
+import axios from "axios";
+
 import PetOwnerSidebar from "../../components/sidebar/PetOwnerSidebar";
 import Navbar from "../../components/Navbar";
 
 import ReviewCard from "../../components/ReviewCard";
+import { mapBidInfoToBidData } from "../../utils/BidsHelper";
 
-const MOCK_DATA = [
-  {
-    careTakerName: "care taker",
-    petName: "meowzers",
-    petType: "Cat",
-    startDate: "20 Oct 2020",
-    endDate: "22 Oct 20202",
-    isSuccessful: true,
-    isActive: false,
-    rating: undefined,
-    reviewText: undefined,
-  },
-];
+const PetOwnerCaretakers = (props) => {
 
-const MOCK_DATA_2 = [
-  {
-    careTakerName: "care taker",
-    petName: "woofers",
-    petType: "Dog",
-    startDate: "20 Oct 2020",
-    endDate: "22 Oct 20202",
-    isSuccessful: true,
-    isActive: false,
-    rating: 3,
-    reviewText: 'Hello World',
-  },
-];
-
-const PetOwnerCaretakers = () => {
+  const { username } = props;
 
   const [filterStatus, setFilterStatus] = useState(1);
-  const [reviews, setReviews] = useState(MOCK_DATA);
+  const [dbReviews, setDBReviews] = useState([]);
+  const [reviews, setReviews] = useState([]);
+
+  const getReviews = async () => {
+    axios
+      .get(`/api/bids/reviews/${username}`)
+      .then(response => {
+        const reviews = response.data.data.map(rev => mapBidInfoToBidData(rev));
+        console.log(reviews);
+        setDBReviews(reviews);
+        const actualReviews = dbReviews.filter(review => review.review_text === null);
+        setReviews(actualReviews);
+      })
+      .catch(error => {
+        toast.error(error.response.data.message);
+      });
+  };
 
   const changeView = (newFilter) => {
     setFilterStatus(newFilter);
     if (filterStatus === 1) {
-      setReviews(MOCK_DATA);
+      const actualReviews = dbReviews.filter(review => review.review_text === null);
+      setReviews(actualReviews);
     } else {
-      setReviews(MOCK_DATA_2);
+      const actualReviews = dbReviews.filter(review => review.review_text !== null);
+      setReviews(actualReviews);
     }
   };
+
+  useEffect(() => {
+    getReviews();
+  }, []);
 
   return (
     <div>

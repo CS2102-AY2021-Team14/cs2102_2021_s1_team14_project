@@ -15,6 +15,19 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/reviews/:owner", async (req, res) => {
+  try {
+    const { owner } = req.params;
+    const result = await Bids.getAllReviewableBids(owner);
+
+    res.status(200).json({ count: result.rowCount, data: result.rows });
+  } catch (error) {
+    console.error("Error getting all bids", error);
+
+    res.status(404).json({ message: "Error getting all bids", error });
+  }
+});
+
 router.get("/active", async (req, res) => {
   try {
     const result = await Bids.getAllActive();
