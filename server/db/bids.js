@@ -10,7 +10,14 @@ class Bids {
   }
 
   static getPetOwnersBids(owner) {
-    return pool.query("SELECT * FROM bids WHERE owner = $1;", [owner]);
+    return pool.query(
+      `
+      SELECT bids.*, users.name AS care_taker_name
+      FROM bids INNER JOIN users ON bids.care_taker = users.user_name
+      WHERE owner = $1;
+      `,
+      [owner]
+    );
   }
 
   static addBid(pet, owner, care_taker, pet_type, start_date, end_date) {

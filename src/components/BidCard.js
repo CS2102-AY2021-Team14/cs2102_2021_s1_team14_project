@@ -6,13 +6,19 @@ import "./BidCard.css";
 
 const BidCard = props => {
   const {
-    careTakerName,
-    petName,
+    showButtons,
+    caretakerUsername,
+    caretakerName,
+    pet,
     petType,
     startDate,
     endDate,
     isSuccessful,
     isActive,
+    paymentType,
+    transferMethod,
+    rating,
+    reviewText,
   } = props;
 
   const getBadgeVariant = () => {
@@ -37,8 +43,9 @@ const BidCard = props => {
   };
 
   const isReviewable = () => {
+    const hasReviewed = rating != null;
     const todaysDate = new Date().setHours(0, 0, 0, 0);
-    return isSuccessful && endDate >= todaysDate;
+    return isSuccessful && !hasReviewed && endDate >= todaysDate;
   };
 
   const getButtonComponent = () => {
@@ -79,13 +86,13 @@ const BidCard = props => {
             <span className="iconContainer">
               <MdPerson />
             </span>
-            Care Taker: {careTakerName}
+            Care Taker: {caretakerName}
           </div>
           <div>
             <span className="iconContainer">
               <MdPets />
             </span>
-            Pet: {petName}
+            Pet: {pet}
             <span className="badgeContainer">
               <Badge variant="light">{petType}</Badge>
             </span>
@@ -94,10 +101,11 @@ const BidCard = props => {
             <span className="iconContainer">
               <MdDateRange />
             </span>
-            Date: {startDate} - {endDate}
+            Date: {new Date(startDate).toDateString()} -{" "}
+            {new Date(endDate).toDateString()}
           </div>
         </div>
-        {getButtonComponent()}
+        {showButtons && getButtonComponent()}
       </Card.Body>
     </Card>
   );

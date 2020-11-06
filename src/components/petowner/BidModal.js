@@ -70,6 +70,7 @@ const BidModal = props => {
         toast.success(
           "Successfully bidded, you can check your status in the bids page"
         );
+        handleClose();
       })
       .catch(err => {
         console.log("Error posting bid", err);

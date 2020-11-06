@@ -10,8 +10,8 @@ import { RiAuctionFill } from "react-icons/ri";
 // TODO: link with backend
 export const MOCK_DATA = [
   {
-    careTakerName: "care taker",
-    petName: "meowzers",
+    caretakerName: "care taker",
+    pet: "meowzers",
     petType: "Cat",
     startDate: "20 Oct 2020",
     endDate: "22 Oct 20202",
@@ -19,8 +19,8 @@ export const MOCK_DATA = [
     isActive: true,
   },
   {
-    careTakerName: "care taker 2",
-    petName: "doggo",
+    caretakerName: "care taker 2",
+    pet: "doggo",
     petType: "Dog",
     startDate: "23 Oct 2020",
     endDate: "29 Oct 20202",
@@ -28,8 +28,8 @@ export const MOCK_DATA = [
     isActive: true,
   },
   {
-    careTakerName: "care taker three 3",
-    petName: "snek",
+    caretakerName: "care taker three 3",
+    pet: "snek",
     petType: "Snake",
     startDate: "03 Nov 2020",
     endDate: "19 Nov 2020",
@@ -73,7 +73,7 @@ const PetOwnerHome = () => {
               <Card.Body>
                 {/* TODO CareTakerBidStatusCard? */}
                 {MOCK_DATA.map((data, index) => (
-                  <BidCard {...data} key={index} />
+                  <BidCard {...data} key={index} showButtons={false} />
                 ))}
               </Card.Body>
             </Card>
