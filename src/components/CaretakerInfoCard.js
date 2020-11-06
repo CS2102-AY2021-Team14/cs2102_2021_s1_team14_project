@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Button, Card, Badge } from "react-bootstrap";
 import { MdPerson, MdPets, MdStar } from "react-icons/md";
 import { RiAuctionFill } from "react-icons/ri";
@@ -7,6 +7,8 @@ import BidModal from "./petowner/BidModal";
 
 import "./CaretakerInfoCard.css";
 import ReviewsModal from "./petowner/ReviewsModal";
+import { UserContext } from "../utils/UserProvider";
+import axios from "axios";
 
 const CaretakerInfoCard = props => {
   const {
@@ -18,8 +20,31 @@ const CaretakerInfoCard = props => {
     avgRating,
   } = props;
 
+  const { username: userUsername } = useContext(UserContext);
+
   const [isBidModalOpen, setIsBidModalOpen] = useState(false);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+
+  const [pets, setPets] = useState([]);
+
+  useEffect(() => {
+    if (username) {
+      axios
+        .get(`/api/pets/${userUsername}`)
+        .then(res => {
+          const data = res.data?.data ?? [];
+          setPets(
+            data.map(pet => {
+              return {
+                name: pet.pet_name,
+                type: pet.pet_type,
+              };
+            })
+          );
+        })
+        .catch(err => console.log("Error getting user's pets", err));
+    }
+  }, [username]);
 
   return (
     <>
@@ -110,6 +135,8 @@ const CaretakerInfoCard = props => {
         handleClose={() => setIsBidModalOpen(false)}
         caretakerUsername={username}
         caretakerName={name}
+        pets={pets}
+        careTakerPetPrices={petPrices}
       />
 
       <ReviewsModal

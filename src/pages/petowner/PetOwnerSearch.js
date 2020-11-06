@@ -76,7 +76,7 @@ const PetOwnerSearch = () => {
   const getFilteredCaretakers = () => {
     return caretakers.filter(caretaker => {
       const isSearchShown =
-        search == null || search == ""
+        search == null || search === ""
           ? true
           : caretaker.username.toLowerCase().includes(search) ||
             caretaker.name?.toLowerCase()?.includes(search) ||
