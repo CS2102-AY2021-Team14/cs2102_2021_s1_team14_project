@@ -23,9 +23,9 @@ const PetOwnerCaretakers = (props) => {
       .get(`/api/bids/reviews/${username}`)
       .then(response => {
         const reviews = response.data.data.map(rev => mapBidInfoToBidData(rev));
-        console.log(reviews);
         setDBReviews(reviews);
-        const actualReviews = dbReviews.filter(review => review.review_text === null);
+        const actualReviews = reviews.filter(review => review.reviewText == null);
+        console.log(actualReviews);
         setReviews(actualReviews);
       })
       .catch(error => {
@@ -36,10 +36,10 @@ const PetOwnerCaretakers = (props) => {
   const changeView = (newFilter) => {
     setFilterStatus(newFilter);
     if (filterStatus === 1) {
-      const actualReviews = dbReviews.filter(review => review.review_text === null);
+      const actualReviews = dbReviews.filter(review => review.reviewText == null);
       setReviews(actualReviews);
     } else {
-      const actualReviews = dbReviews.filter(review => review.review_text !== null);
+      const actualReviews = dbReviews.filter(review => review.reviewText != null);
       setReviews(actualReviews);
     }
   };
