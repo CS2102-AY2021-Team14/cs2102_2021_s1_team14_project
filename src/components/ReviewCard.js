@@ -11,6 +11,7 @@ import ReviewTextModal from "./ReviewTextModal";
 
 const ReviewCard = props => {
   const {
+    addReview,
     careTakerName,
     petName,
     petType,
@@ -25,12 +26,13 @@ const ReviewCard = props => {
   const [newRating, setRating] = useState(rating ? rating : 3);
   const [newReviewText, setReviewText] = useState(reviewText ? reviewText : '');
 
-  const addReview = () => {
+  const addReviewHandler = () => {
     if (newReviewText == '' || /^\s+$/.test(newReviewText)) {
       toast.error('Review Text Cannot be empty!');
       return;
     }
 
+    addReview(petName, careTakerName, startDate, endDate, newRating, newReviewText);
     setOpen(false);
   };
 
@@ -99,7 +101,7 @@ const ReviewCard = props => {
         <Button className="button" variant="primary" disabled={!canEdit()} onClick={() => { setOpen(true); }}>
           Review
         </Button>
-        <NewReviewModal addReview={addReview}
+        <NewReviewModal addReview={addReviewHandler}
           isOpen={isOpen}
           handleClose={() => setOpen(false)}
           careTakerName={careTakerName}

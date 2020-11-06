@@ -33,6 +33,27 @@ const PetOwnerCaretakers = (props) => {
       });
   };
 
+  const addReview = (petName, careTakerName, startDate, endDate, newRating, newReviewText) => {
+    const data = {
+      petName: petName,
+      careTakerName: careTakerName,
+      startDate: startDate,
+      endDate: endDate,
+      rating: newRating,
+      reviewText: newReviewText
+    };
+
+    axios
+      .post(`/api/bids/reviews/${username}`, data)
+      .then(response => {
+        toast.success("Review added!");
+        getReviews();
+      })
+      .catch(error => {
+        toast.error(error.response.data.message);
+      });
+  }
+
   const changeView = (newFilter) => {
     setFilterStatus(newFilter);
     if (filterStatus === 1) {
@@ -67,7 +88,7 @@ const PetOwnerCaretakers = (props) => {
               <Card.Body>
                 <Card>
                   {reviews.map((data, index) => (
-                    <ReviewCard {...data} key={index} />
+                    <ReviewCard {...data} addReview={addReview} key={index} />
                   ))}
                 </Card>
               </Card.Body>
