@@ -36,12 +36,15 @@ class Admin {
     // Most pet days worked in the month
     // Highest rating in the month only
     return pool.query(`
-      SELECT care_taker
+    SELECT employee.care_taker AS care_taker, users.name AS name 
+     FROM ( SELECT care_taker
         FROM bids
         GROUP BY care_taker, date_part('month', end_date)
         HAVING date_part('month', end_date) = date_part('month', now())
         ORDER BY SUM(date(end_date) - date(start_date) + 1) DESC, AVG(rating) DESC, COUNT(owner) DESC
-        LIMIT 1; 
+        LIMIT 1 ) AS employee 
+      INNER JOIN  
+      users ON employee.care_taker = users.user_name; 
     `);
   }
 
