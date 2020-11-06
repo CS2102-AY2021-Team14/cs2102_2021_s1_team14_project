@@ -110,13 +110,13 @@ const PcsAdminOverview = () => {
                 <Card.Body className="bidCardBodyContainer">
                   <Card.Title>{basePrice.pet_type}</Card.Title>
                   <Card.Text>${basePrice.base_price}</Card.Text>
-                  <Button
+                  {/* <Button
                     className="button"
                     variant="danger"
                     onClick={() => handleDelete(basePrice.pet_type)}
                   >
                     Delete
-                  </Button>
+                  </Button> */}
                   <Button
                     className="button"
                     variant="warning"

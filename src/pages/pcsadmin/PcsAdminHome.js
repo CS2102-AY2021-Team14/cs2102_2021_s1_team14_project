@@ -5,7 +5,7 @@ import AdminSidebar from "../../components/sidebar/AdminSidebar";
 import { Typography } from "@material-ui/core";
 import axios from "axios";
 import Confetti from "react-confetti";
-
+import useWindowDimensions from "../../utils/WindowDimensions";
 const PcsAdminHome = () => {
   const [employeeOfTheMonth, setEmployeeOfTheMonth] = useState("");
 
@@ -14,6 +14,8 @@ const PcsAdminHome = () => {
       setEmployeeOfTheMonth(response.data.care_taker);
     });
   }, []);
+
+  const { height, width } = useWindowDimensions();
 
   return (
     <div>
@@ -36,8 +38,12 @@ const PcsAdminHome = () => {
                 src="https://webstockreview.net/images/congratulations-clipart-transparent-background-2.png"
                 fluid
               />
-              <Confetti />
             </Container>
+            <Confetti
+              numberOfPieces={1000}
+              width={(width * 3) / 4}
+              height={height}
+            />
           </Col>
         </Row>
       </Container>
