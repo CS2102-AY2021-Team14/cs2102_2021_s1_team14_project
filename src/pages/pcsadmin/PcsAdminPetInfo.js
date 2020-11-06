@@ -1,4 +1,4 @@
-import React,  { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import Navbar from "../../components/Navbar";
 import AdminSidebar from "../../components/sidebar/AdminSidebar";
@@ -14,22 +14,30 @@ const PcsAdminPetInfo = () => {
   const [displayMonthInfo, setMonthInfo] = useState([]);
 
   const handleDateChanges = event => {
-    const newDisplayInfo = petsInfo.filter((item) => { return item.month_year === event.target.value });
+    const newDisplayInfo = petsInfo.filter(item => {
+      return item.month_year === event.target.value;
+    });
     setMonthInfo(newDisplayInfo);
   };
 
   const getPetsInfo = async () => {
-    axios.get(`/api/admin/petsinfo`)
-          .then(response => {
-            const { data: { data } } = response;
-            setPetsInfo(data);
-            const mappedDates = data.map(row => row.month_year)
-                                    .filter((item, index, arr) => { return arr.indexOf(item) === index });
-            setDates(mappedDates);
-          })
-          .catch(error => {
-            toast.error(error.response.data);
+    axios
+      .get(`/api/admin/petsinfo`)
+      .then(response => {
+        const {
+          data: { data },
+        } = response;
+        setPetsInfo(data);
+        const mappedDates = data
+          .map(row => row.month_year)
+          .filter((item, index, arr) => {
+            return arr.indexOf(item) === index;
           });
+        setDates(mappedDates);
+      })
+      .catch(error => {
+        toast.error(error.response.data);
+      });
   };
 
   useEffect(() => {
@@ -38,28 +46,34 @@ const PcsAdminPetInfo = () => {
 
   return (
     <div>
-    <Navbar />
-    <Container fluid>
-      <Row className="justify-content-md-center">
-        <Col xs={3} id="sidebar">
-        <AdminSidebar defaultKey={"Pets"} />
-        </Col>
-        <Col xs={9} id="page-content">
+      <Navbar />
+      <Container fluid>
+        <Row className="justify-content-md-center">
+          <Col xs={3} id="sidebar">
+            <AdminSidebar defaultKey={"Pets"} />
+          </Col>
+          <Col xs={9} id="page-content">
+            <Container className="mt-3">
+              <FormControl>
+                <NativeSelect
+                  defaultValue=""
+                  onChange={e => handleDateChanges(e)}
+                >
+                  <option value="main">Select Date</option>
+                  {dates.map((date, i) => (
+                    <option key={i} value={date}>
+                      {date}
+                    </option>
+                  ))}
+                </NativeSelect>
+              </FormControl>
+            </Container>
 
-          <FormControl>
-              <NativeSelect defaultValue="" onChange={(e) => handleDateChanges(e)}>
-                  <option value="main">
-                      Select Date
-                  </option>
-                  {dates.map((date,i) => (<option key={i} value={date}>{date}</option>)) }
-              </NativeSelect>
-          </FormControl>
-
-          <SummaryChart displayInfo={displayMonthInfo} />
-        </Col>
-      </Row>
-    </Container>
-  </div>
+            <SummaryChart displayInfo={displayMonthInfo} />
+          </Col>
+        </Row>
+      </Container>
+    </div>
   );
 };
 

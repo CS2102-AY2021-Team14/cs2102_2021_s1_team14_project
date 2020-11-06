@@ -1,29 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import { Badge, Card, Container, Row, Col } from "react-bootstrap";
 import Navbar from "../../components/Navbar";
 import AdminSidebar from "../../components/sidebar/AdminSidebar";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Typography } from "@material-ui/core";
-import CaretakerInfoCard from "../../components/CaretakerInfoCard";
 
 const PcsAdminHome = () => {
   const [upCount, setUpCount] = useState(0);
-  const [upCaretaker, setUpCaretaker] = useState([]);
+  const [upCaretakers, setUpCaretakers] = useState([]);
 
   const getUnderperforming = async () => {
     axios
       .get(`/api/admin/underperforming`)
       .then(response => {
         setUpCount(response.data.count);
-        setUpCaretaker(response.data.data);
-
-        response.data.data.forEach(caretaker => {
-          axios.get(`/api/caretaker/${caretaker.care_taker}`).then(response => {
-            console.log(response);
-          });
-        });
-        console.log(response.data.data);
+        setUpCaretakers(response.data.data);
       })
       .catch(error => {
         toast.error(error.response.data);
@@ -46,8 +38,27 @@ const PcsAdminHome = () => {
             <Typography className="mt-3" variant="h3">
               Underperforming Caretakers
             </Typography>
-            {upCaretaker.map(caretaker => (
-              <CaretakerInfoCard username={caretaker.care_taker} />
+
+            <Typography>
+              You have {upCount} underperforming caretakers
+            </Typography>
+
+            {upCaretakers.map(caretaker => (
+              <Card key={caretaker.user_name} className="m-2">
+                <Card.Body>
+                  <Card.Title>
+                    {caretaker.user_name}
+                    <span className="badgeContainer">
+                      <Badge
+                        variant={caretaker.isPartTime ? "warning" : "info"}
+                      >
+                        {caretaker.isPartTime ? "Part-timer" : "Full-timer"}
+                      </Badge>
+                    </span>
+                  </Card.Title>
+                  <Card.Text>{caretaker.name ?? "No name added"}</Card.Text>
+                </Card.Body>
+              </Card>
             ))}
           </Col>
         </Row>
