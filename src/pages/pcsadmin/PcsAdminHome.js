@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Image } from "react-bootstrap";
 import Navbar from "../../components/Navbar";
 import AdminSidebar from "../../components/sidebar/AdminSidebar";
-import { Paper, Typography, Table, TableBody, TableRow, TableCell, TableHead } from "@material-ui/core";
+import { Paper, Typography, Table, TableBody, TableRow, TableCell, TableHead, TablePagination } from "@material-ui/core";
 import axios from "axios";
+import TablePageScroll from "../../components/admin/TablePageScroll";
 // import Confetti from "react-confetti";
 
 import styles from "../../components/admin/styles/PcsAdmin.module.css";
@@ -11,12 +12,26 @@ import styles from "../../components/admin/styles/PcsAdmin.module.css";
 const PcsAdminHome = () => {
   // const [employeeOfTheMonth, setEmployeeOfTheMonth] = useState("");
   const [employeeInfos, setEmployeesInfo] = useState([]);
+      
+  // states for table paginations
+  const rowsPerPageDropDown = [5, 10, 15];
+  const [page, setPage] = useState(0); // page is 0 indexed by documentation
+  const [rowsPerPage, setRowsPerPage] = useState(rowsPerPageDropDown[page])
 
   // useEffect(() => {
   //   axios.get("/api/admin/employeeofmonth").then(response => {
   //     setEmployeeOfTheMonth(response.data.care_taker);
   //   });
   // }, []);
+
+  const employeesInfoDisplay = () => {
+    // Only display selected items 
+    if (employeeInfos) {
+      // eg. page 0 selected, rows per page to show is 5
+      // start is 0 * 5 = 0, end is 1 * 5 == 5 (not inclusive)
+      return employeeInfos.slice(page * rowsPerPage, (page + 1) * rowsPerPage);
+    }
+  }
 
   const headerLabels = [
     'Name',
@@ -74,7 +89,7 @@ const PcsAdminHome = () => {
                   </TableHead>
                   <TableBody className={styles.per_row} >
                     {
-                      employeeInfos.map(item => 
+                      employeesInfoDisplay().map(item => 
                         (<TableRow key={item.user_name}>
                             <TableCell>{item.user_name}</TableCell>
                             <TableCell>{item.user_address}</TableCell>
@@ -85,6 +100,14 @@ const PcsAdminHome = () => {
                     }
                   </TableBody>
                 </Table>
+                <TablePageScroll 
+                  employeeInfos={employeeInfos} 
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  rowsPerPageDropDown={rowsPerPageDropDown}
+                  setPage={setPage}
+                  setRowsPerPage={setRowsPerPage}
+                />
               </Paper>
             </Container>
           </Col>
