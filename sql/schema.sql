@@ -1,6 +1,6 @@
 -- Uncomment to recreate your database
 -- DROP DATABASE yogapets;
-CREATE DATABASE yogapets;
+-- CREATE DATABASE yogapets;
 
 -- changed to separate table as pet owner and care taker may use the same account
 -- CREATE TYPE pcs_user_role AS ENUM ('ADMIN', 'CARETAKER', 'OWNER');
@@ -105,6 +105,7 @@ CREATE TABLE IF NOT EXISTS care_taker_leaves (
 CREATE TABLE IF NOT EXISTS care_takers_pet_preferences (
     care_taker      VARCHAR(255)    NOT NULL REFERENCES care_takers(user_name)      ON DELETE CASCADE,
     pet_type        pet_type        NOT NULL,
+    price           NUMERIC(10, 2)  CHECK (price > 0), -- for part time care takers
     PRIMARY KEY (care_taker, pet_type)
 );
 
@@ -153,6 +154,45 @@ CREATE VIEW care_takers_rating AS
     SELECT care_taker, AVG(rating) AS avg_rating
     FROM ratings
     GROUP BY care_taker;
+
+CREATE VIEW daily_price AS
+    SELECT *
+    FROM care_takers_pet_preferences
+    WHERE (
+        SELECT is_part_time 
+        FROM care_takers 
+        WHERE user_name = care_takers_pet_preferences.care_taker
+    ) = true
+    UNION
+    SELECT care_takers.user_name AS care_taker, base_prices.pet_type, 
+        CASE 
+            WHEN care_takers_rating.avg_rating >= 4.8 THEN base_prices.base_price * 1.5
+            WHEN care_takers_rating.avg_rating >= 4.5 THEN base_prices.base_price * 1.4
+            WHEN care_takers_rating.avg_rating >= 4.0 THEN base_prices.base_price * 1.3
+            WHEN care_takers_rating.avg_rating >= 3.5 THEN base_prices.base_price * 1.2
+            WHEN care_takers_rating.avg_rating >= 3.0 THEN base_prices.base_price * 1.1
+            ELSE base_prices.base_price
+        END AS price
+    FROM care_takers INNER JOIN care_takers_pet_preferences ON care_takers.user_name = care_takers_pet_preferences.care_taker 
+        INNER JOIN base_prices ON care_takers_pet_preferences.pet_type = base_prices.pet_type
+        LEFT JOIN care_takers_rating ON care_takers.user_name = care_takers_rating.care_taker
+    WHERE care_takers.is_part_time = false;
+
+-- DROP VIEW pets_full_information;
+
+CREATE VIEW pets_full_information AS 
+    SELECT P.name AS pet_name, P.owner AS pet_owner, P.type AS pet_type, 
+        U.name AS pet_owner_name, 
+        ARRAY_AGG(PC.category) AS pet_categories, 
+        ARRAY_AGG(PR.requirement) AS pet_special_requirement, 
+        ARRAY_AGG(PR.description) AS pet_requirements_description
+    FROM ( 
+        pets P
+        LEFT OUTER JOIN users U ON P.owner = U.user_name
+        LEFT OUTER JOIN pet_category PC ON P.name = PC.name 
+        LEFT OUTER JOIN pet_special_requirements PR ON P.name = PR.name 
+    )
+    GROUP BY (P.name, P.owner, P.type, U.name);
 
 -- Trigger to check if 2 * 150 consecutive days is fulfilled when adding a leave
 -- INSERT INTO care_taker_leaves VALUES('seanlowjk', '2020-01-02');
@@ -280,9 +320,24 @@ END IF;
 RETURN NEW;
 END; $$ LANGUAGE plpgsql;
 
-
 -- Trigger for full time care-taker to auto accept bid if it falls between available dates of care taker
 CREATE TRIGGER autoAcceptFullTimerBid
 BEFORE INSERT ON bids
 FOR EACH ROW
 EXECUTE PROCEDURE autoAcceptFullTimerBidFunction();
+
+
+-- Drop table commands for resetting all tables 
+-- DROP TABLE care_takers_availability;
+-- DROP TABLE pet_special_requirements;
+-- DROP TABLE pet_category;
+-- DROP TABLE base_prices;
+-- DROP TABLE salary;
+-- DROP TABLE bids CASCADE;
+-- DROP TABLE care_taker_leaves CASCADE;
+-- DROP TABLE care_taker CASCADE;
+-- DROP TABLE care_takers_pet_preferences CASCADE;
+-- DROP TABLE pcs_admins CASCADE;
+-- DROP TABLE pet_owners CASCADE;
+-- DROP TABLE pets CASCADE;
+-- DROP TABLE users CASCADE;

@@ -1,13 +1,11 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Route, Redirect, Switch } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 
 import { UserContext } from "../utils/UserProvider";
 
 import ROUTES from "./Routes";
 
-import PcsAdminHome from "../pages/pcsadmin/PcsAdminHome";
-import PcsAdminCareTaker from "../pages/pcsadmin/PcsAdminCareTaker";
-import PcsAdminPetInfo from "../pages/pcsadmin/PcsAdminPetInfo";
+import { PcsAdminHome, PcsAdminCareTaker, PcsAdminPetInfo, PcsAdminOverview } from "../pages/pcsadmin"
 
 const PrivatePCSAdminRoute = props => {
   const { username, authToken, roles } = useContext(UserContext);
@@ -44,6 +42,9 @@ const PrivatePCSAdminRoute = props => {
             <Switch>
               <Route exact path={ROUTES.ADMIN_HOME}>
                 <PcsAdminHome />
+              </Route>
+              <Route exact path={ROUTES.ADMIN_OVERVIEW}>
+                <PcsAdminOverview />
               </Route>
               <Route exact path={ROUTES.ADMIN_PET_INFO}>
                 <PcsAdminPetInfo />

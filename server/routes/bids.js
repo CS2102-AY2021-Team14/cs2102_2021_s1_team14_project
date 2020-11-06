@@ -27,6 +27,20 @@ router.get("/active", async (req, res) => {
   }
 });
 
+router.get("/owner/:owner", async (req, res) => {
+  try {
+    const { owner } = req.params;
+
+    const result = await Bids.getPetOwnersBids(owner);
+
+    res.status(200).json({ count: result.rowCount, data: result.rows });
+  } catch (error) {
+    console.error("Error getting pet owner's bids", error);
+
+    res.status(404).json({ message: "Error getting pet owner's bids", error });
+  }
+});
+
 router.post("/inactive", async (req, res) => {
   try {
     const { pet, care_taker, start_date, end_date } = req.body;
@@ -55,21 +69,14 @@ router.post("/inactive", async (req, res) => {
 
 router.post("/add", async (req, res) => {
   try {
-    const {
-      pet,
-      owner,
-      care_taker,
-      pet_type,
-      start_date,
-      end_date,
-    } = req.body;
+    const { pet, owner, care_taker, pet_type, start_date, end_date } = req.body;
     const result = await Bids.addBid(
       pet,
       owner,
       care_taker,
       pet_type,
       new Date(start_date),
-      new Date(end_date),
+      new Date(end_date)
     );
 
     if (result.rowCount === 0) {

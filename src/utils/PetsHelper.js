@@ -1,23 +1,40 @@
 export const mapPetInfoToPetData = ( petInfo ) => {
     const {
-        name, 
-        owner, 
-        type
+        pet_name, 
+        pet_owner, 
+        pet_type, 
+        pet_owner_name, 
+        pet_categories, 
+        pet_special_requirement, 
+        pet_requirements_description
     } = petInfo;
 
     return {
-        petName: name,
-        petType: type,
-        petOwner: owner,
-        petOwnerName: "owner name",
-        petCategories: ["Small Cat", "Four-legged"],
-        petSpecialRequirements: [
-          "Requires 10 feedings per day",
-          "Only eats $100 cat food",
-          "Hates rats",
-        ],
+        petName: pet_name,
+        petType: pet_type,
+        petOwner: pet_owner,
+        petOwnerName: pet_owner_name,
+        petCategories: pet_categories[0] == null ? [] : pet_categories,
+        petSpecialRequirements: getPetSpecialRequirements(pet_special_requirement, pet_requirements_description)
     }
 };
+
+const getPetSpecialRequirements = (pet_special_requirement, pet_requirements_description) => {
+    let specialRequirements = [];
+
+    if (pet_special_requirement.length == 1 && pet_requirements_description[0] == null) {
+        return [];
+    }
+
+    for (let i = 0; i < pet_special_requirement.length; i++) {
+        specialRequirements[i] = {
+            requirement: pet_special_requirement[i], 
+            description: pet_requirements_description[i]
+        }
+    }
+
+    return specialRequirements;
+}
 
 export const unwrapPetType = ( wrappedPetType ) => {
     return wrappedPetType.unnest;

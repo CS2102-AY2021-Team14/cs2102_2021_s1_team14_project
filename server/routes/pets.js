@@ -150,4 +150,65 @@ router.post("/:owner/:name/requirement", async (req, res) => {
   }
 });
 
+router.delete("/:owner/:name/requirement/:requirement", async (req, res) => {
+  try {
+    const result = await Pets.deleteSpecialRequirement(
+      req.params.name,
+      req.params.owner,
+      req.params.requirement,
+    );
+
+    res.status(201).send({
+      message: `Successfully delete ${req.params.requirement} from pet ${req.params.name} from ${req.params.owner}`,
+    });
+  } catch (error) {
+    console.error("Error deleting special requirement", error);
+
+    res
+      .status(400)
+      .json({ message: "Error deleting special requirement", error });
+  }
+});
+
+router.post("/:owner/:name/category", async (req, res) => {
+  try {
+    const { category } = req.body;
+    const result = await Pets.addPetCategory(
+      req.params.name,
+      req.params.owner,
+      category
+    );
+
+    res.status(201).send({
+      message: `Successfully added ${category} to pet ${req.params.name} from ${req.params.owner}`,
+    });
+  } catch (error) {
+    console.error("Error adding category", error);
+
+    res
+      .status(400)
+      .json({ message: "Error adding special category", error });
+  }
+});
+
+router.delete("/:owner/:name/category/:category", async (req, res) => {
+  try {
+    const result = await Pets.deletePetCategory(
+      req.params.name,
+      req.params.owner,
+      req.params.category,
+    );
+
+    res.status(201).send({
+      message: `Successfully delete ${req.params.category} from pet ${req.params.name} from ${req.params.owner}`,
+    });
+  } catch (error) {
+    console.error("Error deleting category", error);
+
+    res
+      .status(400)
+      .json({ message: "Error deleting category", error });
+  }
+});
+
 module.exports = router;
