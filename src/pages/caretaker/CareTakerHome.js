@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 
 import CaretakerSidebar from '../../components/sidebar/CaretakerSidebar';
@@ -7,49 +7,112 @@ import Navbar from '../../components/Navbar';
 import Job from '../../components/job/Job';
 import Calendar from '../../components/availability/Calendar';
 
-import Image from '../../images/logo.png';
+import YogaPetsLogo from '../../images/logo.png';
+
+// Backed linking
+import axios from 'axios';
+import { UserContext } from "../../utils/UserProvider";
 
 const CareTakerHome = () => {
 
-    // TODO use API calls
-    const caretaker = {
-        name: "Jan Low",
-        image: Image,
-        job: "Full-time",
-        join: "18/09/2020",
-        salary: "$2374.23",
-        employment: "EMPLOYED",
-        jobs: [
-            {
-                owner: "JanLu",
-                pet: "Hippopotamus",
-                start: "01/06/1999",
-                end: "30/06/2002"
-            },
-            {
-                owner: "SanLo",
-                pet: "Sonic the Hedgehog",
-                start: "02/06/1999",
-                end: "29/06/2002"
-            }
-        ],
+    // Caretaker information
+    const { username, authToken, roles } = useContext(UserContext); 
+    const [caretaker, setCaretaker] = useState({
+        user_name: "",
+        is_part_time: false,
+        introduction: ""
+    });
+
+    const [caretakerSalary, setCaretakerSalary] = useState([]);
+
+    const [caretakerJobs, setCaretakerJobs] = useState([]);
+
+    const [caretakerLeaves, setCaretakerLeaves] = useState([]);
+
+
+    // All the backend URL
+    const serverURL = 'http://localhost:8080/api/caretaker/';
+    const caretakerURL = serverURL + username;
+    const caretakerSalaryURL = caretakerURL + "/salary";
+    const caretakerJobsURL = caretakerURL + "/jobs";
+    const caretakerLeaveURL = caretakerURL + "/leaves";
+
+    // API call
+    useEffect(() => {
+        // Getting caretaker data
+        axios
+            .get(caretakerURL)
+            .then((res) => {
+                var caretakerData = res.data[0];
+                setCaretaker(caretakerData);
+                console.log("Content of this caretaker is: " + JSON.stringify(caretakerData));
+            });
+
+        // Getting caretaker salary
+        axios
+            .get(caretakerSalaryURL)
+            .then((res) => {
+                var caretakerSalaryData = res.data.data;
+                setCaretakerSalary(caretakerSalaryData);
+                console.log("This caretaker salary data is: " + JSON.stringify(caretakerSalaryData));
+            });
+
+        // Get caretaker job
+        axios
+            .get(caretakerJobsURL)
+            .then((res) => {
+                var caretakerJobData = res.data.data;
+                setCaretakerJobs(caretakerJobData);
+                console.log("This caretaker job information is: " + JSON.stringify(caretakerJobData))
+            });
+
+        // Get caretaker leave dates
+        axios   
+            .get(caretakerLeaveURL)
+            .then((res) => {
+                var caretakerLeaveData = res.data.data;
+                setCaretakerLeaves(caretakerLeaveData);
+                console.log("This caretaker leave date is: " + JSON.stringify(caretakerLeaveData));
+            })
+    }, [])
+
+    // Find average monthly salary 
+    const findAverageSalary = () => {
+        let sum = 0;
+        for (var i = 0; i < caretakerSalary.length; i ++) {
+            sum += parseFloat(caretakerSalary[i].amount);
+        }
+        return parseFloat(sum / caretakerSalary.length).toFixed(2);
+    };
+
+    // Find employment
+    const findEmployment = () => {
+        if (caretakerJobs.length < 1) {
+            return "UNEMPLOYED";
+        } else {
+            return "EMPLOYED";
+        }
+    }
+
+    // Get leave days format
+    const getLeaveDays = () => {
+        let leaveDays = [];
+        for (var i = 0; i < caretakerLeaves.length; i ++) {
+            leaveDays.push(new Date(caretakerLeaves[i].leave_date));
+        }
+        return leaveDays;
+    };
+
+    const caretakerInfo = {
+        username: caretaker.user_name,
+        image: YogaPetsLogo,
+        job: caretaker.is_part_time ? "Part time" : "Full time",
+        join: (new Date(2020, 8, 9).toDateString().split(" ").splice(1).join(" ")),
+        salary: findAverageSalary(),
+        employment: findEmployment(),
+        jobs: caretakerJobs,
         availability: {
-            leaveDays: [
-                new Date(2020, 8, 22),
-                new Date(2020, 8, 28),
-                new Date(2020, 8, 29),
-                new Date(2020, 9, 10),
-                new Date(2020, 9, 12),
-                new Date(2020, 9, 23),
-                new Date(2020, 10, 19),
-                new Date(2020, 10, 20),
-                new Date(2020, 10, 21),
-                new Date(2020, 10, 22),
-                new Date(2020, 11, 20),
-                new Date(2020, 11, 1),
-                new Date(2020, 11, 4),
-                new Date(2020, 11, 10)
-            ],
+            leaveDays: getLeaveDays(),
             startDate: new Date(2020, 8, 9)
         } 
     }
@@ -63,13 +126,13 @@ const CareTakerHome = () => {
                         <CaretakerSidebar defaultKey={"Home"} />
                     </Col>
                     <Col xs={4} id="availability">
-                        <Calendar caretakerAvailability={caretaker.availability} />
+                        <Calendar caretakerAvailability={caretakerInfo.availability} />
                     </Col>
                     <Col xs={4} id="jobs">
-                        <Job jobs={caretaker.jobs} />
+                        <Job jobs={caretakerInfo.jobs} />
                     </Col>
                     <Col xs={2} id="avatar">
-                        <Avatar user={caretaker} />
+                        <Avatar user={caretakerInfo} />
                     </Col>
                 </Row>
             </Container>
