@@ -45,7 +45,7 @@ const BidModal = props => {
       .diff(moment(startDate).startOf("day"), "days") + 1;
 
   const hasPrice = () => {
-    return getNumDays() >= 1 && pet !== null;
+    return getNumDays() >= 1 && pet != null;
   };
 
   const getPrice = () => {
@@ -57,6 +57,11 @@ const BidModal = props => {
   };
 
   const handleBid = () => {
+    if (!hasPrice()) {
+      toast.error("Invalid dates or no pets chosen");
+      return;
+    }
+
     axios
       .post(`/api/bids/add`, {
         pet,
