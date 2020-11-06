@@ -10,10 +10,10 @@ const PcsAdminHome = () => {
       <Container fluid>
         <Row className="justify-content-md-center">
           <Col xs={3} id="sidebar">
-          <AdminSidebar defaultKey={"Home"} />
+            <AdminSidebar defaultKey={"Home"} />
           </Col>
           <Col xs={9} id="page-content">
-            Page content here
+            <Container className="mt-3">Page content here</Container>
           </Col>
         </Row>
       </Container>

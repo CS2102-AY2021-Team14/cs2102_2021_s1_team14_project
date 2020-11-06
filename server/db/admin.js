@@ -6,19 +6,22 @@ class Admin {
     // AVERAGE < 60 pet-day per month OR
     // This month (< 2 stars)
     return pool.query(`
-      SELECT care_taker
-        FROM care_takers_rating 
-        WHERE avg_rating < 3
-      UNION
-      SELECT care_taker
-        FROM bids 
-        GROUP BY care_taker
-        HAVING SUM(date(end_date) - date(start_date) + 1) < 60
-      UNION 
-      SELECT care_taker
-        FROM bids 
-        GROUP BY care_taker, date_part('month', end_date)
-        HAVING AVG(rating) < 2;
+      SELECT users.user_name, is_part_time, name FROM (
+        SELECT care_taker
+          FROM care_takers_rating 
+          WHERE avg_rating < 3
+        UNION
+        SELECT care_taker
+          FROM bids 
+          GROUP BY care_taker
+          HAVING SUM(date(end_date) - date(start_date) + 1) < 60
+        UNION 
+        SELECT care_taker
+          FROM bids 
+          GROUP BY care_taker, date_part('month', end_date)
+          HAVING AVG(rating) < 2
+      ) AS t INNER JOIN care_takers ON t.care_taker = care_takers.user_name
+        INNER JOIN users ON t.care_taker = users.user_name;
     `);
   }
 
@@ -44,6 +47,37 @@ class Admin {
       FROM bids 
       GROUP BY pet_type, date_trunc('month', start_date)
     `);
+  }
+
+  static getBaseDailyPrices() {
+    return pool.query(`SELECT * FROM base_prices;`);
+  }
+
+  static insertBaseDailyPrice(pet_type, base_price) {
+    return pool.query(
+      `
+      INSERT INTO base_prices VALUES ($1, $2);
+    `,
+      [pet_type, base_price]
+    );
+  }
+
+  static updateBaseDailyPrice(pet_type, base_price) {
+    return pool.query(
+      `
+        UPDATE base_prices SET pet_type = $1, base_price = $2 WHERE pet_type = $1;
+    `,
+      [pet_type, base_price]
+    );
+  }
+
+  static deleteBaseDailyPrice(pet_type) {
+    return pool.query(
+      `
+        DELETE FROM base_prices WHERE pet_type = $1;
+    `,
+      [pet_type]
+    );
   }
 
   // static getTotalNumberOfPetsTakenCare(month) {

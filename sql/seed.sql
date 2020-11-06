@@ -212,11 +212,11 @@ VALUES ('rat1', 'po1', 'ftct1', 'rodent', '2020-11-01', '2020-11-02', 'false', '
 """
 
 -------- BASE PRICES -------
-INSERT INTO base_prices VALUES ('a1', 'cat', 88);
-INSERT INTO base_prices VALUES ('a1', 'dog', 77);
-INSERT INTO base_prices VALUES ('a1', 'bird', 68.5);
-INSERT INTO base_prices VALUES ('a1', 'rabbit', 72);
-INSERT INTO base_prices VALUES ('a1', 'rodent', 22);
-INSERT INTO base_prices VALUES ('a1', 'fish', 58);
-INSERT INTO base_prices VALUES ('a1', 'insect', 12.5);
-INSERT INTO base_prices VALUES ('a1', 'turtle', 62);
+INSERT INTO base_prices VALUES ('cat', 88);
+INSERT INTO base_prices VALUES ('dog', 77);
+INSERT INTO base_prices VALUES ('bird', 68.5);
+INSERT INTO base_prices VALUES ('rabbit', 72);
+INSERT INTO base_prices VALUES ('rodent', 22);
+INSERT INTO base_prices VALUES ('fish', 58);
+INSERT INTO base_prices VALUES ('insect', 12.5);
+INSERT INTO base_prices VALUES ('turtle', 62);

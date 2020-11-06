@@ -76,7 +76,6 @@ CREATE TABLE IF NOT EXISTS pet_special_requirements (
 );
 
 CREATE TABLE IF NOT EXISTS base_prices (
-    specified_by    VARCHAR(255)    REFERENCES pcs_admins(user_name),
     pet_type        pet_type        PRIMARY KEY,
     base_price      NUMERIC(10, 2)  NOT NULL CHECK (base_price > 0) -- max 2 d.p.
 );

@@ -23,7 +23,9 @@ router.get("/employeeofmonth", async (req, res) => {
   } catch (error) {
     console.error("Error getting employee of the month", error);
 
-    res.status(404).json({ message: "Employee of the month request error", error });
+    res
+      .status(404)
+      .json({ message: "Employee of the month request error", error });
   }
 });
 
@@ -33,7 +35,61 @@ router.get("/petsinfo", async (req, res) => {
     res.json({ count: result.rowCount, data: result.rows });
   } catch (error) {
     console.error("Could not obtain pet info", error);
-    res.status(404).json({ message: "Get Pet Types of All Months error", error });
+    res
+      .status(404)
+      .json({ message: "Get Pet Types of All Months error", error });
+  }
+});
+
+router.get("/basedailyprices", async (req, res) => {
+  try {
+    const result = await Admin.getBaseDailyPrices();
+    res.json({ count: result.rowCount, data: result.rows });
+  } catch (error) {
+    console.error("Could not obtain base daily prices", error);
+    res.status(404).json({ message: "Get base daily price error", error });
+  }
+});
+
+router.post("/basedailyprices", async (req, res) => {
+  try {
+    const { pet_type, base_price } = req.body;
+
+    const result = await Admin.insertBaseDailyPrice(pet_type, base_price);
+    res.status(201).json({
+      message: `Successfully added ${pet_type} with base price ${base_price}`,
+    });
+  } catch (error) {
+    console.error("Could not insert base daily prices", error);
+    res.status(404).json({ message: "Add base daily price error", error });
+  }
+});
+
+router.put("/basedailyprices", async (req, res) => {
+  try {
+    const { pet_type, base_price } = req.body;
+
+    const result = await Admin.updateBaseDailyPrice(pet_type, base_price);
+    res.status(201).json({
+      message: `Successfully updated ${pet_type} with base price ${base_price}`,
+    });
+  } catch (error) {
+    console.error("Could not update base daily prices", error);
+    res.status(404).json({ message: "Update base daily price error", error });
+  }
+});
+
+router.delete("/basedailyprices/:pettype", async (req, res) => {
+  try {
+    const pet_type = req.params.pettype;
+
+    const result = await Admin.deleteBaseDailyPrice(pet_type);
+    res.status(200).json({
+      message: `Successfully deleted base price of ${pet_type}`,
+    });
+  } catch (error) {
+    console.error("Could not delete base daily price", error);
+    res.status(404).json({ message: "Delete base daily price error", error });
   }
 });
 
