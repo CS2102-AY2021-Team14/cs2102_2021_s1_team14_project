@@ -13,7 +13,7 @@ export const AddBasePriceModal = props => {
   const addBasePrice = () => {
     const price = Number.parseFloat(newBasePrice);
 
-    if (!newPetType || price <= 0) {
+    if (!newPetType || price <= 0 || newPetType === "Choose...") {
       toast.error("Please enter a valid pet type and price!");
       return;
     }
