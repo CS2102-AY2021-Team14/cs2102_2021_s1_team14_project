@@ -69,7 +69,7 @@ const PcsAdminHome = () => {
                       } else if (error_type == 2) {
                         return (
                           <Card.Text>
-                            Average Pet Days Per Motnh is: {caretaker.error_datas[index]}
+                            Average Pet Days Per Month is: {caretaker.error_datas[index]}
                           </Card.Text>
                         );
                       } else {
