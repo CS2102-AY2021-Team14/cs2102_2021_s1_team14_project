@@ -7,11 +7,12 @@ import axios from "axios";
 import Confetti from "react-confetti";
 import useWindowDimensions from "../../utils/WindowDimensions";
 const PcsAdminHome = () => {
-  const [employeeOfTheMonth, setEmployeeOfTheMonth] = useState("");
+  const [employeeOfTheMonth, setEmployeeOfTheMonth] = useState({});
 
   useEffect(() => {
     axios.get("/api/admin/employeeofmonth").then(response => {
-      setEmployeeOfTheMonth(response.data.care_taker);
+      console.log(response.data);
+      setEmployeeOfTheMonth(response.data);
     });
   }, []);
 
@@ -31,9 +32,11 @@ const PcsAdminHome = () => {
                 Employee of the Month
               </Typography>
               <Typography class="mt-5" variant="h4">
-                {employeeOfTheMonth}
+                Congratulations to {employeeOfTheMonth.name}!
               </Typography>
-
+              <Typography class="mt-1" variant="h4">
+                [Username : {employeeOfTheMonth.care_taker}]
+              </Typography>
               <Image
                 src="https://webstockreview.net/images/congratulations-clipart-transparent-background-2.png"
                 fluid
