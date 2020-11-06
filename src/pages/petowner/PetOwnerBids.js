@@ -73,7 +73,18 @@ const PetOwnerBids = () => {
           };
         });
 
-        setBids(fetchedBids ?? []);
+        setBids(
+          fetchedBids.sort((a, b) => {
+            const dateDiff =
+              new Date(a.startDate).setHours(0, 0, 0, 0) -
+              new Date(b.startDate).setHours(0, 0, 0, 0);
+            if (dateDiff !== 0) {
+              return dateDiff;
+            } else {
+              return a.caretakerUsername - b.caretakerUsername;
+            }
+          }) ?? []
+        );
       })
       .catch(err => console.log("Error fetching pet owner's bids", err));
   };
@@ -130,6 +141,7 @@ const PetOwnerBids = () => {
               </Card.Header>
 
               <Card.Body>
+                {shownBids.length === 0 && "No bids with this status"}
                 {shownBids.map((data, index) => (
                   <BidCard
                     {...data}

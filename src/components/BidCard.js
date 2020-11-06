@@ -1,6 +1,12 @@
 import React, { useState } from "react";
-import { Button, Card, Badge, Modal } from "react-bootstrap";
-import { MdPerson, MdPets, MdDateRange } from "react-icons/md";
+import { Button, Card, Badge, Modal, Row, Form, Col } from "react-bootstrap";
+import {
+  MdPerson,
+  MdPets,
+  MdDateRange,
+  MdAttachMoney,
+  MdChildFriendly,
+} from "react-icons/md";
 import axios from "axios";
 import { toast } from "react-toastify";
 
@@ -25,6 +31,12 @@ const BidCard = props => {
   } = props;
 
   const [isCancelBidModalOpen, setIsCancelBidModalOpen] = useState(false);
+  const [isArrangementModalOpen, setIsArrangementModalOpen] = useState(false);
+
+  const [paymentTypeInput, setPaymentTypeInput] = useState(paymentType ?? "");
+  const [transferMethodInput, setTransferMethodInput] = useState(
+    transferMethod ?? ""
+  );
 
   const cancelBid = () => {
     axios
@@ -42,6 +54,32 @@ const BidCard = props => {
       .catch(err => {
         console.log("Error cancelling bid", err);
         toast.error("Error cancelling bid, please try again");
+      });
+  };
+
+  const saveArrangement = () => {
+    if (paymentTypeInput === "" || transferMethodInput === "") {
+      toast.error("Arrangements cannot be empty");
+      return;
+    }
+
+    axios
+      .put("/api/bids/arrangement", {
+        pet: pet,
+        care_taker: caretakerUsername,
+        start_date: startDate,
+        end_date: endDate,
+        payment_type: paymentTypeInput,
+        transfer_method: transferMethodInput,
+      })
+      .then(res => {
+        fetchBids();
+        setIsArrangementModalOpen(false);
+        toast.success("Bid arrangement updated");
+      })
+      .catch(err => {
+        console.log("Error updating bid arrangement", err);
+        toast.error("Error updating bid arrangemetn, please try again");
       });
   };
 
@@ -75,7 +113,11 @@ const BidCard = props => {
   const getButtonComponent = () => {
     if (isSuccessful) {
       return (
-        <Button className="button" variant="primary">
+        <Button
+          className="button"
+          variant="primary"
+          onClick={() => setIsArrangementModalOpen(true)}
+        >
           Change Arrangement
         </Button>
       );
@@ -111,6 +153,7 @@ const BidCard = props => {
               </span>
               Care Taker: {caretakerName}
             </div>
+
             <div>
               <span className="iconContainer">
                 <MdPets />
@@ -120,6 +163,7 @@ const BidCard = props => {
                 <Badge variant="light">{petType}</Badge>
               </span>
             </div>
+
             <div>
               <span className="iconContainer">
                 <MdDateRange />
@@ -127,14 +171,34 @@ const BidCard = props => {
               Date: {new Date(startDate).toDateString()} -{" "}
               {new Date(endDate).toDateString()}
             </div>
+
+            {isSuccessful && (
+              <>
+                <div>
+                  <span className="iconContainer">
+                    <MdAttachMoney />
+                  </span>
+                  Payment Type: {paymentType}
+                </div>
+
+                <div>
+                  <span className="iconContainer">
+                    <MdChildFriendly />
+                  </span>
+                  Transfer Method: {transferMethod}
+                </div>
+              </>
+            )}
           </div>
           {showButtons && getButtonComponent()}
         </Card.Body>
       </Card>
 
+      {/* cancel bid modal */}
       <Modal
         show={isCancelBidModalOpen}
         onHide={() => setIsCancelBidModalOpen(false)}
+        centered
       >
         <Modal.Header closeButton>
           <Modal.Title>Cancel Bid</Modal.Title>
@@ -149,6 +213,58 @@ const BidCard = props => {
           </Button>
           <Button variant="danger" onClick={cancelBid}>
             Yes
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* change arrangement modal */}
+      <Modal
+        show={isArrangementModalOpen}
+        onHide={() => setIsArrangementModalOpen(false)}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Change Arrangement</Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>
+          <Form.Group as={Row}>
+            <Form.Label className="text-right" column sm="4">
+              Payment Type:
+            </Form.Label>
+            <Col sm="8">
+              <Form.Control
+                type="text"
+                value={paymentTypeInput}
+                name="paymentType"
+                onChange={event => setPaymentTypeInput(event.target.value)}
+              />
+            </Col>
+          </Form.Group>
+          <Form.Group as={Row}>
+            <Form.Label className="text-right" column sm="4">
+              Transfer Method:
+            </Form.Label>
+            <Col sm="8">
+              <Form.Control
+                type="text"
+                value={transferMethodInput}
+                name="transferMethod"
+                onChange={event => setTransferMethodInput(event.target.value)}
+              />
+            </Col>
+          </Form.Group>
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Button
+            variant="primary"
+            onClick={() => setIsArrangementModalOpen(false)}
+          >
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={saveArrangement}>
+            Save
           </Button>
         </Modal.Footer>
       </Modal>
