@@ -2,17 +2,39 @@ import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Image } from "react-bootstrap";
 import Navbar from "../../components/Navbar";
 import AdminSidebar from "../../components/sidebar/AdminSidebar";
-import { Typography } from "@material-ui/core";
+import { Paper, Typography, Table, TableBody, TableRow, TableCell, TableHead } from "@material-ui/core";
 import axios from "axios";
-import Confetti from "react-confetti";
+// import Confetti from "react-confetti";
+
+import styles from "../../components/admin/styles/PcsAdmin.module.css";
 
 const PcsAdminHome = () => {
-  const [employeeOfTheMonth, setEmployeeOfTheMonth] = useState("");
+  // const [employeeOfTheMonth, setEmployeeOfTheMonth] = useState("");
+  const [employeeInfos, setEmployeesInfo] = useState([]);
+
+  // useEffect(() => {
+  //   axios.get("/api/admin/employeeofmonth").then(response => {
+  //     setEmployeeOfTheMonth(response.data.care_taker);
+  //   });
+  // }, []);
+
+  const headerLabels = [
+    'Name',
+    'Address',
+    'Email',
+    'Part-Time/Full-Time'
+  ]
+
+  const getEmployeesInfo = async () => {
+    axios.get("/api/admin/employees")
+         .then(response => {
+           const { data } = response;
+           setEmployeesInfo(data.employeesInfo);
+         });
+  }
 
   useEffect(() => {
-    axios.get("/api/admin/employeeofmonth").then(response => {
-      setEmployeeOfTheMonth(response.data.care_taker);
-    });
+    getEmployeesInfo();
   }, []);
 
   return (
@@ -25,7 +47,7 @@ const PcsAdminHome = () => {
           </Col>
           <Col xs={9} id="page-content">
             <Container className="mt-3">
-              <Typography className="m-4" variant="h3">
+              {/* <Typography className="m-4" variant="h3">
                 Employee of the Month
               </Typography>
               <Typography class="mt-5" variant="h4">
@@ -36,7 +58,34 @@ const PcsAdminHome = () => {
                 src="https://webstockreview.net/images/congratulations-clipart-transparent-background-2.png"
                 fluid
               />
-              <Confetti />
+              <Confetti /> */}
+              <Paper className={styles.paper}>
+                <Table>
+                  <TableHead>
+                  {
+                      headerLabels.map(label => (
+                        <TableCell key={label} className={styles.label_head}>
+                          <Typography className={styles.header}>
+                                {label}
+                          </Typography>
+                        </TableCell>
+                      ))
+                  }
+                  </TableHead>
+                  <TableBody className={styles.per_row} >
+                    {
+                      employeeInfos.map(item => 
+                        (<TableRow key={item.user_name}>
+                            <TableCell>{item.user_name}</TableCell>
+                            <TableCell>{item.user_address}</TableCell>
+                            <TableCell>{item.user_email}</TableCell>
+                            <TableCell>{item.is_part_time.toString()}</TableCell>
+                        </TableRow>)
+                      )
+                    }
+                  </TableBody>
+                </Table>
+              </Paper>
             </Container>
           </Col>
         </Row>

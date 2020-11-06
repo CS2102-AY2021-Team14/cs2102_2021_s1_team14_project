@@ -93,4 +93,17 @@ router.delete("/basedailyprices/:pettype", async (req, res) => {
   }
 });
 
+router.get("/employees", async (req, res) => {
+  try {
+    const result = await Admin.getEmployees();
+    res.status(200).json({
+      message: `Employee data fetch successful`,
+      employeesInfo: result.rows
+    })
+  } catch (error) {
+    console.error("Could not get employees");
+    res.status(404).json({ message: "Could not get employees from database", error });
+  }
+});
+
 module.exports = router;

@@ -1,6 +1,50 @@
 const pool = require("./dbPool");
 
 class Admin {
+  static getBaseDailyPrices() {
+    return pool.query(`SELECT * FROM base_prices;`);
+  }
+
+  static insertBaseDailyPrice(pet_type, base_price) {
+    return pool.query(
+      `
+      INSERT INTO base_prices VALUES ($1, $2);
+    `,
+      [pet_type, base_price]
+    );
+  }
+
+  static updateBaseDailyPrice(pet_type, base_price) {
+    return pool.query(
+      `
+        UPDATE base_prices SET pet_type = $1, base_price = $2 WHERE pet_type = $1;
+    `,
+      [pet_type, base_price]
+    );
+  }
+
+  static deleteBaseDailyPrice(pet_type) {
+    return pool.query(
+      `
+        DELETE FROM base_prices WHERE pet_type = $1;
+    `,
+      [pet_type]
+    );
+  }
+
+  ////////// EMPLOYEE DATA /////////////////
+
+  // Fetch all employee's data
+  static getEmployees() {
+    return pool.query(
+      `  SELECT user_roles.user_name, user_address, user_email, is_part_time 
+         FROM users 
+         JOIN user_roles 
+         ON users.user_name = user_roles.user_name 
+         WHERE user_roles.role = 'Care Taker'; `
+    );
+  }
+
   static getUnderperforming() {
     // Low average rating (< 3 stars) OR
     // AVERAGE < 60 pet-day per month OR
@@ -47,37 +91,6 @@ class Admin {
       FROM bids 
       GROUP BY pet_type, date_trunc('month', start_date)
     `);
-  }
-
-  static getBaseDailyPrices() {
-    return pool.query(`SELECT * FROM base_prices;`);
-  }
-
-  static insertBaseDailyPrice(pet_type, base_price) {
-    return pool.query(
-      `
-      INSERT INTO base_prices VALUES ($1, $2);
-    `,
-      [pet_type, base_price]
-    );
-  }
-
-  static updateBaseDailyPrice(pet_type, base_price) {
-    return pool.query(
-      `
-        UPDATE base_prices SET pet_type = $1, base_price = $2 WHERE pet_type = $1;
-    `,
-      [pet_type, base_price]
-    );
-  }
-
-  static deleteBaseDailyPrice(pet_type) {
-    return pool.query(
-      `
-        DELETE FROM base_prices WHERE pet_type = $1;
-    `,
-      [pet_type]
-    );
   }
 
   // static getTotalNumberOfPetsTakenCare(month) {
