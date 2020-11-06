@@ -103,6 +103,20 @@ const CareTakerHome = () => {
         return leaveDays;
     };
 
+    // Only get active jobs
+    const getActiveJobs = () => {
+        let activeJobs = [];
+        for (var i = 0; i < caretakerJobs.length; i ++) {
+            const jobStart = new Date(caretakerJobs[i].start_date);
+            const jobEnd = new Date(caretakerJobs[i].end_date);
+            const current = new Date();
+            if (current.getTime() >= jobStart.getTime() && current.getTime() <= jobEnd.getTime()) {
+                activeJobs.push(caretakerJobs[i]);
+            }
+        }
+        return activeJobs;
+    }
+
     const caretakerInfo = {
         username: caretaker.user_name,
         image: YogaPetsLogo,
@@ -110,7 +124,7 @@ const CareTakerHome = () => {
         join: (new Date(2020, 8, 9).toDateString().split(" ").splice(1).join(" ")),
         salary: findAverageSalary(),
         employment: findEmployment(),
-        jobs: caretakerJobs,
+        jobs: getActiveJobs(),
         availability: {
             leaveDays: getLeaveDays(),
             startDate: new Date(2020, 8, 9)
