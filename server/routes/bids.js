@@ -102,6 +102,43 @@ router.post("/inactive", async (req, res) => {
   }
 });
 
+router.put("/arrangement", async (req, res) => {
+  try {
+    const {
+      pet,
+      care_taker,
+      start_date,
+      end_date,
+      payment_type,
+      transfer_method,
+    } = req.body;
+    const result = await Bids.updateBidArrrangement(
+      pet,
+      care_taker,
+      new Date(start_date),
+      new Date(end_date),
+      payment_type,
+      transfer_method
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).send({
+        message: `Error updating arrangements of bid for pet ${pet} and care taker ${care_taker} from ${start_date} to ${end_date}`,
+      });
+    }
+
+    res.status(200).send({
+      message: `Successfully update arrangement of bid for pet ${pet} and care taker ${care_taker} from ${start_date} to ${end_date}`,
+    });
+  } catch (error) {
+    console.error("Error updating arrangement of bid", error);
+
+    res
+      .status(404)
+      .json({ message: "Error updating arrangement of bid", error });
+  }
+});
+
 router.post("/add", async (req, res) => {
   try {
     const { pet, owner, care_taker, pet_type, start_date, end_date } = req.body;
