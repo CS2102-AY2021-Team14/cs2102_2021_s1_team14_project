@@ -308,6 +308,11 @@ END IF;
 RETURN NULL;
 END; $$ LANGUAGE plpgsql;
 
+CREATE TRIGGER checkAbleToTakeLeave
+BEFORE INSERT ON care_taker_leaves
+FOR EACH ROW
+EXECUTE PROCEDURE checkAbleToTakeLeaveFunction();
+
 CREATE OR REPLACE FUNCTION checkBidAvailabilityFunction()
 RETURNS TRIGGER AS
 $$ BEGIN
@@ -427,7 +432,6 @@ CREATE TRIGGER canAcceptNewOffer
 BEFORE UPDATE ON bids
 FOR EACH ROW
 EXECUTE PROCEDURE canAcceptNewOfferFunction();
-
 
 -- Drop table commands for resetting all tables 
 -- DROP TABLE care_takers_availability;
