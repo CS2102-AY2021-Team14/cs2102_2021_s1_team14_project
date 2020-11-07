@@ -334,6 +334,7 @@ IF (((SELECT COUNT(*)
     )
 THEN
 NEW.is_successful := TRUE;
+NEW.is_active := FALSE;
 NEW.payment_type := 'Cash';
 NEW.transfer_method := 'Pet Owner Deliver';
 END IF;
