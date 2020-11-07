@@ -197,7 +197,6 @@ CREATE VIEW pets_full_information AS
 -- INSERT INTO care_taker_leaves VALUES('seanlowjk', '2020-01-02');
 -- INSERT INTO care_taker_leaves VALUES('seanlowjk', '2020-09-01');
 
-
 -- Create function to get list of available dates for any given caretaker
 CREATE OR REPLACE FUNCTION availableDates(the_care_taker VARCHAR(255), the_leave_date date)
 RETURNS TABLE ( free_day date )
@@ -219,7 +218,6 @@ ORDER BY d) AS free_dates
 WHERE free_dates.d <> the_leave_date;
 END; $$
 LANGUAGE plpgsql;
-
 
 -- Create blocks of 2 *  150 days
 CREATE OR REPLACE FUNCTION getBlocks(the_care_taker VARCHAR(255), the_leave_date date)
@@ -347,6 +345,84 @@ CREATE TRIGGER autoAcceptFullTimerBid
 BEFORE INSERT ON bids
 FOR EACH ROW
 EXECUTE PROCEDURE autoAcceptFullTimerBidFunction();
+
+CREATE OR REPLACE FUNCTION theAvailableDates(the_care_taker VARCHAR(255))
+RETURNS TABLE ( free_day date )
+AS
+$$ BEGIN
+RETURN QUERY
+SELECT *
+FROM
+(SELECT date_trunc('day', all_dates):: date AS d
+    FROM generate_series
+        ( (date_trunc('year', now()))::timestamp
+        , (date_trunc('year', now()) + interval '1 year' - interval '1 day')::timestamp
+        , '1 day'::interval) AS all_dates
+ORDER BY d) AS free_dates;
+END; $$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION canAcceptOffer(the_care_taker VARCHAR(255), the_start_date date, the_end_date date)
+RETURNS BOOLEAN
+AS
+$$ BEGIN
+IF ((
+  SELECT care_takers.is_part_time
+    FROM care_takers 
+    WHERE care_takers.user_name = the_care_taker
+) AND (
+  SELECT AVG(bids.rating)
+    FROM bids 
+    WHERE bids.care_taker = the_care_taker
+) <= 4)
+
+THEN
+IF ((
+  SELECT MAX(getPetsPerDay(the_care_taker, a.free_day))
+    FROM theAvailableDates(the_care_taker) a
+    WHERE a.free_day >= the_start_date
+      AND a.free_day <= the_end_date 
+) > 2 )
+THEN
+RETURN FALSE;
+END IF;
+
+ELSE 
+IF ((
+  SELECT MAX(getPetsPerDay(the_care_taker, a.free_day))
+    FROM theAvailableDates(the_care_taker) a
+    WHERE a.free_day >= the_start_date
+      AND a.free_day <= the_end_date 
+) > 5 )
+THEN
+RETURN FALSE;
+END IF;
+
+END IF;
+RETURN TRUE;
+END; $$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION canAcceptNewOfferFunction()
+RETURNS TRIGGER AS
+$$ BEGIN
+IF ( SELECT NEW.is_successful )
+THEN
+RETURN NEW; 
+ELSE 
+IF ( SELECT canAcceptOffer(NEW.care_taker, NEW.start_date, NEW.end_date) )
+THEN
+RETURN NEW; 
+END IF;
+END IF;
+RETURN NULL;
+END; $$ LANGUAGE plpgsql;
+
+-- Trigger to see if the 
+CREATE TRIGGER canAcceptNewOffer
+BEFORE UPDATE ON bids
+FOR EACH ROW
+EXECUTE PROCEDURE canAcceptNewOfferFunction();
 
 
 -- Drop table commands for resetting all tables 
