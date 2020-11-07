@@ -5,7 +5,13 @@ import { UserContext } from "../utils/UserProvider";
 
 import ROUTES from "./Routes";
 
-import { PcsAdminHome, PcsAdminCareTaker, PcsAdminPetInfo, PcsAdminOverview } from "../pages/pcsadmin"
+import {
+  PcsAdminHome,
+  PcsAdminCareTaker,
+  PcsAdminPetInfo,
+  PcsAdminOverview,
+} from "../pages/pcsadmin";
+import PcsAdminEmployeeOfMonth from "../pages/pcsadmin/PcsAdminEmployeeOfMonth";
 
 const PrivatePCSAdminRoute = props => {
   const { username, authToken, roles } = useContext(UserContext);
@@ -51,6 +57,9 @@ const PrivatePCSAdminRoute = props => {
               </Route>
               <Route exact path={ROUTES.ADMIN_CARE_TAKER}>
                 <PcsAdminCareTaker />
+              </Route>
+              <Route exact path={ROUTES.ADMIN_EMPLOYEE_OF_MONTH}>
+                <PcsAdminEmployeeOfMonth />
               </Route>
             </Switch>
           );

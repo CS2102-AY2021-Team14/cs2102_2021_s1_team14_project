@@ -2,11 +2,24 @@ import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Image } from "react-bootstrap";
 import Navbar from "../../components/Navbar";
 import AdminSidebar from "../../components/sidebar/AdminSidebar";
-import { Paper, Typography, Table, TableBody, TableRow, TableCell, TableHead, TableSortLabel, TextField, Toolbar, InputAdornment, IconButton } from "@material-ui/core";
+import {
+  Paper,
+  Typography,
+  Table,
+  TableBody,
+  TableRow,
+  TableCell,
+  TableHead,
+  TableSortLabel,
+  TextField,
+  Toolbar,
+  InputAdornment,
+  IconButton,
+} from "@material-ui/core";
 import axios from "axios";
 import TablePageScroll from "../../components/admin/TablePageScroll";
 import { BiSearchAlt, BiEditAlt } from "react-icons/bi";
-import Popup from '../../components/admin/Popup';
+import Popup from "../../components/admin/Popup";
 
 // import Confetti from "react-confetti";
 // import useWindowDimensions from "../../utils/WindowDimensions";
@@ -14,7 +27,6 @@ import Popup from '../../components/admin/Popup';
 import styles from "../../components/admin/styles/PcsAdmin.module.css";
 
 const PcsAdminHome = () => {
-
   //   useEffect(() => {
   //     axios.get("/api/admin/employeeofmonth").then(response => {
   //       console.log(response.data);
@@ -25,7 +37,7 @@ const PcsAdminHome = () => {
   //   const { height, width } = useWindowDimensions();
   // const [employeeOfTheMonth, setEmployeeOfTheMonth] = useState("");
   const [employeeInfos, setEmployeesInfo] = useState([]);
-      
+
   // states for table paginations
   const rowsPerPageDropDown = [5, 10, 15];
   const [page, setPage] = useState(0); // page is 0 indexed by documentation
@@ -33,35 +45,39 @@ const PcsAdminHome = () => {
 
   // Order states
   const [order, setOrder] = useState(); // 'asc' or 'desc'
-  const [orderBy, setOrderBy] = useState('user_name'); // headerLabels.id
+  const [orderBy, setOrderBy] = useState("user_name"); // headerLabels.id
 
   // Setting filter function states
-  const [filterFn, setFilterFn] = useState({ func: items => { return items; } });
+  const [filterFn, setFilterFn] = useState({
+    func: items => {
+      return items;
+    },
+  });
 
   // Pop up states
   const [openPopup, setOpenPopup] = useState(false);
   const [infoToEdit, setInfoToEdit] = useState({
-    user_name: '',
-    user_address: '',
-    user_email: '',
+    user_name: "",
+    user_address: "",
+    user_email: "",
     is_part_time: false,
-    name: ''
+    name: "",
   });
 
   // Table header labels mapping with id
   const headerLabels = [
-    { label: 'Name', id: 'name' },
-    { label: 'Address', id: 'user_address' },
-    { label: 'Email', id: 'user_email' },
-    { label: 'Part-Time/Full-Time', id: '', disableSort: true },
-    { label: '', id: ' ', disableSort: true }
-  ]
+    { label: "Name", id: "username" },
+    { label: "Address", id: "user_address" },
+    { label: "Email", id: "user_email" },
+    { label: "Part-Time/Full-Time", id: "", disableSort: true },
+    { label: "", id: " ", disableSort: true },
+  ];
 
   const handleSortRequest = cellId => {
     const isAsc = orderBy === cellId && order === "asc";
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(cellId)
-  }
+    setOrder(isAsc ? "desc" : "asc");
+    setOrderBy(cellId);
+  };
 
   // const handleEdit = () => {
   //   if (openPopup !== undefined) {
@@ -70,77 +86,80 @@ const PcsAdminHome = () => {
   // }
 
   const stableSort = (array, comparator) => {
-      const stabilizedThis = array.map((el, index) => [el, index]);
-      stabilizedThis.sort((a, b) => {
-          const order = comparator(a[0], b[0]);
-          if (order !== 0) return order;
-          return a[1] - b[1];
-      });
-      return stabilizedThis.map((el) => el[0]);
-  }
+    const stabilizedThis = array.map((el, index) => [el, index]);
+    stabilizedThis.sort((a, b) => {
+      const order = comparator(a[0], b[0]);
+      if (order !== 0) return order;
+      return a[1] - b[1];
+    });
+    return stabilizedThis.map(el => el[0]);
+  };
 
   const getComparator = (order, orderBy) => {
-      return order === 'desc'
-          ? (a, b) => descendingComparator(a, b, orderBy)
-          : (a, b) => -descendingComparator(a, b, orderBy);
-  }
+    return order === "desc"
+      ? (a, b) => descendingComparator(a, b, orderBy)
+      : (a, b) => -descendingComparator(a, b, orderBy);
+  };
 
   const descendingComparator = (a, b, orderBy) => {
-      if (b[orderBy] < a[orderBy]) {
-          return -1;
-      }
-      if (b[orderBy] > a[orderBy]) {
-          return 1;
-      }
-      return 0;
-  }
+    if (b[orderBy] < a[orderBy]) {
+      return -1;
+    }
+    if (b[orderBy] > a[orderBy]) {
+      return 1;
+    }
+    return 0;
+  };
 
   const getEmployeesInfo = async () => {
-    axios.get("/api/admin/employees")
-         .then(response => {
-           const { data } = response;
-           setEmployeesInfo(data.employeesInfo);
-         });
-  }
+    axios.get("/api/admin/employees").then(response => {
+      const { data } = response;
+      setEmployeesInfo(data.employeesInfo);
+    });
+  };
 
   const employeesInfoDisplay = () => {
-    // Only display selected items 
+    // Only display selected items
     if (employeeInfos) {
       // eg. page 0 selected, rows per page to show is 5
       // start is 0 * 5 = 0, end is 1 * 5 == 5 (not inclusive)
       if (filterFn) {
-        return stableSort(filterFn.func(employeeInfos), getComparator(order, orderBy))
-              .slice(page * rowsPerPage, (page + 1) * rowsPerPage);
+        return stableSort(
+          filterFn.func(employeeInfos),
+          getComparator(order, orderBy)
+        ).slice(page * rowsPerPage, (page + 1) * rowsPerPage);
       }
     }
-  }
+  };
 
   // TODO: figure a better operation
   const handleSearch = e => {
     let value = e.target.value;
     setFilterFn({
-        func: items => {
-            if (value === "") {
-              return items;
-            } else {
-              return items.filter(item => {
-                if (item.name.toLowerCase().includes(value) || 
-                item.user_email.toLowerCase().includes(value) ||
-                item.user_address.toLowerCase().includes(value)) {
-                  return true;
-                } 
-                return false;
-              })
+      func: items => {
+        if (value === "") {
+          return items;
+        } else {
+          return items.filter(item => {
+            if (
+              item.name.toLowerCase().includes(value) ||
+              item.user_email.toLowerCase().includes(value) ||
+              item.user_address.toLowerCase().includes(value)
+            ) {
+              return true;
             }
+            return false;
+          });
         }
-    })
-  }
+      },
+    });
+  };
 
-  const openInPopup = (item) => {
+  const openInPopup = item => {
     console.log(item);
-    setInfoToEdit({...item});
+    setInfoToEdit({ ...item });
     setOpenPopup(true);
-  }
+  };
 
   useEffect(() => {
     getEmployeesInfo();
@@ -172,62 +191,73 @@ const PcsAdminHome = () => {
               <Confetti /> */}
               <Paper className={styles.paper}>
                 <Toolbar>
-                  <TextField 
+                  <TextField
                     label="Search Employee"
                     variant="outlined"
-                    onChange={(e) => handleSearch(e)}
+                    onChange={e => handleSearch(e)}
                     InputProps={{
-                      startAdornment: <InputAdornment position="start">
-                                        <BiSearchAlt />
-                                      </InputAdornment>
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <BiSearchAlt />
+                        </InputAdornment>
+                      ),
                     }}
                   />
                 </Toolbar>
                 <Table>
                   <TableHead>
-                  {
-                      headerLabels.map(header => (
-                        <TableCell key={header.id} className={styles.label_head} sortDirection={orderBy === header.id ? order : false}>
-                          {header.disableSort ? 
-                          (<Typography className={styles.header}>
-                                  {header.label}
-                            </Typography>) : 
-                          (<TableSortLabel 
+                    {headerLabels.map(header => (
+                      <TableCell
+                        key={header.id}
+                        className={styles.label_head}
+                        sortDirection={orderBy === header.id ? order : false}
+                      >
+                        {header.disableSort ? (
+                          <Typography className={styles.header}>
+                            {header.label}
+                          </Typography>
+                        ) : (
+                          <TableSortLabel
                             active={true}
-                            direction = {orderBy === header.id ? order : 'asc'}
-                            onClick = {() => { handleSortRequest(header.id) }}
+                            direction={orderBy === header.id ? order : "asc"}
+                            onClick={() => {
+                              handleSortRequest(header.id);
+                            }}
                           >
                             <Typography className={styles.header}>
-                                  {header.label}
+                              {header.label}
                             </Typography>
-                          </TableSortLabel>)}
-                        </TableCell>
-                      ))
-                  }
+                          </TableSortLabel>
+                        )}
+                      </TableCell>
+                    ))}
                   </TableHead>
-                  <TableBody className={styles.per_row} >
-                    {
-                      employeesInfoDisplay().map(item => 
-                        (<TableRow key={item.user_name}>
-                            <TableCell>{item.name}</TableCell>
-                            <TableCell>{item.user_address}</TableCell>
-                            <TableCell>{item.user_email}</TableCell>
-                            <TableCell>{item.is_part_time.toString()}</TableCell>
-                            <TableCell>
-                              <IconButton color="primary" onClick={() => { openInPopup(item) }}>
-                                <BiEditAlt />
-                              </IconButton>
-                              {/* <IconButton color="secondary">
+                  <TableBody className={styles.per_row}>
+                    {employeesInfoDisplay().map(item => (
+                      <TableRow key={item.user_name}>
+                        <TableCell>{item.name}</TableCell>
+                        <TableCell>{item.user_address}</TableCell>
+                        <TableCell>{item.user_email}</TableCell>
+                        <TableCell>{item.is_part_time.toString()}</TableCell>
+                        <TableCell>
+                          <IconButton
+                            color="primary"
+                            onClick={() => {
+                              openInPopup(item);
+                            }}
+                          >
+                            <BiEditAlt />
+                          </IconButton>
+                          {/* <IconButton color="secondary">
                                 <AiOutlineDelete />
                               </IconButton> */}
-                            </TableCell>
-                        </TableRow>)
-                      )
-                    }
+                        </TableCell>
+                      </TableRow>
+                    ))}
                   </TableBody>
                 </Table>
-                <TablePageScroll 
-                  employeeInfos={employeeInfos} 
+                <TablePageScroll
+                  employeeInfos={employeeInfos}
                   rowsPerPage={rowsPerPage}
                   page={page}
                   rowsPerPageDropDown={rowsPerPageDropDown}
@@ -235,8 +265,11 @@ const PcsAdminHome = () => {
                   setRowsPerPage={setRowsPerPage}
                 />
               </Paper>
-              <Popup openPopup={openPopup} setOpenPopup={setOpenPopup} infoToEdit={infoToEdit}>
-              </Popup>
+              <Popup
+                openPopup={openPopup}
+                setOpenPopup={setOpenPopup}
+                infoToEdit={infoToEdit}
+              ></Popup>
             </Container>
             {/* <Confetti
               numberOfPieces={1000}
