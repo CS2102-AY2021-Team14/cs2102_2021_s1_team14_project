@@ -6,12 +6,10 @@ import axios from 'axios';
 import { UserContext } from "../../utils/UserProvider";
 import YogaPetsLogo from '../../images/logo.png';
 import Avatar from '../../components/avatar/Avatar';
-import Salary from '../../components/salary/Salary';
+import Offers from '../../components/offers/Offers';
 
-
-const CareTakerSalary = () => {
-  
-  // Caretaker information
+const CareTakerOffers = () => {
+    // Caretaker information
   const { username, authToken, roles } = useContext(UserContext); 
   const [caretaker, setCaretaker] = useState({
       user_name: "",
@@ -76,25 +74,25 @@ const CareTakerSalary = () => {
       salary: caretakerSalary,
       jobs: caretakerJobs,
   }
-
+  
   return (
     <div>
-      <Navbar />
-        <Container fluid>
-          <Row className="justify-content-md-center">
-            <Col xs={2} id="sidebar">
-              <CaretakerSidebar defaultKey={"Salary"} />
-            </Col>
-            <Col xs={8} id="page-content">
-              <Salary jobs={caretakerInfo.jobs} />
-            </Col>
-            <Col xs={2} id="avatar">
-              <Avatar user={caretakerInfo} />
-            </Col>
-          </Row>  
-        </Container>
+    <Navbar />
+      <Container fluid>
+        <Row className="justify-content-md-center">
+          <Col xs={2} id="sidebar">
+            <CaretakerSidebar defaultKey={"Offers"} />
+          </Col>
+          <Col xs={8} id="page-content">
+            <Offers />
+          </Col>
+          <Col xs={2} id="avatar">
+            <Avatar user={caretakerInfo} />
+          </Col>
+        </Row>  
+      </Container>
     </div>
-  )
-};
+  );
+}
 
-export default CareTakerSalary;
+export default CareTakerOffers;

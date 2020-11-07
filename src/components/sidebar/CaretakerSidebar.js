@@ -17,12 +17,17 @@ const sideBarData = [
     {
         icon: <FaIcons.FaDollarSign />,
         key: "Salary",
-        link: "#"
+        link: ROUTES.CARE_TAKER_SALARY
+    },
+    {
+        icon:<FaIcons.FaPaw />,
+        key: "Offers",
+        link: ROUTES.CARE_TAKER_OFFERS
     },
     {
         icon: <FaIcons.FaBookOpen />,
         key: "Availability",
-        link: "#"
+        link: ROUTES.CARE_TAKER_AVAILABILITY
     },
     {
         icon: <FaIcons.FaCog />,

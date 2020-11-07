@@ -76,15 +76,6 @@ const CareTakerHome = () => {
             })
     }, [])
 
-    // Find average monthly salary 
-    const findAverageSalary = () => {
-        let sum = 0;
-        for (var i = 0; i < caretakerSalary.length; i ++) {
-            sum += parseFloat(caretakerSalary[i].amount);
-        }
-        return parseFloat(sum / caretakerSalary.length).toFixed(2);
-    };
-
     // Find employment
     const findEmployment = () => {
         if (caretakerJobs.length < 1) {
@@ -122,7 +113,6 @@ const CareTakerHome = () => {
         image: YogaPetsLogo,
         job: caretaker.is_part_time ? "Part time" : "Full time",
         join: (new Date(2020, 8, 9).toDateString().split(" ").splice(1).join(" ")),
-        salary: findAverageSalary(),
         employment: findEmployment(),
         jobs: getActiveJobs(),
         availability: {
