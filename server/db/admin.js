@@ -37,11 +37,18 @@ class Admin {
   // Fetch all employee's data
   static getEmployees() {
     return pool.query(
-      `  SELECT user_roles.user_name, user_address, user_email, is_part_time 
+      `  SELECT users.name, user_roles.user_name, user_address, user_email, is_part_time 
          FROM users 
          JOIN user_roles 
          ON users.user_name = user_roles.user_name 
          WHERE user_roles.role = 'Care Taker'; `
+    );
+  }
+
+  static updateEmployeeInfo(name, email, addr, username) {
+    return pool.query(
+      `UPDATE users SET name = $1, user_email = $2, user_address = $3 WHERE user_name = $4`,
+      [name, email, addr, username]
     );
   }
 
