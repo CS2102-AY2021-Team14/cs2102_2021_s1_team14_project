@@ -7,13 +7,13 @@ class PetOwner {
     return pool.query(
       `
         WITH count_owner_care_takers AS (  
-          SELECT 'po1' AS owner, c.care_taker AS care_taker, c.orders AS max_bid_count
+          SELECT $1 AS owner, c.care_taker AS care_taker, c.orders AS max_bid_count
           FROM (
           ( 
             SELECT b.owner AS owner, b.care_taker AS care_taker, COUNT(b.care_taker) AS orders
               FROM bids b
               GROUP BY (b.owner, b.care_taker)
-              HAVING owner = 'po1'
+              HAVING owner = $1
               ORDER BY COUNT(b.care_taker) DESC )
           ) AS c
           WHERE c.orders = (
@@ -22,7 +22,7 @@ class PetOwner {
                 SELECT b.owner AS owner, b.care_taker AS care_taker, COUNT(b.care_taker) AS orders
                   FROM bids b
                   GROUP BY (b.owner, b.care_taker)
-                  HAVING owner = 'po1'
+                  HAVING owner = $1
                   ORDER BY COUNT(b.care_taker) DESC 
               ) AS ct
           )
