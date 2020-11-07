@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Image } from "react-bootstrap";
 import Navbar from "../../components/Navbar";
 import AdminSidebar from "../../components/sidebar/AdminSidebar";
-import { Paper, Typography, Table, TableBody, TableRow, TableCell, TableHead, TableSortLabel } from "@material-ui/core";
+import { Paper, Typography, Table, TableBody, TableRow, TableCell, TableHead, TableSortLabel, TextField, Toolbar, InputAdornment } from "@material-ui/core";
 import axios from "axios";
 import TablePageScroll from "../../components/admin/TablePageScroll";
+import { BiSearchAlt } from "react-icons/bi";
 // import Confetti from "react-confetti";
 
 import styles from "../../components/admin/styles/PcsAdmin.module.css";
@@ -21,6 +22,9 @@ const PcsAdminHome = () => {
   // Order states
   const [order, setOrder] = useState(); // 'asc' or 'desc'
   const [orderBy, setOrderBy] = useState('user_name'); // headerLabels.id
+
+  // Filter states
+  const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
 
   const headerLabels = [
     { label: 'Name', id: 'user_name' },
@@ -43,7 +47,6 @@ const PcsAdminHome = () => {
   const stableSort = (array, comparator) => {
       const stabilizedThis = array.map((el, index) => [el, index]);
       stabilizedThis.sort((a, b) => {
-          console.log(a[0]);
           const order = comparator(a[0], b[0]);
           if (order !== 0) return order;
           return a[1] - b[1];
@@ -80,14 +83,36 @@ const PcsAdminHome = () => {
     if (employeeInfos) {
       // eg. page 0 selected, rows per page to show is 5
       // start is 0 * 5 = 0, end is 1 * 5 == 5 (not inclusive)
-      return stableSort(employeeInfos, getComparator(order, orderBy))
+      if (filterFn) {
+        return stableSort(filterFn.fn(employeeInfos), getComparator(order, orderBy))
               .slice(page * rowsPerPage, (page + 1) * rowsPerPage);
+      }
     }
+  }
+
+  const handleSearch = e => {
+    let value = e.target.value;
+    setFilterFn({
+        fn: items => {
+            if (value === ""){
+              return items;
+            } else {
+              return items.filter(item => {
+                if (item.user_name.toLowerCase().includes(value) || 
+                item.user_email.toLowerCase().includes(value) ||
+                item.user_address.toLowerCase().includes(value)) {
+                  return true;
+                } 
+                return false;
+              })
+            }
+        }
+    })
   }
 
   useEffect(() => {
     getEmployeesInfo();
-  }, []);
+  }, [filterFn]);
 
   return (
     <div>
@@ -112,6 +137,18 @@ const PcsAdminHome = () => {
               />
               <Confetti /> */}
               <Paper className={styles.paper}>
+                <Toolbar>
+                  <TextField 
+                    label="Search Employee"
+                    variant="outlined"
+                    onChange={(e) => handleSearch(e)}
+                    InputProps={{
+                      startAdornment: <InputAdornment position="start">
+                                        <BiSearchAlt />
+                                      </InputAdornment>
+                    }}
+                  />
+                </Toolbar>
                 <Table>
                   <TableHead>
                   {
