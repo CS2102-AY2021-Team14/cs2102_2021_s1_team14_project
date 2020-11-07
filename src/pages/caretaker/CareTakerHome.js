@@ -127,7 +127,7 @@ const CareTakerHome = () => {
         jobs: getActiveJobs(),
         availability: {
             leaveDays: getLeaveDays(),
-            startDate: new Date(2020, 8, 9)
+            startDate: new Date(2020, 7, 3)
         } 
     }
     

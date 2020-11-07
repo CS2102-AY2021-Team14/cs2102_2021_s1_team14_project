@@ -4,6 +4,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import CaretakerSidebar from '../../components/sidebar/CaretakerSidebar';
 import Navbar from '../../components/Navbar';
 import Avatar from '../../components/avatar/Avatar';
+import History from '../../components/history/History';
 
 import axios from 'axios';
 import { UserContext } from "../../utils/UserProvider";
@@ -108,7 +109,7 @@ const CareTakerHistory = () => {
                     <CaretakerSidebar defaultKey={"History"} />
                 </Col>
                 <Col xs={8} id="page-content">
-                    History 
+                    <History histories={caretakerInfo.pastJobs} />
                 </Col>
                 <Col xs={2} id="avatar">
                     <Avatar user={caretakerInfo} />
