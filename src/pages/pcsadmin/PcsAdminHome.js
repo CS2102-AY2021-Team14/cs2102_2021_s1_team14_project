@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Image } from "react-bootstrap";
 import Navbar from "../../components/Navbar";
 import AdminSidebar from "../../components/sidebar/AdminSidebar";
-import { Paper, Typography, Table, TableBody, TableRow, TableCell, TableHead, TablePagination } from "@material-ui/core";
+import { Paper, Typography, Table, TableBody, TableRow, TableCell, TableHead, TableSortLabel } from "@material-ui/core";
 import axios from "axios";
 import TablePageScroll from "../../components/admin/TablePageScroll";
 // import Confetti from "react-confetti";
@@ -16,8 +16,18 @@ const PcsAdminHome = () => {
   // states for table paginations
   const rowsPerPageDropDown = [5, 10, 15];
   const [page, setPage] = useState(0); // page is 0 indexed by documentation
-  const [rowsPerPage, setRowsPerPage] = useState(rowsPerPageDropDown[page])
+  const [rowsPerPage, setRowsPerPage] = useState(rowsPerPageDropDown[page]);
 
+  // Order states
+  const [order, setOrder] = useState();
+  const [orderBy, setOrderBy] = useState('user_name');
+
+  const headerLabels = [
+    { label: 'Name', id: 'user_name' },
+    { label: 'Address', id: 'user_address' },
+    { label: 'Email', id: 'user_email' },
+    { label: 'Part-Time/Full-Time', id: '' }
+  ]
   // useEffect(() => {
   //   axios.get("/api/admin/employeeofmonth").then(response => {
   //     setEmployeeOfTheMonth(response.data.care_taker);
@@ -33,12 +43,11 @@ const PcsAdminHome = () => {
     }
   }
 
-  const headerLabels = [
-    'Name',
-    'Address',
-    'Email',
-    'Part-Time/Full-Time'
-  ]
+  const handleSortRequest = cellId => {
+    const isAsc = orderBy === cellId && order === "asc";
+    setOrder(isAsc ? 'desc' : 'asc');
+    setOrderBy(cellId)
+  }
 
   const getEmployeesInfo = async () => {
     axios.get("/api/admin/employees")
@@ -78,11 +87,17 @@ const PcsAdminHome = () => {
                 <Table>
                   <TableHead>
                   {
-                      headerLabels.map(label => (
-                        <TableCell key={label} className={styles.label_head}>
-                          <Typography className={styles.header}>
-                                {label}
-                          </Typography>
+                      headerLabels.map(header => (
+                        <TableCell key={header.id} className={styles.label_head}>
+                          <TableSortLabel 
+                            active={true}
+                            direction = {orderBy === header.id ? order : 'asc'}
+                            onClick = {() => { handleSortRequest(header.id) }}
+                          >
+                            <Typography className={styles.header}>
+                                  {header.label}
+                            </Typography>
+                          </TableSortLabel>
                         </TableCell>
                       ))
                   }
