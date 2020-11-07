@@ -6,7 +6,6 @@ import { Paper, Typography, Table, TableBody, TableRow, TableCell, TableHead, Ta
 import axios from "axios";
 import TablePageScroll from "../../components/admin/TablePageScroll";
 import { BiSearchAlt, BiEditAlt } from "react-icons/bi";
-import { AiOutlineDelete } from "react-icons/ai";
 import Popup from '../../components/admin/Popup';
 
 // import Confetti from "react-confetti";
@@ -15,8 +14,6 @@ import Popup from '../../components/admin/Popup';
 import styles from "../../components/admin/styles/PcsAdmin.module.css";
 
 const PcsAdminHome = () => {
-
-  //   const [employeeOfTheMonth, setEmployeeOfTheMonth] = useState({});
 
   //   useEffect(() => {
   //     axios.get("/api/admin/employeeofmonth").then(response => {
@@ -220,9 +217,9 @@ const PcsAdminHome = () => {
                               <IconButton color="primary" onClick={() => { openInPopup(item) }}>
                                 <BiEditAlt />
                               </IconButton>
-                              <IconButton color="secondary">
+                              {/* <IconButton color="secondary">
                                 <AiOutlineDelete />
-                              </IconButton>
+                              </IconButton> */}
                             </TableCell>
                         </TableRow>)
                       )

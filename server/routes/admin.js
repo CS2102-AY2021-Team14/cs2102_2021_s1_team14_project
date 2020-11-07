@@ -92,6 +92,7 @@ router.delete("/basedailyprices/:pettype", async (req, res) => {
     res.status(404).json({ message: "Delete base daily price error", error });
   }
 });
+
 router.put("/updateEmployee", async (req, res) => {
   try {
     const { name, email, addr, username } = req.body;
