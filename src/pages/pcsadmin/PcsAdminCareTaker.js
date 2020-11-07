@@ -50,20 +50,44 @@ const PcsAdminHome = () => {
                     {caretaker.user_name}
                     <span className="badgeContainer">
                       <Badge
-                        variant={caretaker.isPartTime ? "warning" : "info"}
+                        variant={caretaker.is_part_time ? "warning" : "info"}
                       >
-                        {caretaker.isPartTime ? "Part-timer" : "Full-timer"}
+                        {caretaker.is_part_time ? "Part-timer" : "Full-timer"}
                       </Badge>
                     </span>
                   </Card.Title>
-                  <Card.Text>{caretaker.name ?? "No name added"}</Card.Text>
+                  <Card.Text>{caretaker.name ? `${caretaker.name} is underperforming!` : "No name added"}</Card.Text>
+                  {console.log(caretaker.error_types, caretaker.error_datas)}
+                  {
+                    caretaker.error_types.map((error_type, index) => {
+                      if (error_type == 1) {
+                        return (
+                          <Card.Text>
+                            Average Rating is: {caretaker.error_datas[index]}
+                          </Card.Text>
+                        );
+                      } else if (error_type == 2) {
+                        return (
+                          <Card.Text>
+                            Average Pet Days Per Month is: {caretaker.error_datas[index]}
+                          </Card.Text>
+                        );
+                      } else {
+                        return (
+                          <Card.Text>
+                            Average Rating For This Month is: {caretaker.error_datas[index]}
+                          </Card.Text>
+                        );
+                      }
+                    })
+                  }
                 </Card.Body>
               </Card>
             ))}
           </Col>
         </Row>
       </Container>
-    </div>
+    </div >
   );
 };
 

@@ -182,9 +182,9 @@ CREATE VIEW daily_price AS
 CREATE VIEW pets_full_information AS 
     SELECT P.name AS pet_name, P.owner AS pet_owner, P.type AS pet_type, 
         U.name AS pet_owner_name, 
-        ARRAY_AGG(PC.category) AS pet_categories, 
-        ARRAY_AGG(PR.requirement) AS pet_special_requirement, 
-        ARRAY_AGG(PR.description) AS pet_requirements_description
+        ARRAY_AGG(DISTINCT PC.category) AS pet_categories, 
+        ARRAY_AGG(DISTINCT PR.requirement) AS pet_special_requirement, 
+        ARRAY_AGG(DISTINCT PR.description) AS pet_requirements_description
     FROM ( 
         pets P
         LEFT OUTER JOIN users U ON P.owner = U.user_name
@@ -309,7 +309,7 @@ IF (((SELECT COUNT(*)
     FROM bids
     WHERE care_taker = NEW.care_taker AND start_date >= NEW.start_date AND end_date <= NEW.end_date AND is_successful) < 5)
     AND
-    (SELECT is_part_time FROM care_takers WHERE user_name = NEW.care_taker)
+    NOT (SELECT is_part_time FROM care_takers WHERE user_name = NEW.care_taker)
     )
 THEN
 NEW.is_successful := TRUE;

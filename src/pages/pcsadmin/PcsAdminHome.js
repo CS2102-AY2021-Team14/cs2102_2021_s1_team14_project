@@ -7,12 +7,23 @@ import axios from "axios";
 import TablePageScroll from "../../components/admin/TablePageScroll";
 import { BiSearchAlt } from "react-icons/bi";
 // import Confetti from "react-confetti";
+// import useWindowDimensions from "../../utils/WindowDimensions";
 
 import styles from "../../components/admin/styles/PcsAdmin.module.css";
 
 const PcsAdminHome = () => {
+
+  //   const [employeeOfTheMonth, setEmployeeOfTheMonth] = useState({});
+
+  //   useEffect(() => {
+  //     axios.get("/api/admin/employeeofmonth").then(response => {
+  //       console.log(response.data);
+  //       setEmployeeOfTheMonth(response.data);
+  //     });
+  //   }, []);
+
+  //   const { height, width } = useWindowDimensions();
   // const [employeeOfTheMonth, setEmployeeOfTheMonth] = useState("");
-  const [employeeInfos, setEmployeesInfo] = useState([]);
       
   // states for table paginations
   const rowsPerPageDropDown = [5, 10, 15];
@@ -33,11 +44,6 @@ const PcsAdminHome = () => {
     { label: 'Email', id: 'user_email' },
     { label: 'Part-Time/Full-Time', id: '', disableSort: true }
   ]
-  // useEffect(() => {
-  //   axios.get("/api/admin/employeeofmonth").then(response => {
-  //     setEmployeeOfTheMonth(response.data.care_taker);
-  //   });
-  // }, []);
 
   const handleSortRequest = cellId => {
     const isAsc = orderBy === cellId && order === "asc";
@@ -130,9 +136,11 @@ const PcsAdminHome = () => {
                 Employee of the Month
               </Typography>
               <Typography class="mt-5" variant="h4">
-                {employeeOfTheMonth}
+                Congratulations to {employeeOfTheMonth.name}!
               </Typography>
-
+              <Typography class="mt-1" variant="h4">
+                [Username : {employeeOfTheMonth.care_taker}]
+              </Typography>
               <Image
                 src="https://webstockreview.net/images/congratulations-clipart-transparent-background-2.png"
                 fluid
@@ -196,6 +204,11 @@ const PcsAdminHome = () => {
                 />
               </Paper>
             </Container>
+            {/* <Confetti
+              numberOfPieces={1000}
+              width={(width * 3) / 4}
+              height={height}
+            /> */}
           </Col>
         </Row>
       </Container>
