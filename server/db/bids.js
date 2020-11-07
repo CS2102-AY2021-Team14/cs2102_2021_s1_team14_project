@@ -10,7 +10,14 @@ class Bids {
   }
 
   static getPetOwnersBids(owner) {
-    return pool.query("SELECT * FROM bids WHERE owner = $1;", [owner]);
+    return pool.query(
+      `
+      SELECT bids.*, users.name AS care_taker_name
+      FROM bids INNER JOIN users ON bids.care_taker = users.user_name
+      WHERE owner = $1;
+      `,
+      [owner]
+    );
   }
 
   static getAllReviewableBids(owner) {
@@ -43,9 +50,27 @@ class Bids {
       `
       UPDATE bids 
         SET is_active = false
-        WHERE pet = $1 AND care_taker = $2 AND start_date = $3 AND end_date = $4
+        WHERE pet = $1 AND care_taker = $2 AND start_date = $3 AND end_date = $4;
     `,
       [pet, care_taker, start_date, end_date]
+    );
+  }
+
+  static updateBidArrrangement(
+    pet,
+    care_taker,
+    start_date,
+    end_date,
+    payment_type,
+    transfer_method
+  ) {
+    return pool.query(
+      `
+      UPDATE bids
+        SET payment_type = $5, transfer_method = $6
+        WHERE pet = $1 AND care_taker = $2 AND start_date = $3 AND end_date = $4;
+      `,
+      [pet, care_taker, start_date, end_date, payment_type, transfer_method]
     );
   }
 
@@ -54,7 +79,7 @@ class Bids {
       `
       UPDATE bids
         SET rating = $5, review_text = $6
-        WHERE pet = $1 AND care_taker = $2 AND start_date = $3 AND end_date = $4
+        WHERE pet = $1 AND care_taker = $2 AND start_date = $3 AND end_date = $4;
     `,
       [pet, care_taker, start_date, end_date, rating, review_text]
     );
@@ -73,7 +98,7 @@ class Bids {
       `
       UPDATE bids
         SET payment_type = $5, transfer_method = $6
-        WHERE pet = $1 AND care_taker = $2 AND start_date = $3 AND end_date = $4
+        WHERE pet = $1 AND care_taker = $2 AND start_date = $3 AND end_date = $4;
     `,
       [pet, care_taker, start_date, end_date, payment_type, transfer_method]
     );

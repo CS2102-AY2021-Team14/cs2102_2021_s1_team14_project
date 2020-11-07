@@ -45,7 +45,8 @@ const BidModal = props => {
       .diff(moment(startDate).startOf("day"), "days") + 1;
 
   const hasPrice = () => {
-    return getNumDays() >= 1 && pet !== null;
+    const startsLaterThanToday = startDate >= new Date().setHours(0, 0, 0, 0);
+    return startsLaterThanToday && getNumDays() >= 1 && pet != null;
   };
 
   const getPrice = () => {
@@ -57,6 +58,11 @@ const BidModal = props => {
   };
 
   const handleBid = () => {
+    if (!hasPrice()) {
+      toast.error("Invalid dates or no pets chosen");
+      return;
+    }
+
     axios
       .post(`/api/bids/add`, {
         pet,
@@ -70,6 +76,7 @@ const BidModal = props => {
         toast.success(
           "Successfully bidded, you can check your status in the bids page"
         );
+        handleClose();
       })
       .catch(err => {
         console.log("Error posting bid", err);
