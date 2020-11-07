@@ -24,6 +24,7 @@ const PcsAdminHome = () => {
 
   //   const { height, width } = useWindowDimensions();
   // const [employeeOfTheMonth, setEmployeeOfTheMonth] = useState("");
+  const [employeeInfos, setEmployeesInfo] = useState([]);
       
   // states for table paginations
   const rowsPerPageDropDown = [5, 10, 15];
@@ -102,7 +103,7 @@ const PcsAdminHome = () => {
     let value = e.target.value;
     setFilterFn({
         func: items => {
-            if (value === ""){
+            if (value === "") {
               return items;
             } else {
               return items.filter(item => {
