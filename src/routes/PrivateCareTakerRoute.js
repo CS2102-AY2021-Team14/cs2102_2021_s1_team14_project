@@ -8,6 +8,7 @@ import ROUTES from "./Routes";
 import CareTakerHome from "../pages/caretaker/CareTakerHome";
 import CareTakerSalary from "../pages/caretaker/CareTakerSalary";
 import CareTakerHistory from "../pages/caretaker/CareTakerHistory";
+import CareTakerAvailability from "../pages/caretaker/CareTakerAvailability";
 
 const PrivateCareTakerRoute = props => {
   const { username, authToken, roles } = useContext(UserContext);
@@ -55,6 +56,10 @@ const PrivateCareTakerRoute = props => {
 
               <Route exact path={ROUTES.CARE_TAKER_HISTORY}>
                 <CareTakerHistory />
+              </Route>
+
+              <Route exact path={ROUTES.CARE_TAKER_AVAILABILITY}>
+                <CareTakerAvailability />
               </Route>
             </Switch>
           );

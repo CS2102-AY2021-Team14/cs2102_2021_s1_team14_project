@@ -22,7 +22,7 @@ const sideBarData = [
     {
         icon: <FaIcons.FaBookOpen />,
         key: "Availability",
-        link: "#"
+        link: ROUTES.CARE_TAKER_AVAILABILITY
     },
     {
         icon: <FaIcons.FaCog />,
