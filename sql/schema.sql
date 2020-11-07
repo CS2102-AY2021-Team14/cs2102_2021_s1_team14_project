@@ -270,19 +270,34 @@ RETURN FALSE;
 END; $$
 LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION isThereClashWithBids(the_care_taker VARCHAR(255), the_leave_date date)
+RETURNS BOOLEAN
+AS
+$$ BEGIN
+IF ((
+        SELECT COUNT(*)
+          FROM bids 
+          WHERE bids.care_taker = the_care_taker
+            AND bids.start_date <= the_leave_date
+            AND bids.end_date >= the_leave_date
+            AND bids.is_successful = TRUE
+    ) >= 1)
+THEN
+RETURN TRUE;
+END IF;
+RETURN FALSE;
+END; $$
+LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION checkAbleToTakeLeaveFunction()
 RETURNS TRIGGER AS
 $$ BEGIN
-IF (SELECT canTakeLeave(NEW.care_taker, NEW.leave_date)) THEN
+IF ((SELECT canTakeLeave(NEW.care_taker, NEW.leave_date)) 
+    AND NOT (SELECT isThereClashWithBids(NEW.care_taker, NEW.leave_date))) THEN
 RETURN NEW;
 END IF;
 RETURN NULL;
 END; $$ LANGUAGE plpgsql;
-
-CREATE TRIGGER checkAbleToTakeLeave
-BEFORE INSERT ON care_taker_leaves
-FOR EACH ROW
-EXECUTE PROCEDURE checkAbleToTakeLeaveFunction();
 
 CREATE OR REPLACE FUNCTION checkBidAvailabilityFunction()
 RETURNS TRIGGER AS
