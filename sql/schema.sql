@@ -138,8 +138,8 @@ CREATE TABLE IF NOT EXISTS salary (
     care_taker      VARCHAR(255)    NOT NULL REFERENCES care_takers(user_name)    ON DELETE CASCADE,
     month           CHAR(3)         NOT NULL, -- 3 letter month
     year            CHAR(4)         NOT NULL, -- 4 letter year
-    pet_days        INT             NOT NULL DEFAULT 0,
-    amount          NUMERIC         NOT NULL DEFAULT 0,
+    pet_days        INT             NOT NULL DEFAULT 0 CHECK (pet_days >= 0),
+    amount          NUMERIC         NOT NULL DEFAULT 0 CHECK (amount >= 0),
     PRIMARY KEY (care_taker, month, year)
 );
 
