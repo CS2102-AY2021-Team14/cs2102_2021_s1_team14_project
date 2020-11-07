@@ -130,7 +130,9 @@ CREATE TABLE IF NOT EXISTS bids (
         REFERENCES care_takers_pet_preferences(care_taker, pet_type),
     CONSTRAINT valid_date_range CHECK (start_date <= end_date),
     CONSTRAINT successful_bid_constraint CHECK
-        ((NOT is_successful) OR (payment_type IS NOT NULL AND transfer_method IS NOT NULL))
+        ((NOT is_successful) OR (payment_type IS NOT NULL AND transfer_method IS NOT NULL)),
+    CONSTRAINT valid_rating_constraint CHECK
+        ((rating IS NULL) OR is_successful)
 );
 
 -- trigger to update amount and pet day
