@@ -3,6 +3,7 @@ const express = require("express");
 const path = require("path");
 const frontendRoutes = require("./src/routes/Routes.js");
 const apiRouter = require("./server/apiRouter");
+const cors = require("cors");
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -27,6 +28,7 @@ app.get(Object.values(frontendRoutes), (req, res) => {
   res.sendFile(path.join(__dirname, "build/index.html"));
 });
 
+app.use(cors());
 app.use("/api", apiRouter);
 
 app.listen(port, () => {

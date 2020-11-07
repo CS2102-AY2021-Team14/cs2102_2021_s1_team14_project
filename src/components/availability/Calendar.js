@@ -31,28 +31,12 @@ const FindWorkingDays = (leaveDays, date, startDate) => {
     return workingDays;
 }
 
-const Calendar = () => {
+const Calendar = ({caretakerAvailability}) => {
     
-    // TODO change to API calls
-    const leaveDays = [
-        new Date(2020, 8, 22),
-        new Date(2020, 8, 28),
-        new Date(2020, 8, 29),
-        new Date(2020, 9, 10),
-        new Date(2020, 9, 12),
-        new Date(2020, 9, 23),
-        new Date(2020, 10, 19),
-        new Date(2020, 10, 20),
-        new Date(2020, 10, 21),
-        new Date(2020, 10, 22),
-        new Date(2020, 11, 20),
-        new Date(2020, 11, 1),
-        new Date(2020, 11, 4),
-        new Date(2020, 11, 10)
-    ]
+    const leaveDays = caretakerAvailability.leaveDays;
 
     // Day started working change to API calls
-    const startDate = new Date(2020, 8, 18);
+    const startDate = caretakerAvailability.startDate;
     const startMonth = new Date(startDate.getFullYear(), startDate.getMonth());
 
     // Setting the style of the highlighted objects
