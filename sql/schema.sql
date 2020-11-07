@@ -121,7 +121,7 @@ CREATE TABLE IF NOT EXISTS bids (
     is_successful   BOOLEAN         NOT NULL DEFAULT false,
     payment_type    VARCHAR(255),
     transfer_method VARCHAR(255),
-    rating          INT             CHECK (rating >= 0),
+    rating          INT             CHECK (rating >= 0 AND rating <= 5),
     review_text     VARCHAR,
     PRIMARY KEY (pet, care_taker, start_date, end_date),
     FOREIGN KEY (pet, owner) REFERENCES pets(name, owner),
