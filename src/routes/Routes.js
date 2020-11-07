@@ -20,6 +20,7 @@ const ROUTES = {
   ADMIN_PET_INFO: "/admin/petinfo",
   ADMIN_CARE_TAKER: "/admin/careTakers",
   ADMIN_OVERVIEW: "/admin/overview",
+  ADMIN_EMPLOYEE_OF_MONTH: "/admin/employeeofmonth",
 };
 
 module.exports = ROUTES;
