@@ -2,18 +2,18 @@ import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Image } from "react-bootstrap";
 import Navbar from "../../components/Navbar";
 import AdminSidebar from "../../components/sidebar/AdminSidebar";
-import { Paper, Typography, Table, TableBody, TableRow, TableCell, TableHead, TableSortLabel, TextField, Toolbar, InputAdornment } from "@material-ui/core";
+import { Paper, Typography, Table, TableBody, TableRow, TableCell, TableHead, TableSortLabel, TextField, Toolbar, InputAdornment, IconButton } from "@material-ui/core";
 import axios from "axios";
 import TablePageScroll from "../../components/admin/TablePageScroll";
-import { BiSearchAlt } from "react-icons/bi";
+import { BiSearchAlt, BiEditAlt } from "react-icons/bi";
+import Popup from '../../components/admin/Popup';
+
 // import Confetti from "react-confetti";
 // import useWindowDimensions from "../../utils/WindowDimensions";
 
 import styles from "../../components/admin/styles/PcsAdmin.module.css";
 
 const PcsAdminHome = () => {
-
-  //   const [employeeOfTheMonth, setEmployeeOfTheMonth] = useState({});
 
   //   useEffect(() => {
   //     axios.get("/api/admin/employeeofmonth").then(response => {
@@ -36,14 +36,25 @@ const PcsAdminHome = () => {
   const [orderBy, setOrderBy] = useState('user_name'); // headerLabels.id
 
   // Setting filter function states
-  const [filterFn, setFilterFn] = useState({ func: items => { return items; } })
+  const [filterFn, setFilterFn] = useState({ func: items => { return items; } });
+
+  // Pop up states
+  const [openPopup, setOpenPopup] = useState(false);
+  const [infoToEdit, setInfoToEdit] = useState({
+    user_name: '',
+    user_address: '',
+    user_email: '',
+    is_part_time: false,
+    name: ''
+  });
 
   // Table header labels mapping with id
   const headerLabels = [
-    { label: 'Name', id: 'user_name' },
+    { label: 'Name', id: 'name' },
     { label: 'Address', id: 'user_address' },
     { label: 'Email', id: 'user_email' },
-    { label: 'Part-Time/Full-Time', id: '', disableSort: true }
+    { label: 'Part-Time/Full-Time', id: '', disableSort: true },
+    { label: '', id: ' ', disableSort: true }
   ]
 
   const handleSortRequest = cellId => {
@@ -51,6 +62,12 @@ const PcsAdminHome = () => {
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(cellId)
   }
+
+  // const handleEdit = () => {
+  //   if (openPopup !== undefined) {
+  //     setOpenPopup(!openPopup);
+  //   }
+  // }
 
   const stableSort = (array, comparator) => {
       const stabilizedThis = array.map((el, index) => [el, index]);
@@ -107,7 +124,7 @@ const PcsAdminHome = () => {
               return items;
             } else {
               return items.filter(item => {
-                if (item.user_name.toLowerCase().includes(value) || 
+                if (item.name.toLowerCase().includes(value) || 
                 item.user_email.toLowerCase().includes(value) ||
                 item.user_address.toLowerCase().includes(value)) {
                   return true;
@@ -117,6 +134,12 @@ const PcsAdminHome = () => {
             }
         }
     })
+  }
+
+  const openInPopup = (item) => {
+    console.log(item);
+    setInfoToEdit({...item});
+    setOpenPopup(true);
   }
 
   useEffect(() => {
@@ -186,10 +209,18 @@ const PcsAdminHome = () => {
                     {
                       employeesInfoDisplay().map(item => 
                         (<TableRow key={item.user_name}>
-                            <TableCell>{item.user_name}</TableCell>
+                            <TableCell>{item.name}</TableCell>
                             <TableCell>{item.user_address}</TableCell>
                             <TableCell>{item.user_email}</TableCell>
                             <TableCell>{item.is_part_time.toString()}</TableCell>
+                            <TableCell>
+                              <IconButton color="primary" onClick={() => { openInPopup(item) }}>
+                                <BiEditAlt />
+                              </IconButton>
+                              {/* <IconButton color="secondary">
+                                <AiOutlineDelete />
+                              </IconButton> */}
+                            </TableCell>
                         </TableRow>)
                       )
                     }
@@ -204,6 +235,8 @@ const PcsAdminHome = () => {
                   setRowsPerPage={setRowsPerPage}
                 />
               </Paper>
+              <Popup openPopup={openPopup} setOpenPopup={setOpenPopup} infoToEdit={infoToEdit}>
+              </Popup>
             </Container>
             {/* <Confetti
               numberOfPieces={1000}

@@ -93,6 +93,19 @@ router.delete("/basedailyprices/:pettype", async (req, res) => {
   }
 });
 
+router.put("/updateEmployee", async (req, res) => {
+  try {
+    const { name, email, addr, username } = req.body;
+    const result = await Admin.updateEmployeeInfo(name, email, addr, username);
+    res.status(200).json({
+      message: `Successfully updated Employee ${username}`
+    })
+  } catch (error) {
+    console.error("Could not update employee", error);
+    res.status(404).json({ message: "Update employee error", error });
+  }
+})
+
 router.get("/employees", async (req, res) => {
   try {
     const result = await Admin.getEmployees();

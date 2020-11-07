@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS pet_owners (
 );
 
 CREATE TABLE IF NOT EXISTS care_takers (
-    user_name       VARCHAR(255)    PRIMARY KEY REFERENCES users(user_name),
+    user_name       VARCHAR(255)    PRIMARY KEY REFERENCES users(user_name) ON UPDATE CASCADE,
     is_part_time    BOOLEAN         NOT NULL,
     introduction    VARCHAR
 );
@@ -102,7 +102,7 @@ CREATE TABLE IF NOT EXISTS care_taker_leaves (
 
 -- Table takes care of relation between a pet_type and care_takers
 CREATE TABLE IF NOT EXISTS care_takers_pet_preferences (
-    care_taker      VARCHAR(255)    NOT NULL REFERENCES care_takers(user_name)      ON DELETE CASCADE,
+    care_taker      VARCHAR(255)    NOT NULL REFERENCES care_takers(user_name)      ON DELETE CASCADE ON UPDATE CASCADE,
     pet_type        pet_type        NOT NULL,
     price           NUMERIC(10, 2)  CHECK (price > 0), -- for part time care takers
     PRIMARY KEY (care_taker, pet_type)
