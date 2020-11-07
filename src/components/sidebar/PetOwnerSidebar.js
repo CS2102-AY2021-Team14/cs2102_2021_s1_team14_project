@@ -29,6 +29,11 @@ const sideBarData = [
     key: "Pets",
     link: ROUTES.PET_OWNER_PETS,
   },
+  {
+    icon: <FaIcons.FaHeartbeat />,
+    key: "Obsession",
+    link: ROUTES.PET_OWNER_OBSESSION,
+  },
 ];
 
 const PetOwnerSidebar = ({ defaultKey }) => {
