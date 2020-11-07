@@ -188,23 +188,23 @@ INSERT INTO care_takers_pet_preferences (care_taker, pet_type, price) VALUES ('p
 -- TODO
 
 ----------- bids ---------------
-INSERT INTO bids (pet, owner, care_taker, pet_type, start_date, end_date, is_active, is_successful, payment_type, transfer_method, rating, review_text)
-VALUES ('rat1', 'po1', 'ftct1', 'rodent', '2020-10-02', '2020-10-11', 'false', 'true', 'Cash', 'Pet Owner Delivery', 3, 'Good');
+INSERT INTO bids (pet, owner, care_taker, pet_type, start_date, end_date, price, is_active, is_successful, payment_type, transfer_method, rating, review_text)
+VALUES ('rat1', 'po1', 'ftct1', 'rodent', '2020-10-02', '2020-10-11', 31, 'false', 'true', 'Cash', 'Pet Owner Delivery', 3, 'Good');
 
-INSERT INTO bids (pet, owner, care_taker, pet_type, start_date, end_date, is_active, is_successful, payment_type, transfer_method, rating, review_text)
-VALUES ('rat2', 'po1', 'ftct1', 'rodent', '2020-11-02', '2020-11-11', 'false', 'true', 'Cash', 'Pet Owner Delivery', 5, 'Ok');
+INSERT INTO bids (pet, owner, care_taker, pet_type, start_date, end_date, price, is_active, is_successful, payment_type, transfer_method, rating, review_text)
+VALUES ('rat2', 'po1', 'ftct1', 'rodent', '2020-11-02', '2020-11-11', 42, 'false', 'true', 'Cash', 'Pet Owner Delivery', 5, 'Ok');
 
-INSERT INTO bids (pet, owner, care_taker, pet_type, start_date, end_date, is_active, is_successful, payment_type, transfer_method, rating, review_text)
-VALUES ('dog2', 'po2', 'ftct2', 'dog', '2020-11-02', '2020-11-12', 'false', 'true', 'Cash', 'Pet Owner Delivery', 5, 'Nice');
+INSERT INTO bids (pet, owner, care_taker, pet_type, start_date, end_date, price, is_active, is_successful, payment_type, transfer_method, rating, review_text)
+VALUES ('dog2', 'po2', 'ftct2', 'dog', '2020-11-02', '2020-11-12', 14, 'false', 'true', 'Cash', 'Pet Owner Delivery', 5, 'Nice');
 
-INSERT INTO bids (pet, owner, care_taker, pet_type, start_date, end_date, is_active, is_successful, payment_type, transfer_method, rating, review_text)
-VALUES ('dog1', 'po1', 'ftct2', 'dog', '2020-11-13', '2020-11-15', 'false', 'true', 'Cash', 'Pet Owner Delivery', 5, 'Nicely');
+INSERT INTO bids (pet, owner, care_taker, pet_type, start_date, end_date, price, is_active, is_successful, payment_type, transfer_method, rating, review_text)
+VALUES ('dog1', 'po1', 'ftct2', 'dog', '2020-11-13', '2020-11-15', 124, 'false', 'true', 'Cash', 'Pet Owner Delivery', 5, 'Nicely');
 
-INSERT INTO bids (pet, owner, care_taker, pet_type, start_date, end_date, is_active, is_successful, payment_type, transfer_method, rating, review_text)
-VALUES ('cat1', 'po2', 'ftct2', 'cat', '2020-11-01', '2020-11-02', 'false', 'true', 'Cash', 'Pet Owner Delivery', 2, 'Ew');
+INSERT INTO bids (pet, owner, care_taker, pet_type, start_date, end_date, price, is_active, is_successful, payment_type, transfer_method, rating, review_text)
+VALUES ('cat1', 'po2', 'ftct2', 'cat', '2020-11-01', '2020-11-02', 13, 'false', 'true', 'Cash', 'Pet Owner Delivery', 2, 'Ew');
 
-INSERT INTO bids (pet, owner, care_taker, pet_type, start_date, end_date, is_active, is_successful, payment_type, transfer_method, rating, review_text)
-VALUES ('dog3', 'po2', 'ftct3', 'dog', '2020-11-01', '2020-11-02', 'false', 'true', 'Cash', 'Pet Owner Delivery', 4, 'Ok not bad');
+INSERT INTO bids (pet, owner, care_taker, pet_type, start_date, end_date, price, is_active, is_successful, payment_type, transfer_method, rating, review_text)
+VALUES ('dog3', 'po2', 'ftct3', 'dog', '2020-11-01', '2020-11-02', 42, 'false', 'true', 'Cash', 'Pet Owner Delivery', 4, 'Ok not bad');
 
 -- """
 -- INSERT INTO bids (pet, owner, care_taker, pet_type, start_date, end_date, is_active, is_successful, payment_type, transfer_method, rating, review_text)

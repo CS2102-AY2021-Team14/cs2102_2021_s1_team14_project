@@ -57,8 +57,22 @@ router.get("/owner/:owner", async (req, res) => {
 router.post("/reviews/:owner", async (req, res) => {
   try {
     const { owner } = req.params;
-    const { petName, careTakerName, startDate, endDate, rating, reviewText } = req.body;
-    const result = await Bids.addReview(petName, careTakerName, startDate, endDate, rating, reviewText);
+    const {
+      petName,
+      careTakerName,
+      startDate,
+      endDate,
+      rating,
+      reviewText,
+    } = req.body;
+    const result = await Bids.addReview(
+      petName,
+      careTakerName,
+      startDate,
+      endDate,
+      rating,
+      reviewText
+    );
 
     if (result.rowCount === 0) {
       return res.status(400).send({
@@ -141,14 +155,23 @@ router.put("/arrangement", async (req, res) => {
 
 router.post("/add", async (req, res) => {
   try {
-    const { pet, owner, care_taker, pet_type, start_date, end_date } = req.body;
+    const {
+      pet,
+      owner,
+      care_taker,
+      pet_type,
+      start_date,
+      end_date,
+      price,
+    } = req.body;
     const result = await Bids.addBid(
       pet,
       owner,
       care_taker,
       pet_type,
       new Date(start_date),
-      new Date(end_date)
+      new Date(end_date),
+      price
     );
 
     if (result.rowCount === 0) {

@@ -54,7 +54,7 @@ const BidModal = props => {
     const petType = pets.find(petObj => petObj.name === pet).type;
     const petTypePrice = careTakerPetPrices[petType];
 
-    return (numDays * petTypePrice).toFixed(2);
+    return numDays * petTypePrice;
   };
 
   const handleBid = () => {
@@ -71,6 +71,7 @@ const BidModal = props => {
         pet_type: pets.find(petObj => petObj.name === pet).type,
         start_date: startDate,
         end_date: endDate,
+        price: getPrice(),
       })
       .then(res => {
         toast.success(
@@ -148,7 +149,7 @@ const BidModal = props => {
             <Col sm="9">
               {hasPrice() && (
                 <Badge variant="info" style={{ fontSize: 20 }}>
-                  {getPrice()}
+                  ${getPrice().toFixed(2)}
                 </Badge>
               )}
             </Col>

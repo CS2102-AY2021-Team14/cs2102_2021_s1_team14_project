@@ -6,6 +6,7 @@ import {
   MdDateRange,
   MdAttachMoney,
   MdChildFriendly,
+  MdPayment,
 } from "react-icons/md";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -22,6 +23,7 @@ const BidCard = props => {
     petType,
     startDate,
     endDate,
+    price,
     isSuccessful,
     isActive,
     paymentType,
@@ -172,11 +174,18 @@ const BidCard = props => {
               {new Date(endDate).toDateString()}
             </div>
 
+            <div>
+              <span className="iconContainer">
+                <MdAttachMoney />
+              </span>
+              Price: ${price}
+            </div>
+
             {isSuccessful && (
               <>
                 <div>
                   <span className="iconContainer">
-                    <MdAttachMoney />
+                    <MdPayment />
                   </span>
                   Payment Type: {paymentType}
                 </div>

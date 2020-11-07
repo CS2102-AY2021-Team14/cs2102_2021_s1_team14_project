@@ -9,37 +9,6 @@ import axios from "axios";
 
 import { RiAuctionFill } from "react-icons/ri";
 
-// TODO: link with backend
-export const MOCK_DATA = [
-  {
-    caretakerName: "care taker",
-    pet: "meowzers",
-    petType: "Cat",
-    startDate: "20 Oct 2020",
-    endDate: "22 Oct 20202",
-    isSuccessful: true,
-    isActive: true,
-  },
-  {
-    caretakerName: "care taker 2",
-    pet: "doggo",
-    petType: "Dog",
-    startDate: "23 Oct 2020",
-    endDate: "29 Oct 20202",
-    isSuccessful: false,
-    isActive: true,
-  },
-  {
-    caretakerName: "care taker three 3",
-    pet: "snek",
-    petType: "Snake",
-    startDate: "03 Nov 2020",
-    endDate: "19 Nov 2020",
-    isSuccessful: false,
-    isActive: false,
-  },
-];
-
 const PetOwnerHome = () => {
   const { username } = useContext(UserContext);
 
@@ -59,6 +28,7 @@ const PetOwnerHome = () => {
             pet_type,
             start_date,
             end_date,
+            price,
             is_successful,
             is_active,
             payment_type,
@@ -74,6 +44,7 @@ const PetOwnerHome = () => {
             petType: pet_type,
             startDate: start_date,
             endDate: end_date,
+            price,
             isSuccessful: is_successful,
             isActive: is_active,
             paymentType: payment_type,
