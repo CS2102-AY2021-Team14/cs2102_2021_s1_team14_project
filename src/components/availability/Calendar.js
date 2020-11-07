@@ -62,7 +62,7 @@ const Calendar = ({caretakerAvailability}) => {
  
     return(
         <div className="calendarContainer">
-            <h2>Working days</h2>
+            <h2>Available days</h2>
             <div className="availabilitystats">
 
             </div>

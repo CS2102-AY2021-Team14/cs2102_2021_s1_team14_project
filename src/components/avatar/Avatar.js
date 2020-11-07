@@ -30,7 +30,6 @@ const Avatar = ({user}) => {
                     <h4>{userinfo.name}</h4>
                     <p>{userinfo.job}</p>
                     <p>Joined on {userinfo.startDate}</p>
-                    <h5>${userinfo.salary}/month</h5>
                     <div className={employmentStatus}>
                         <h5 id="employmentstatus">{userinfo.employmentStatus}</h5>
                     </div>
