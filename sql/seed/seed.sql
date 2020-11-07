@@ -206,10 +206,10 @@ VALUES ('cat1', 'po2', 'ftct2', 'cat', '2020-11-01', '2020-11-02', 'false', 'tru
 INSERT INTO bids (pet, owner, care_taker, pet_type, start_date, end_date, is_active, is_successful, payment_type, transfer_method, rating, review_text)
 VALUES ('dog3', 'po2', 'ftct3', 'dog', '2020-11-01', '2020-11-02', 'false', 'true', 'Cash', 'Pet Owner Delivery', 4, 'Ok not bad');
 
-"""
-INSERT INTO bids (pet, owner, care_taker, pet_type, start_date, end_date, is_active, is_successful, payment_type, transfer_method, rating, review_text)
-VALUES ('rat1', 'po1', 'ftct1', 'rodent', '2020-11-01', '2020-11-02', 'false', 'true', 'Cash', 'Pet Owner Delivery', NULL, NULL);
-"""
+-- """
+-- INSERT INTO bids (pet, owner, care_taker, pet_type, start_date, end_date, is_active, is_successful, payment_type, transfer_method, rating, review_text)
+-- VALUES ('rat1', 'po1', 'ftct1', 'rodent', '2020-11-01', '2020-11-02', 'false', 'true', 'Cash', 'Pet Owner Delivery', NULL, NULL);
+-- """
 
 -------- BASE PRICES -------
 INSERT INTO base_prices VALUES ('cat', 88);
