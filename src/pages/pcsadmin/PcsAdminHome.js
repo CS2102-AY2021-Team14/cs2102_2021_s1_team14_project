@@ -23,9 +23,10 @@ const PcsAdminHome = () => {
   const [order, setOrder] = useState(); // 'asc' or 'desc'
   const [orderBy, setOrderBy] = useState('user_name'); // headerLabels.id
 
-  // Filter states
-  const [filterFn, setFilterFn] = useState({ fn: items => { return items; } })
+  // Setting filter function states
+  const [filterFn, setFilterFn] = useState({ func: items => { return items; } })
 
+  // Table header labels mapping with id
   const headerLabels = [
     { label: 'Name', id: 'user_name' },
     { label: 'Address', id: 'user_address' },
@@ -84,16 +85,17 @@ const PcsAdminHome = () => {
       // eg. page 0 selected, rows per page to show is 5
       // start is 0 * 5 = 0, end is 1 * 5 == 5 (not inclusive)
       if (filterFn) {
-        return stableSort(filterFn.fn(employeeInfos), getComparator(order, orderBy))
+        return stableSort(filterFn.func(employeeInfos), getComparator(order, orderBy))
               .slice(page * rowsPerPage, (page + 1) * rowsPerPage);
       }
     }
   }
 
+  // TODO: figure a better operation
   const handleSearch = e => {
     let value = e.target.value;
     setFilterFn({
-        fn: items => {
+        func: items => {
             if (value === ""){
               return items;
             } else {
