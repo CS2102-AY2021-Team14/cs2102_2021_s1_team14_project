@@ -110,6 +110,46 @@ class Admin {
     `);
   }
 
+  // Retrieve employee salary
+  static getSalaryInfoForMonth(username, month, year) {
+    return pool.query(`
+      SELECT amount, pet_days FROM salary WHERE care_taker = $1, month = $2, year = $3
+    `, [username, month, year]);
+  }
+
+  // Update employee salary
+  static updateSalaryInfoForMonth(username, month, year, amount, petDays) {
+    return pool.query(`
+      UPDATE salary SET amount = $1, pet_days = $2 WHERE care_taker = $1, month = $2, year = $3
+    `, [amount, petDays, username, month, year]);
+  }
+
+  // Delete employee salary (for eg. after paid by admin)
+  static deleteSalaryForEmployeeOfMonth(username, month, year) {
+    return pool.query(`
+      DELETE FROM salary WHERE care_taker = $1, month = $2, year = $3
+    `, [username, month, year]);
+  }
+
+  static insertSalaryInfoForEmployee(username, month, year, petDays, amount) {
+    return pool.query(`
+      INSERT INTO salary (care_taker, month, year, pet_days, amount)
+      VALUES ($1, $2, $3, $4, $5)
+    `, [username, month, year, petDays, amount]);
+  }
+
+  // Get Prices Information
+  static getEmployeePricesForMonth(username, month, year) {
+    return pool.query(
+      `SELECT care_taker, price, DATE_PART('day', end_date::timestamp - start_date::timestamp) AS pet_days
+      FROM bids WHERE DATE_PART('year', start_date) = $1
+                AND DATE_PART('month', start_date) = $2
+                AND care_taker = $3
+                AND is_active = false
+                AND is_successful = true`,
+      [year, month, username]);
+  }
+
   // static getTotalNumberOfPetsTakenCare(month) {
   //   return pool.query("SELECT 1");
   // }

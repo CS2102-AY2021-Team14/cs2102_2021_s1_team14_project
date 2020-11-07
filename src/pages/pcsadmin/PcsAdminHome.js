@@ -21,21 +21,9 @@ import TablePageScroll from "../../components/admin/TablePageScroll";
 import { BiSearchAlt, BiEditAlt } from "react-icons/bi";
 import Popup from "../../components/admin/Popup";
 
-// import Confetti from "react-confetti";
-// import useWindowDimensions from "../../utils/WindowDimensions";
-
 import styles from "../../components/admin/styles/PcsAdmin.module.css";
 
 const PcsAdminHome = () => {
-  //   useEffect(() => {
-  //     axios.get("/api/admin/employeeofmonth").then(response => {
-  //       console.log(response.data);
-  //       setEmployeeOfTheMonth(response.data);
-  //     });
-  //   }, []);
-
-  //   const { height, width } = useWindowDimensions();
-  // const [employeeOfTheMonth, setEmployeeOfTheMonth] = useState("");
   const [employeeInfos, setEmployeesInfo] = useState([]);
 
   // states for table paginations
@@ -78,12 +66,6 @@ const PcsAdminHome = () => {
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(cellId);
   };
-
-  // const handleEdit = () => {
-  //   if (openPopup !== undefined) {
-  //     setOpenPopup(!openPopup);
-  //   }
-  // }
 
   const stableSort = (array, comparator) => {
     const stabilizedThis = array.map((el, index) => [el, index]);
@@ -175,20 +157,6 @@ const PcsAdminHome = () => {
           </Col>
           <Col xs={9} id="page-content">
             <Container className="mt-3">
-              {/* <Typography className="m-4" variant="h3">
-                Employee of the Month
-              </Typography>
-              <Typography class="mt-5" variant="h4">
-                Congratulations to {employeeOfTheMonth.name}!
-              </Typography>
-              <Typography class="mt-1" variant="h4">
-                [Username : {employeeOfTheMonth.care_taker}]
-              </Typography>
-              <Image
-                src="https://webstockreview.net/images/congratulations-clipart-transparent-background-2.png"
-                fluid
-              />
-              <Confetti /> */}
               <Paper className={styles.paper}>
                 <Toolbar>
                   <TextField
@@ -248,9 +216,6 @@ const PcsAdminHome = () => {
                           >
                             <BiEditAlt />
                           </IconButton>
-                          {/* <IconButton color="secondary">
-                                <AiOutlineDelete />
-                              </IconButton> */}
                         </TableCell>
                       </TableRow>
                     ))}
@@ -271,11 +236,6 @@ const PcsAdminHome = () => {
                 infoToEdit={infoToEdit}
               ></Popup>
             </Container>
-            {/* <Confetti
-              numberOfPieces={1000}
-              width={(width * 3) / 4}
-              height={height}
-            /> */}
           </Col>
         </Row>
       </Container>
