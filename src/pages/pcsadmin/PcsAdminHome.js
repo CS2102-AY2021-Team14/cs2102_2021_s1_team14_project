@@ -19,14 +19,14 @@ const PcsAdminHome = () => {
   const [rowsPerPage, setRowsPerPage] = useState(rowsPerPageDropDown[page]);
 
   // Order states
-  const [order, setOrder] = useState();
-  const [orderBy, setOrderBy] = useState('user_name');
+  const [order, setOrder] = useState(); // 'asc' or 'desc'
+  const [orderBy, setOrderBy] = useState('user_name'); // headerLabels.id
 
   const headerLabels = [
     { label: 'Name', id: 'user_name' },
     { label: 'Address', id: 'user_address' },
     { label: 'Email', id: 'user_email' },
-    { label: 'Part-Time/Full-Time', id: '' }
+    { label: 'Part-Time/Full-Time', id: '', disableSort: true }
   ]
   // useEffect(() => {
   //   axios.get("/api/admin/employeeofmonth").then(response => {
@@ -34,19 +34,37 @@ const PcsAdminHome = () => {
   //   });
   // }, []);
 
-  const employeesInfoDisplay = () => {
-    // Only display selected items 
-    if (employeeInfos) {
-      // eg. page 0 selected, rows per page to show is 5
-      // start is 0 * 5 = 0, end is 1 * 5 == 5 (not inclusive)
-      return employeeInfos.slice(page * rowsPerPage, (page + 1) * rowsPerPage);
-    }
-  }
-
   const handleSortRequest = cellId => {
     const isAsc = orderBy === cellId && order === "asc";
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(cellId)
+  }
+
+  const stableSort = (array, comparator) => {
+      const stabilizedThis = array.map((el, index) => [el, index]);
+      stabilizedThis.sort((a, b) => {
+          console.log(a[0]);
+          const order = comparator(a[0], b[0]);
+          if (order !== 0) return order;
+          return a[1] - b[1];
+      });
+      return stabilizedThis.map((el) => el[0]);
+  }
+
+  const getComparator = (order, orderBy) => {
+      return order === 'desc'
+          ? (a, b) => descendingComparator(a, b, orderBy)
+          : (a, b) => -descendingComparator(a, b, orderBy);
+  }
+
+  const descendingComparator = (a, b, orderBy) => {
+      if (b[orderBy] < a[orderBy]) {
+          return -1;
+      }
+      if (b[orderBy] > a[orderBy]) {
+          return 1;
+      }
+      return 0;
   }
 
   const getEmployeesInfo = async () => {
@@ -55,6 +73,16 @@ const PcsAdminHome = () => {
            const { data } = response;
            setEmployeesInfo(data.employeesInfo);
          });
+  }
+
+  const employeesInfoDisplay = () => {
+    // Only display selected items 
+    if (employeeInfos) {
+      // eg. page 0 selected, rows per page to show is 5
+      // start is 0 * 5 = 0, end is 1 * 5 == 5 (not inclusive)
+      return stableSort(employeeInfos, getComparator(order, orderBy))
+              .slice(page * rowsPerPage, (page + 1) * rowsPerPage);
+    }
   }
 
   useEffect(() => {
@@ -88,8 +116,12 @@ const PcsAdminHome = () => {
                   <TableHead>
                   {
                       headerLabels.map(header => (
-                        <TableCell key={header.id} className={styles.label_head}>
-                          <TableSortLabel 
+                        <TableCell key={header.id} className={styles.label_head} sortDirection={orderBy === header.id ? order : false}>
+                          {header.disableSort ? 
+                          (<Typography className={styles.header}>
+                                  {header.label}
+                            </Typography>) : 
+                          (<TableSortLabel 
                             active={true}
                             direction = {orderBy === header.id ? order : 'asc'}
                             onClick = {() => { handleSortRequest(header.id) }}
@@ -97,7 +129,7 @@ const PcsAdminHome = () => {
                             <Typography className={styles.header}>
                                   {header.label}
                             </Typography>
-                          </TableSortLabel>
+                          </TableSortLabel>)}
                         </TableCell>
                       ))
                   }
