@@ -270,18 +270,26 @@ RETURN FALSE;
 END; $$
 LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION getPetsPerDay(the_care_taker VARCHAR(255), the_date date)
+RETURNS INTEGER
+AS
+$$ BEGIN
+RETURN (
+    SELECT COUNT(*)
+          FROM bids 
+          WHERE bids.care_taker = the_care_taker
+            AND bids.start_date <= the_date
+            AND bids.end_date >= the_date
+            AND bids.is_successful = TRUE
+);
+END; $$
+LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION isThereClashWithBids(the_care_taker VARCHAR(255), the_leave_date date)
 RETURNS BOOLEAN
 AS
 $$ BEGIN
-IF ((
-        SELECT COUNT(*)
-          FROM bids 
-          WHERE bids.care_taker = the_care_taker
-            AND bids.start_date <= the_leave_date
-            AND bids.end_date >= the_leave_date
-            AND bids.is_successful = TRUE
-    ) >= 1)
+IF ((SELECT getPetsPerDay(the_care_taker, the_leave_date)) >= 1)
 THEN
 RETURN TRUE;
 END IF;
