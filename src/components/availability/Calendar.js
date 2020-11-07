@@ -23,7 +23,7 @@ const FindWorkingDays = (leaveDays, date, startDate) => {
     while (startOfTheYear <= endOfNextYear) {
         // If it is a sick day
         if (!isInArray(leaveDays, dateIterator)) {
-            workingDays = [...workingDays, new Date(dateIterator)];       
+            workingDays = [...workingDays, new Date(dateIterator)];
         }
         dateIterator.setDate(dateIterator.getDate() + 1);
     }
@@ -31,25 +31,12 @@ const FindWorkingDays = (leaveDays, date, startDate) => {
     return workingDays;
 }
 
-const Calendar = () => {
-    
-    // TODO change to API calls
-    const leaveDays = [
-        new Date(2020, 8, 22),
-        new Date(2020, 8, 28),
-        new Date(2020, 8, 29),
-        new Date(2020, 9, 10),
-        new Date(2020, 9, 12),
-        new Date(2020, 9, 23),
-        new Date(2020, 10, 19),
-        new Date(2020, 10, 20),
-        new Date(2020, 10, 21),
-        new Date(2020, 10, 22),
-        new Date(2020, 11, 20),
-        new Date(2020, 11, 1),
-        new Date(2020, 11, 4),
-        new Date(2020, 11, 10)
-    ]
+const Calendar = (props) => {
+    const {
+        leaves
+    } = props;
+
+    const leaveDays = leaves.map(leave => new Date(leave.leave_date));
 
     // Day started working change to API calls
     const startDate = new Date(2020, 8, 18);
@@ -75,15 +62,15 @@ const Calendar = () => {
     let modifier = {
         highlighted: workingDays
     }
- 
-    return(
+
+    return (
         <div className="calendarContainer">
             <h2>Working days</h2>
             <div className="availabilitystats">
 
             </div>
             <div className="calendar">
-                <DayPicker 
+                <DayPicker
                     fromMonth={startMonth}
                     modifiers={modifier}
                     modifiersStyles={modifierStyles}

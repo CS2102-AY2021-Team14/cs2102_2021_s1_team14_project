@@ -46,7 +46,7 @@ const PrivateCareTakerRoute = props => {
           return (
             <Switch>
               <Route exact path={ROUTES.CARE_TAKER_HOME}>
-                <CareTakerHome />
+                <CareTakerHome username={username} />
               </Route>
 
               <Route exact path={ROUTES.CARE_TAKER_SALARY}>

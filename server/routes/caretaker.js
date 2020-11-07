@@ -48,7 +48,7 @@ router.get("/:username/leaves", async (req, res) => {
       error
     );
 
-    res.status(404).json({
+    res.status(400).json({
       message: `Error getting leaves of caretaker ${req.params.username}`,
       error,
     });

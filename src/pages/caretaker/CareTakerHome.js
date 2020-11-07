@@ -8,8 +8,25 @@ import Job from '../../components/job/Job';
 import Calendar from '../../components/availability/Calendar';
 
 import Image from '../../images/logo.png';
+import { toast } from 'react-toastify';
+import axios from 'axios';
 
-const CareTakerHome = () => {
+const CareTakerHome = (props) => {
+    const { username } = props;
+
+    const [leaves, setLeaves] = useState([]);
+
+    const getLeaves = async () => {
+        axios
+            .get(`/api/caretaker/${username}/leaves`)
+            .then(response => {
+                const { data } = response;
+                setLeaves(data.data);
+            })
+            .catch(error => {
+                toast.error(error.response.data.message);
+            });
+    };
 
     // TODO use API calls
     const caretaker = {
@@ -38,8 +55,9 @@ const CareTakerHome = () => {
     ]
 
     useEffect(() => {
-    })
-    
+        getLeaves()
+    }, []);
+
     return (
         <div>
             <Navbar />
@@ -49,7 +67,7 @@ const CareTakerHome = () => {
                         <CaretakerSidebar defaultKey={"Home"} />
                     </Col>
                     <Col xs={3} id="availability">
-                        <Calendar />
+                        <Calendar leaves={leaves} />
                     </Col>
                     <Col xs={5} id="jobs">
                         <Job jobs={jobs} />
