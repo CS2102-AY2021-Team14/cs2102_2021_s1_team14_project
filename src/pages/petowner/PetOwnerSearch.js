@@ -15,8 +15,11 @@ import CaretakerInfoCard from "../../components/CaretakerInfoCard";
 import { FaSearch } from "react-icons/fa";
 
 import axios from "axios";
+import PagePagination from "../../components/pagination/PagePagination";
 
 const PetOwnerSearch = () => {
+  const ITEMS_PER_PAGE = 20;
+
   const [caretakers, setCaretakers] = useState([]);
 
   const [showFullTimers, setShowFullTimers] = useState(true);
@@ -33,7 +36,7 @@ const PetOwnerSearch = () => {
 
   const [search, setSearch] = useState(null);
 
-  useEffect(() => {
+  const getCaretakers = () => {
     axios
       .get("/api/caretaker")
       .then(res => {
@@ -71,16 +74,20 @@ const PetOwnerSearch = () => {
         setCaretakers(caretakers);
       })
       .catch(err => console.log("Error getting caretakers", err));
+  };
+
+  useEffect(() => {
+    getCaretakers();
   }, []);
 
   const getFilteredCaretakers = () => {
-    return caretakers.filter(caretaker => {
+    const newFilteredCaretakers = caretakers.filter(caretaker => {
       const isSearchShown =
         search == null || search === ""
           ? true
-          : caretaker.username.toLowerCase().includes(search) ||
-            caretaker.name?.toLowerCase()?.includes(search) ||
-            caretaker.introduction?.toLowerCase()?.includes(search);
+          : caretaker.username.toLowerCase().includes(search.toLowerCase()) ||
+          caretaker.name?.toLowerCase()?.includes(search.toLowerCase()) ||
+          caretaker.introduction?.toLowerCase()?.includes(search.toLowerCase());
 
       const isRoleShown =
         (caretaker.isPartTime && showPartTimers) ||
@@ -99,6 +106,7 @@ const PetOwnerSearch = () => {
 
       return isSearchShown && isRoleShown && isPetTypeShown;
     });
+    return newFilteredCaretakers;
   };
 
   return (
@@ -223,9 +231,11 @@ const PetOwnerSearch = () => {
                   />
                 </div>
 
-                {getFilteredCaretakers().map((data, index) => (
-                  <CaretakerInfoCard {...data} key={index} />
-                ))}
+                <PagePagination
+                  content={getFilteredCaretakers()}
+                  cardComponent={<CaretakerInfoCard />}
+                  itemsPerPage={ITEMS_PER_PAGE}
+                />
               </Card.Body>
             </Card>
           </Col>
