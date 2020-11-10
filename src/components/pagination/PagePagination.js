@@ -2,17 +2,17 @@ import React, { useState, useEffect } from "react";
 import { Pagination } from "react-bootstrap";
 
 const PagePagination = (props) => {
-  const FIRST_PAGE = 1;
-
   const {
     content,
     cardComponent,
-    itemsPerPage,
-    lastPage
+    itemsPerPage
   } = props;
 
+  const FIRST_PAGE = 1;
+  const LAST_PAGE = (Math.ceil(content.length / itemsPerPage));
+
   const [currentPage, setCurrentPage] = useState(FIRST_PAGE);
-  const [pageViews, setPageViews] = useState([FIRST_PAGE, FIRST_PAGE + 1, FIRST_PAGE + 2]);
+  const [pageViews, setPageViews] = useState([FIRST_PAGE, FIRST_PAGE + 1, FIRST_PAGE + 2]);;
 
   const modifyPageViews = (pageNum) => {
     setCurrentPage(pageNum);
@@ -22,14 +22,14 @@ const PagePagination = (props) => {
   const moveBounds = (pageNum) => {
     if (pageNum < FIRST_PAGE) {
       pageNum = FIRST_PAGE;
-    } else if (pageNum > lastPage) {
-      pageNum = lastPage;
+    } else if (pageNum > LAST_PAGE) {
+      pageNum = LAST_PAGE;
     }
 
     if (pageNum == FIRST_PAGE) {
       setPageViews([FIRST_PAGE, FIRST_PAGE + 1, FIRST_PAGE + 2]);
-    } else if (pageNum == lastPage) {
-      setPageViews([lastPage - 2, lastPage - 1, lastPage]);
+    } else if (pageNum == LAST_PAGE) {
+      setPageViews([LAST_PAGE - 2, LAST_PAGE - 1, LAST_PAGE]);
     } else {
       setPageViews([pageNum - 1, pageNum, pageNum + 1]);
     }
@@ -44,17 +44,17 @@ const PagePagination = (props) => {
     let pageNumbers = pageViews;
     let isOff = false;
 
-    if (currentPage > lastPage) {
+    if (currentPage > LAST_PAGE) {
       pageNumbers = [FIRST_PAGE, FIRST_PAGE + 1, FIRST_PAGE + 2];
       isOff = true;
     }
 
-    if (lastPage - FIRST_PAGE == 1) {
-      pageNumbers = [FIRST_PAGE, lastPage];
+    if (LAST_PAGE - FIRST_PAGE == 1) {
+      pageNumbers = [FIRST_PAGE, LAST_PAGE];
       isOff = true;
     }
 
-    if (lastPage - FIRST_PAGE == 0) {
+    if (LAST_PAGE - FIRST_PAGE == 0) {
       pageNumbers = [FIRST_PAGE];
       isOff = true;
     }
@@ -79,7 +79,7 @@ const PagePagination = (props) => {
   };
 
   const generateContent = () => {
-    if (lastPage == 0) {
+    if (LAST_PAGE == 0) {
       return <p> No Results Found </p>
     } else {
       return (
@@ -90,7 +90,7 @@ const PagePagination = (props) => {
           {generatePaginations()}
           <Pagination.Next onClick={() => moveBounds(pageViews[0] + 3)} />
           <Pagination.Ellipsis disabled />
-          <Pagination.Item onClick={() => goTo(lastPage)}>{lastPage}</Pagination.Item>
+          <Pagination.Item onClick={() => goTo(LAST_PAGE)}>{LAST_PAGE}</Pagination.Item>
         </>
       )
     }
@@ -99,7 +99,7 @@ const PagePagination = (props) => {
   return (
     <>
       {
-        (currentPage > lastPage) ? (
+        (currentPage > LAST_PAGE) ? (
           <ul class="list-unstyles" style={{ maxHeight: "45vh", overflowX: 'none', overflowY: 'scroll' }}>
             {content
               .slice((FIRST_PAGE - 1) * itemsPerPage, FIRST_PAGE * itemsPerPage)

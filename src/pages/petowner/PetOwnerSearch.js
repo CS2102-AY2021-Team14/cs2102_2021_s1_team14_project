@@ -76,10 +76,6 @@ const PetOwnerSearch = () => {
       .catch(err => console.log("Error getting caretakers", err));
   };
 
-  const getLastPage = () => {
-    return (Math.ceil(getFilteredCaretakers().length / ITEMS_PER_PAGE));
-  }
-
   useEffect(() => {
     getCaretakers();
   }, []);
@@ -239,7 +235,6 @@ const PetOwnerSearch = () => {
                   content={getFilteredCaretakers()}
                   cardComponent={<CaretakerInfoCard />}
                   itemsPerPage={ITEMS_PER_PAGE}
-                  lastPage={(getLastPage())}
                 />
               </Card.Body>
             </Card>
