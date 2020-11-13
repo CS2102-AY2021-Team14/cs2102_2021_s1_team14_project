@@ -83,11 +83,10 @@ router.post("/:username/leaves", async (req, res) => {
   }
 });
 
-router.delete("/:username/leaves", async (req, res) => {
+router.delete("/:username/leaves/:date", async (req, res) => {
   try {
-    const { leave_date } = req.body;
-    const date = new Date(leave_date);
-    const result = await Caretaker.deleteLeave(req.params.username, date);
+    let date = new Date(parseInt(req.params.date));
+    const result = await Caretaker.removeLeave(req.params.username, date);
 
     if (result.rowCount === 0) {
       return res.status(404).send({
@@ -96,7 +95,7 @@ router.delete("/:username/leaves", async (req, res) => {
     }
 
     res.status(200).send({
-      message: `Successfully deleled ${leave_date} of caretaker ${req.params.username}`,
+      message: `Successfully deleled ${date} of caretaker ${req.params.username}`,
     });
   } catch (error) {
     console.error(

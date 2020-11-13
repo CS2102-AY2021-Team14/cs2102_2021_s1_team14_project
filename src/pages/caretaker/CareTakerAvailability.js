@@ -7,9 +7,9 @@ import { UserContext } from "../../utils/UserProvider";
 import YogaPetsLogo from '../../images/logo.png';
 import Avatar from '../../components/avatar/Avatar';
 import Calendar from "../../components/availability/Calendar";
-
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import { toast } from "react-toastify";
+import AddLeaveModal from "../../components/caretaker/AddLeaveModal";
+import RemoveLeaveModal from "../../components/caretaker/RemoveLeaveModal";
 
 const CareTakerAvailability = () => {
   // Caretaker information
@@ -24,7 +24,11 @@ const CareTakerAvailability = () => {
   const [caretakerJobs, setCaretakerJobs] = useState([]);
   const [caretakerLeaves, setCaretakerLeaves] = useState([]);
 
-  const [isOpen, setOpen] = useState(false);
+  const [isAdderOpen, setAdderOpen] = useState(false);
+  const [leaveDate, setLeaveDate] = useState(new Date());
+
+  const [isDeleterOpen, setDeleterOpen] = useState(false);
+  const [removedDate, setRemovedDate] = useState(new Date());
 
   // All the backend URL
   const serverURL = '/api/caretaker/';
@@ -32,6 +36,43 @@ const CareTakerAvailability = () => {
   const caretakerSalaryURL = caretakerURL + "/salary";
   const caretakerJobsURL = caretakerURL + "/jobs";
   const caretakerLeaveURL = caretakerURL + "/leaves";
+
+  const addLeave = (date) => {
+    axios
+      .post(caretakerLeaveURL, { leave_date: date })
+      .then(() => {
+        toast.success(`Added ${date.toISOString().slice(0, 10)} to your leaves!`);
+        setAdderOpen(false);
+        getLeaves();
+      })
+      .catch(error => {
+        toast.error(`You cannot take leave on  ${date.toISOString().slice(0, 10)}!`);
+      });
+  }
+
+  const deleteLeave = (date) => {
+    axios
+      .delete(`${caretakerLeaveURL}/${date.getTime()}`)
+      .then(() => {
+        toast.success(`Deleted ${date.toISOString().slice(0, 10)} from your leaves!`);
+        setDeleterOpen(false);
+        getLeaves();
+      })
+      .catch(error => {
+        toast.error(`Error Deleting Leaves leave on  ${date.toISOString().slice(0, 10)}!`);
+      });
+  }
+
+  const getLeaves = () => {
+    axios
+      .get(caretakerLeaveURL)
+      .then((res) => {
+        var caretakerLeaveData = res.data.data;
+        let caretakerLeaveDates = caretakerLeaveData.map(item => new Date(item.leave_date));
+        setCaretakerLeaves(caretakerLeaveDates);
+        console.log("This caretaker leave date is: " + JSON.stringify(caretakerLeaveData));
+      });
+  }
 
   // API call
   useEffect(() => {
@@ -62,13 +103,7 @@ const CareTakerAvailability = () => {
         console.log("This caretaker job information is: " + JSON.stringify(caretakerJobData))
       });
 
-    axios
-      .get(caretakerLeaveURL)
-      .then((res) => {
-        var caretakerLeaveData = res.data.data;
-        setCaretakerLeaves(caretakerLeaveData);
-        console.log("This caretaker leave date is: " + JSON.stringify(caretakerLeaveData));
-      });
+    getLeaves();
   }, [])
 
   // Find employment
@@ -104,29 +139,34 @@ const CareTakerAvailability = () => {
             <CaretakerSidebar defaultKey={"Availability"} />
           </Col>
           <Col xs={8} id="page-content">
-            <Calendar caretakerAvailability={availability} />
+            <Row>
+              <Calendar caretakerAvailability={availability} />
+            </Row>
             <br />
-            <Button onClick={() => setOpen(true)}> Add a new Leave Date </Button>
-            <>
-              <Modal
-                show={isOpen}
-                onHide={() => setOpen(false)}
-                centered
-              >
-                <Modal.Header closeButton>
-                  <Modal.Title>Add a new Leave Date</Modal.Title>
-                </Modal.Header>
-                <Modal.Body class="p-5 d-flex justify-content-center">
-                  <DatePicker
-                    selected={new Date()}
-                    onChange={() => { }}
-                  />
-                </Modal.Body>
-                <Modal.Footer>
-
-                </Modal.Footer>
-              </Modal>
-            </>
+            <Row>
+              <Col>
+                <Button onClick={() => setAdderOpen(true)}> Add a new Leave Date </Button>
+              </Col>
+              <Col>
+                <Button onClick={() => setDeleterOpen(true)}> Remove a Leave Date </Button>
+              </Col>
+            </Row>
+            <AddLeaveModal
+              isAdderOpen={isAdderOpen}
+              setAdderOpen={setAdderOpen}
+              leaveDate={leaveDate}
+              setLeaveDate={setLeaveDate}
+              caretakerLeaves={caretakerLeaves}
+              addLeave={addLeave}
+            />
+            <RemoveLeaveModal
+              isOpen={isDeleterOpen}
+              setOpen={setDeleterOpen}
+              leaveDate={removedDate}
+              setLeaveDate={setRemovedDate}
+              caretakerLeaves={caretakerLeaves}
+              deleteLeave={deleteLeave}
+            />
           </Col>
           <Col xs={2} id="avatar">
             <Avatar user={caretakerInfo} />
