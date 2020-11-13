@@ -15,6 +15,13 @@ class Caretaker {
     ]);
   }
 
+  static removeLeave(user_name, leave_date) {
+    return pool.query("DELETE FROM care_taker_leaves WHERE care_taker = $1 AND leave_date = $2;", [
+      user_name,
+      leave_date
+    ]);
+  }
+
   static getCaretaker(user_name) {
     return pool.query("SELECT * FROM care_takers WHERE user_name = $1;", [
       user_name,

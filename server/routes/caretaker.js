@@ -83,6 +83,33 @@ router.post("/:username/leaves", async (req, res) => {
   }
 });
 
+router.delete("/:username/leaves/:date", async (req, res) => {
+  try {
+    let date = new Date(parseInt(req.params.date));
+    const result = await Caretaker.removeLeave(req.params.username, date);
+
+    if (result.rowCount === 0) {
+      return res.status(404).send({
+        message: `Error deleting of leave of caretaker ${req.params.username} (check the trigger)`,
+      });
+    }
+
+    res.status(200).send({
+      message: `Successfully deleled ${date} of caretaker ${req.params.username}`,
+    });
+  } catch (error) {
+    console.error(
+      `Error deleting leave of caretaker ${req.params.username}`,
+      error
+    );
+
+    res.status(404).json({
+      message: `Error adding leave if caretaker ${req.params.username}`,
+      error,
+    });
+  }
+});
+
 router.get("/:username/jobs", async (req, res) => {
   try {
     const result = await Caretaker.getJobs(req.params.username);
