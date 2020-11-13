@@ -119,4 +119,6 @@ router.get("/employees", async (req, res) => {
   }
 });
 
+router.get("/parttimesalary")
+
 module.exports = router;

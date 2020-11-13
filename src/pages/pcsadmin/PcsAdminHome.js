@@ -58,6 +58,7 @@ const PcsAdminHome = () => {
     { label: "Address", id: "user_address" },
     { label: "Email", id: "user_email" },
     { label: "Part-Time/Full-Time", id: "", disableSort: true },
+    { label: "Salary", id: "salary", disableSort: true },
     { label: "", id: " ", disableSort: true },
   ];
 
@@ -137,8 +138,13 @@ const PcsAdminHome = () => {
     });
   };
 
+  // Salaries
+  const computePartTimeSalary = async () => {
+    axios.get()
+    return "$$";
+  }
+
   const openInPopup = item => {
-    console.log(item);
     setInfoToEdit({ ...item });
     setOpenPopup(true);
   };
@@ -207,6 +213,8 @@ const PcsAdminHome = () => {
                         <TableCell>{item.user_address}</TableCell>
                         <TableCell>{item.user_email}</TableCell>
                         <TableCell>{item.is_part_time.toString()}</TableCell>
+                    {item.is_part_time ? <TableCell>{computePartTimeSalary()}</TableCell> 
+                                            : <TableCell>$$$$</TableCell>}
                         <TableCell>
                           <IconButton
                             color="primary"
