@@ -66,6 +66,8 @@ const PcsAdminHome = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [salaryData, setSalaryData] = useState(null);
+  const [payButtonShow, setPayButtonShow] = useState(false);
+  const [unpayButtonShow, setUnpayButtonShow] = useState(false);
 
   // Table header labels mapping with id
   const headerLabels = [
@@ -197,6 +199,8 @@ const PcsAdminHome = () => {
     setIsModalOpen(false);
     setSelectedDate(new Date());
     setSalaryData(null);
+    setPayButtonShow(false);
+    setUnpayButtonShow(false);
   }
 
   // Unpays an employee if Salary was pre-maturely paid for by admin
@@ -213,6 +217,7 @@ const PcsAdminHome = () => {
             .then(res => {
               console.log(res.data.message);
               toast.error(`You have unpaid ${care_taker} for ${letter_month}-${year}`);
+              setUnpayButtonShow(false);
             })
             .catch(err => console.error(err.response.data.message));
     }
@@ -235,8 +240,10 @@ const PcsAdminHome = () => {
               console.log(data.data);
               if (data.data.length > 0) {
                 toast.success(`You have paid ${care_taker}: ${data.data[0].amount} for ${letter_month}-${year}`);
+                setUnpayButtonShow(true);
               } else {
                 toast.warning(`You have not paid ${care_taker} for ${letter_month}-${year}`);
+                setPayButtonShow(true);
               }
             })
             .catch(err => {
@@ -252,6 +259,7 @@ const PcsAdminHome = () => {
     const { care_taker, month, year, pet_days, amount } = currSalaryData;
     if (amount <= 0) {
       toast.error(`You can't pay ${care_taker} $${amount}!`);
+      setPayButtonShow(false);
       return;
     }
     const letter_month = monthsMap['' + month];
@@ -267,6 +275,7 @@ const PcsAdminHome = () => {
           .then(res => {
             console.log(res.data.message);
             toast.success(`You have paid ${care_taker} $${amount} for ${letter_month}-${year}`);
+            setPayButtonShow(false);
           })
           .catch(err => {
             console.error(err.response.data.message);
@@ -490,9 +499,9 @@ const PcsAdminHome = () => {
                       {salaryData && 
                       <Grid container className={styles.container}>
                         <Grid item xs={12} sm={4}>
-                          <Button variant="contained" color="secondary" onClick={handleUnpay}>
+                          {unpayButtonShow ? <Button variant="contained" color="secondary" onClick={handleUnpay}>
                             UNPAY
-                          </Button>
+                          </Button> : null}
                         </Grid>
                         <Grid item xs={12} sm={4}>
                           <Button variant="contained" className={styles.warning} onClick={handleCheckPay}>
@@ -500,9 +509,9 @@ const PcsAdminHome = () => {
                           </Button>
                         </Grid>
                         <Grid item xs={12} sm={4}>
-                          <Button variant="contained" color="primary" onClick={handlePaySalary}>
+                          {payButtonShow ? <Button variant="contained" color="primary" onClick={handlePaySalary}>
                             PAY
-                          </Button>
+                          </Button> : null}
                         </Grid>
                       </Grid>}
                     </CardContent>
