@@ -23,8 +23,6 @@ const AddPetTypeModal = (props) => {
     return rows;
   }
 
-  console.log(rows());
-
   return (
     <Modal
       show={isOpen}
