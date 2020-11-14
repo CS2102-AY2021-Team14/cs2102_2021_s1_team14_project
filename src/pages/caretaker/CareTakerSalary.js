@@ -36,7 +36,6 @@ const CareTakerSalary = () => {
           .then((res) => {
               var caretakerData = res.data[0];
               setCaretaker(caretakerData);
-              console.log("Content of this caretaker is: " + JSON.stringify(caretakerData));
           });
 
       // Getting caretaker salary
@@ -45,7 +44,6 @@ const CareTakerSalary = () => {
           .then((res) => {
               var caretakerSalaryData = res.data.data;
               setCaretakerSalary(caretakerSalaryData);
-              console.log("This caretaker salary data is: " + JSON.stringify(caretakerSalaryData));
           });
 
       // Get caretaker job
@@ -54,7 +52,6 @@ const CareTakerSalary = () => {
           .then((res) => {
               var caretakerJobData = res.data.data;
               setCaretakerJobs(caretakerJobData);
-              console.log("This caretaker job information is: " + JSON.stringify(caretakerJobData))
           });
   }, [])
 

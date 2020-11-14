@@ -35,7 +35,6 @@ const CareTakerHistory = () => {
             .then((res) => {
                 var caretakerData = res.data[0];
                 setCaretaker(caretakerData);
-                console.log("Content of this caretaker is: " + JSON.stringify(caretakerData));
             });
 
         // Get caretaker job
@@ -44,7 +43,6 @@ const CareTakerHistory = () => {
             .then((res) => {
                 var caretakerJobData = res.data.data;
                 setCaretakerJobs(caretakerJobData);
-                console.log("This caretaker job information is: " + JSON.stringify(caretakerJobData))
             });
     }, [])
 
