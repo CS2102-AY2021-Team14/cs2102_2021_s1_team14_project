@@ -200,10 +200,48 @@ router.get("/:username/avgrating", async (req, res) => {
   }
 });
 
+router.get("/:username/pettype", async (req, res) => {
+  try {
+    const result = await Caretaker.getPetTypes(req.params.username);
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.error(
+      `Error getting average rating of caretaker ${req.params.username}`,
+      error
+    );
+
+    res.status(404).json({
+      message: `Error getting average rating of caretaker ${req.params.username}`,
+      error,
+    });
+  }
+});
+
+router.post("/:username/pettype/edit", async (req, res) => {
+  try {
+    const { pet_type, price } = req.body;
+    const result = await Caretaker.editPetType(req.params.username, pet_type, price);
+
+    res.status(201).send({
+      message: `Successfully added pet type ${pet_type} to care taker ${req.params.username}`,
+    });
+  } catch (error) {
+    console.error(
+      `Error adding pet type to care taker ${req.params.username}`,
+      error
+    );
+
+    res.status(404).json({
+      message: `Error adding pet type to care taker ${req.params.username}`,
+      error,
+    });
+  }
+});
+
 router.post("/:username/pettype", async (req, res) => {
   try {
-    const { pet_type } = req.body;
-    const result = await Caretaker.addPetType(req.params.username, pet_type);
+    const { pet_type, is_part_time } = req.body;
+    const result = await Caretaker.addPetType(req.params.username, pet_type, is_part_time);
 
     if (result.rowCount === 0) {
       return res.status(404).send({
