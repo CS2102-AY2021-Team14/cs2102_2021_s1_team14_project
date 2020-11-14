@@ -16,18 +16,23 @@ const sideBarData = [
   },
   {
     icon: <FaIcons.FaHammer />,
-    key: "Bid",
-    link: "#",
+    key: "Bids",
+    link: ROUTES.PET_OWNER_BIDS,
   },
   {
     icon: <FaIcons.FaUser />,
     key: "Caretakers",
-    link: "#",
+    link: ROUTES.PET_OWNER_CARETAKERS,
   },
   {
     icon: <FaIcons.FaPaw />,
     key: "Pets",
     link: ROUTES.PET_OWNER_PETS,
+  },
+  {
+    icon: <FaIcons.FaHeartbeat />,
+    key: "Obsession",
+    link: ROUTES.PET_OWNER_OBSESSION,
   },
 ];
 

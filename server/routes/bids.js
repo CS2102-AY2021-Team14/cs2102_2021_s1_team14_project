@@ -15,6 +15,19 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/reviews/:owner", async (req, res) => {
+  try {
+    const { owner } = req.params;
+    const result = await Bids.getAllReviewableBids(owner);
+
+    res.status(200).json({ count: result.rowCount, data: result.rows });
+  } catch (error) {
+    console.error("Error getting all reviews", error);
+
+    res.status(404).json({ message: "Error getting all reviews", error });
+  }
+});
+
 router.get("/active", async (req, res) => {
   try {
     const result = await Bids.getAllActive();
@@ -24,6 +37,56 @@ router.get("/active", async (req, res) => {
     console.error("Error getting all active bids", error);
 
     res.status(404).json({ message: "Error getting all active bids", error });
+  }
+});
+
+router.get("/owner/:owner", async (req, res) => {
+  try {
+    const { owner } = req.params;
+
+    const result = await Bids.getPetOwnersBids(owner);
+
+    res.status(200).json({ count: result.rowCount, data: result.rows });
+  } catch (error) {
+    console.error("Error getting pet owner's bids", error);
+
+    res.status(404).json({ message: "Error getting pet owner's bids", error });
+  }
+});
+
+router.post("/reviews/:owner", async (req, res) => {
+  try {
+    const { owner } = req.params;
+    const {
+      petName,
+      careTakerName,
+      startDate,
+      endDate,
+      rating,
+      reviewText,
+    } = req.body;
+    const result = await Bids.addReview(
+      petName,
+      careTakerName,
+      startDate,
+      endDate,
+      rating,
+      reviewText
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(400).send({
+        message: `Error posting review`,
+      });
+    }
+
+    res.status(200).send({
+      message: `Ok`,
+    });
+  } catch (error) {
+    console.error("Error posting review", error);
+
+    res.status(404).json({ message: "Error posting review", error });
   }
 });
 
@@ -53,6 +116,43 @@ router.post("/inactive", async (req, res) => {
   }
 });
 
+router.put("/arrangement", async (req, res) => {
+  try {
+    const {
+      pet,
+      care_taker,
+      start_date,
+      end_date,
+      payment_type,
+      transfer_method,
+    } = req.body;
+    const result = await Bids.updateBidArrrangement(
+      pet,
+      care_taker,
+      new Date(start_date),
+      new Date(end_date),
+      payment_type,
+      transfer_method
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).send({
+        message: `Error updating arrangements of bid for pet ${pet} and care taker ${care_taker} from ${start_date} to ${end_date}`,
+      });
+    }
+
+    res.status(200).send({
+      message: `Successfully update arrangement of bid for pet ${pet} and care taker ${care_taker} from ${start_date} to ${end_date}`,
+    });
+  } catch (error) {
+    console.error("Error updating arrangement of bid", error);
+
+    res
+      .status(404)
+      .json({ message: "Error updating arrangement of bid", error });
+  }
+});
+
 router.post("/add", async (req, res) => {
   try {
     const {
@@ -62,6 +162,7 @@ router.post("/add", async (req, res) => {
       pet_type,
       start_date,
       end_date,
+      price,
     } = req.body;
     const result = await Bids.addBid(
       pet,
@@ -70,6 +171,7 @@ router.post("/add", async (req, res) => {
       pet_type,
       new Date(start_date),
       new Date(end_date),
+      price
     );
 
     if (result.rowCount === 0) {

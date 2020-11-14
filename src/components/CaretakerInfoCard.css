@@ -1,0 +1,21 @@
+.petCardContainer {
+  margin: 12px 0 12px 0;
+}
+
+.petCardBodyContainer {
+  justify-content: flex-start;
+  text-align: justify;
+}
+
+.badgeContainer {
+  margin: 10px;
+}
+
+.button {
+  float: right;
+  margin: 0 0 0 10px;
+}
+
+.iconContainer {
+  margin: 0 4px 0 0;
+}

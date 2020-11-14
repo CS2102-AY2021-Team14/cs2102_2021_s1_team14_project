@@ -1,11 +1,11 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import './Avatar.css';
 
 const Avatar = ({user}) => {
 
     // Save the user info
     const userinfo = {
-        name: user.name,
+        name: user.username,
         image: user.image,
         job: user.job,
         startDate: user.join,
@@ -30,7 +30,6 @@ const Avatar = ({user}) => {
                     <h4>{userinfo.name}</h4>
                     <p>{userinfo.job}</p>
                     <p>Joined on {userinfo.startDate}</p>
-                    <h5>{userinfo.salary}/month</h5>
                     <div className={employmentStatus}>
                         <h5 id="employmentstatus">{userinfo.employmentStatus}</h5>
                     </div>

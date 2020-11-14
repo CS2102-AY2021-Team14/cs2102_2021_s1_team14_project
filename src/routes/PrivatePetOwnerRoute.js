@@ -7,6 +7,9 @@ import ROUTES from "./Routes";
 import PetOwnerHome from "../pages/petowner/PetOwnerHome";
 import PetOwnerSearch from "../pages/petowner/PetOwnerSearch";
 import PetOwnerPets from "../pages/petowner/PetOwnerPets";
+import PetOwnerCaretakers from "../pages/petowner/PetOwnerCaretakers";
+import PetOwnerBids from "../pages/petowner/PetOwnerBids";
+import PetOwnerObsession from "../pages/petowner/PetOwnerObsession";
 
 const PrivatePetOwnerRoute = props => {
   const { username, authToken, roles } = useContext(UserContext);
@@ -49,8 +52,20 @@ const PrivatePetOwnerRoute = props => {
                 <PetOwnerSearch />
               </Route>
 
+              <Route exact path={ROUTES.PET_OWNER_BIDS}>
+                <PetOwnerBids />
+              </Route>
+
+              <Route exact path={ROUTES.PET_OWNER_CARETAKERS}>
+                <PetOwnerCaretakers username={username} />
+              </Route>
+
               <Route exact path={ROUTES.PET_OWNER_PETS}>
                 <PetOwnerPets username={username} />
+              </Route>
+
+              <Route exact path={ROUTES.PET_OWNER_OBSESSION}>
+                <PetOwnerObsession username={username} />
               </Route>
             </Switch>
           );

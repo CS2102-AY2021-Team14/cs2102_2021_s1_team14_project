@@ -1,6 +1,6 @@
 -- Uncomment to recreate your database
 -- DROP DATABASE yogapets;
-CREATE DATABASE yogapets;
+-- CREATE DATABASE yogapets;
 
 -- changed to separate table as pet owner and care taker may use the same account
 -- CREATE TYPE pcs_user_role AS ENUM ('ADMIN', 'CARETAKER', 'OWNER');
@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS users (
     name            VARCHAR(255),
     user_email      VARCHAR(255),
     user_password   VARCHAR(255)    NOT NULL,
-    user_country    VARCHAR(30),
+    user_country    VARCHAR(255),
     user_address    VARCHAR(255)
 );
 
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS pet_owners (
 );
 
 CREATE TABLE IF NOT EXISTS care_takers (
-    user_name       VARCHAR(255)    PRIMARY KEY REFERENCES users(user_name),
+    user_name       VARCHAR(255)    PRIMARY KEY REFERENCES users(user_name) ON UPDATE CASCADE,
     is_part_time    BOOLEAN         NOT NULL,
     introduction    VARCHAR
 );
@@ -76,7 +76,6 @@ CREATE TABLE IF NOT EXISTS pet_special_requirements (
 );
 
 CREATE TABLE IF NOT EXISTS base_prices (
-    specified_by    VARCHAR(255)    REFERENCES pcs_admins(user_name),
     pet_type        pet_type        PRIMARY KEY,
     base_price      NUMERIC(10, 2)  NOT NULL CHECK (base_price > 0) -- max 2 d.p.
 );
@@ -103,8 +102,9 @@ CREATE TABLE IF NOT EXISTS care_taker_leaves (
 
 -- Table takes care of relation between a pet_type and care_takers
 CREATE TABLE IF NOT EXISTS care_takers_pet_preferences (
-    care_taker      VARCHAR(255)    NOT NULL REFERENCES care_takers(user_name)      ON DELETE CASCADE,
+    care_taker      VARCHAR(255)    NOT NULL REFERENCES care_takers(user_name)      ON DELETE CASCADE ON UPDATE CASCADE,
     pet_type        pet_type        NOT NULL,
+    price           NUMERIC(10, 2)  CHECK (price > 0), -- for part time care takers
     PRIMARY KEY (care_taker, pet_type)
 );
 
@@ -117,11 +117,12 @@ CREATE TABLE IF NOT EXISTS bids (
     pet_type        pet_type        NOT NULL,
     start_date      DATE            NOT NULL,
     end_date        DATE            NOT NULL,
+    price           NUMERIC(10, 2)  NOT NULL CHECK (price > 0),
     is_active       BOOLEAN         NOT NULL DEFAULT true,
     is_successful   BOOLEAN         NOT NULL DEFAULT false,
     payment_type    VARCHAR(255),
     transfer_method VARCHAR(255),
-    rating          INT             CHECK (rating >= 0),
+    rating          INT             CHECK (rating >= 0 AND rating <= 5),
     review_text     VARCHAR,
     PRIMARY KEY (pet, care_taker, start_date, end_date),
     FOREIGN KEY (pet, owner) REFERENCES pets(name, owner),
@@ -129,7 +130,9 @@ CREATE TABLE IF NOT EXISTS bids (
         REFERENCES care_takers_pet_preferences(care_taker, pet_type),
     CONSTRAINT valid_date_range CHECK (start_date <= end_date),
     CONSTRAINT successful_bid_constraint CHECK
-        ((NOT is_successful) OR (payment_type IS NOT NULL AND transfer_method IS NOT NULL))
+        ((NOT is_successful) OR (payment_type IS NOT NULL AND transfer_method IS NOT NULL)),
+    CONSTRAINT valid_rating_constraint CHECK
+        ((rating IS NULL) OR is_successful)
 );
 
 -- trigger to update amount and pet day
@@ -138,8 +141,8 @@ CREATE TABLE IF NOT EXISTS salary (
     care_taker      VARCHAR(255)    NOT NULL REFERENCES care_takers(user_name)    ON DELETE CASCADE,
     month           CHAR(3)         NOT NULL, -- 3 letter month
     year            CHAR(4)         NOT NULL, -- 4 letter year
-    pet_days        INT             NOT NULL DEFAULT 0,
-    amount          NUMERIC         NOT NULL DEFAULT 0,
+    pet_days        INT             NOT NULL DEFAULT 0 CHECK (pet_days >= 0),
+    amount          NUMERIC         NOT NULL DEFAULT 0 CHECK (amount >= 0),
     PRIMARY KEY (care_taker, month, year)
 );
 
@@ -154,10 +157,48 @@ CREATE VIEW care_takers_rating AS
     FROM ratings
     GROUP BY care_taker;
 
+CREATE VIEW daily_price AS
+    SELECT *
+    FROM care_takers_pet_preferences
+    WHERE (
+        SELECT is_part_time 
+        FROM care_takers 
+        WHERE user_name = care_takers_pet_preferences.care_taker
+    ) = true
+    UNION
+    SELECT care_takers.user_name AS care_taker, base_prices.pet_type, 
+        CASE 
+            WHEN care_takers_rating.avg_rating >= 4.8 THEN base_prices.base_price * 1.5
+            WHEN care_takers_rating.avg_rating >= 4.5 THEN base_prices.base_price * 1.4
+            WHEN care_takers_rating.avg_rating >= 4.0 THEN base_prices.base_price * 1.3
+            WHEN care_takers_rating.avg_rating >= 3.5 THEN base_prices.base_price * 1.2
+            WHEN care_takers_rating.avg_rating >= 3.0 THEN base_prices.base_price * 1.1
+            ELSE base_prices.base_price
+        END AS price
+    FROM care_takers INNER JOIN care_takers_pet_preferences ON care_takers.user_name = care_takers_pet_preferences.care_taker 
+        INNER JOIN base_prices ON care_takers_pet_preferences.pet_type = base_prices.pet_type
+        LEFT JOIN care_takers_rating ON care_takers.user_name = care_takers_rating.care_taker
+    WHERE care_takers.is_part_time = false;
+
+-- DROP VIEW pets_full_information;
+
+CREATE VIEW pets_full_information AS 
+    SELECT P.name AS pet_name, P.owner AS pet_owner, P.type AS pet_type, 
+        U.name AS pet_owner_name, 
+        ARRAY_AGG(DISTINCT PC.category) AS pet_categories, 
+        ARRAY_AGG(DISTINCT PR.requirement) AS pet_special_requirement, 
+        ARRAY_AGG(DISTINCT PR.description) AS pet_requirements_description
+    FROM ( 
+        pets P
+        LEFT OUTER JOIN users U ON P.owner = U.user_name
+        LEFT OUTER JOIN pet_category PC ON P.name = PC.name 
+        LEFT OUTER JOIN pet_special_requirements PR ON P.name = PR.name 
+    )
+    GROUP BY (P.name, P.owner, P.type, U.name);
+
 -- Trigger to check if 2 * 150 consecutive days is fulfilled when adding a leave
 -- INSERT INTO care_taker_leaves VALUES('seanlowjk', '2020-01-02');
 -- INSERT INTO care_taker_leaves VALUES('seanlowjk', '2020-09-01');
-
 
 -- Create function to get list of available dates for any given caretaker
 CREATE OR REPLACE FUNCTION availableDates(the_care_taker VARCHAR(255), the_leave_date date)
@@ -180,7 +221,6 @@ ORDER BY d) AS free_dates
 WHERE free_dates.d <> the_leave_date;
 END; $$
 LANGUAGE plpgsql;
-
 
 -- Create blocks of 2 *  150 days
 CREATE OR REPLACE FUNCTION getBlocks(the_care_taker VARCHAR(255), the_leave_date date)
@@ -231,10 +271,38 @@ RETURN FALSE;
 END; $$
 LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION getPetsPerDay(the_care_taker VARCHAR(255), the_date date)
+RETURNS INTEGER
+AS
+$$ BEGIN
+RETURN (
+    SELECT COUNT(*)
+          FROM bids 
+          WHERE bids.care_taker = the_care_taker
+            AND bids.start_date <= the_date
+            AND bids.end_date >= the_date
+            AND bids.is_successful = TRUE
+);
+END; $$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION isThereClashWithBids(the_care_taker VARCHAR(255), the_leave_date date)
+RETURNS BOOLEAN
+AS
+$$ BEGIN
+IF ((SELECT getPetsPerDay(the_care_taker, the_leave_date)) >= 1)
+THEN
+RETURN TRUE;
+END IF;
+RETURN FALSE;
+END; $$
+LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION checkAbleToTakeLeaveFunction()
 RETURNS TRIGGER AS
 $$ BEGIN
-IF (SELECT canTakeLeave(NEW.care_taker, NEW.leave_date)) THEN
+IF ((SELECT canTakeLeave(NEW.care_taker, NEW.leave_date)) 
+    AND NOT (SELECT isThereClashWithBids(NEW.care_taker, NEW.leave_date))) THEN
 RETURN NEW;
 END IF;
 RETURN NULL;
@@ -270,19 +338,112 @@ IF (((SELECT COUNT(*)
     FROM bids
     WHERE care_taker = NEW.care_taker AND start_date >= NEW.start_date AND end_date <= NEW.end_date AND is_successful) < 5)
     AND
-    (SELECT is_part_time FROM care_takers WHERE user_name = NEW.care_taker)
+    NOT (SELECT is_part_time FROM care_takers WHERE user_name = NEW.care_taker)
     )
 THEN
 NEW.is_successful := TRUE;
+NEW.is_active := FALSE;
 NEW.payment_type := 'Cash';
 NEW.transfer_method := 'Pet Owner Deliver';
 END IF;
 RETURN NEW;
 END; $$ LANGUAGE plpgsql;
 
-
 -- Trigger for full time care-taker to auto accept bid if it falls between available dates of care taker
 CREATE TRIGGER autoAcceptFullTimerBid
 BEFORE INSERT ON bids
 FOR EACH ROW
 EXECUTE PROCEDURE autoAcceptFullTimerBidFunction();
+
+CREATE OR REPLACE FUNCTION theAvailableDates(the_care_taker VARCHAR(255))
+RETURNS TABLE ( free_day date )
+AS
+$$ BEGIN
+RETURN QUERY
+SELECT *
+FROM
+(SELECT date_trunc('day', all_dates):: date AS d
+    FROM generate_series
+        ( (date_trunc('year', now()))::timestamp
+        , (date_trunc('year', now()) + interval '1 year' - interval '1 day')::timestamp
+        , '1 day'::interval) AS all_dates
+ORDER BY d) AS free_dates;
+END; $$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION canAcceptOffer(the_care_taker VARCHAR(255), the_start_date date, the_end_date date)
+RETURNS BOOLEAN
+AS
+$$ BEGIN
+IF ((
+  SELECT care_takers.is_part_time
+    FROM care_takers 
+    WHERE care_takers.user_name = the_care_taker
+) AND (
+  SELECT AVG(bids.rating)
+    FROM bids 
+    WHERE bids.care_taker = the_care_taker
+) <= 4)
+
+THEN
+IF ((
+  SELECT MAX(getPetsPerDay(the_care_taker, a.free_day))
+    FROM theAvailableDates(the_care_taker) a
+    WHERE a.free_day >= the_start_date
+      AND a.free_day <= the_end_date 
+) > 2 )
+THEN
+RETURN FALSE;
+END IF;
+
+ELSE 
+IF ((
+  SELECT MAX(getPetsPerDay(the_care_taker, a.free_day))
+    FROM theAvailableDates(the_care_taker) a
+    WHERE a.free_day >= the_start_date
+      AND a.free_day <= the_end_date 
+) > 5 )
+THEN
+RETURN FALSE;
+END IF;
+
+END IF;
+RETURN TRUE;
+END; $$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION canAcceptNewOfferFunction()
+RETURNS TRIGGER AS
+$$ BEGIN
+IF ( SELECT NEW.is_successful )
+THEN
+RETURN NEW; 
+ELSE 
+IF ( SELECT canAcceptOffer(NEW.care_taker, NEW.start_date, NEW.end_date) )
+THEN
+RETURN NEW; 
+END IF;
+END IF;
+RETURN NULL;
+END; $$ LANGUAGE plpgsql;
+
+-- Trigger to see if the 
+CREATE TRIGGER canAcceptNewOffer
+BEFORE UPDATE ON bids
+FOR EACH ROW
+EXECUTE PROCEDURE canAcceptNewOfferFunction();
+
+-- Drop table commands for resetting all tables 
+-- DROP TABLE care_takers_availability;
+-- DROP TABLE pet_special_requirements;
+-- DROP TABLE pet_category;
+-- DROP TABLE base_prices;
+-- DROP TABLE salary;
+-- DROP TABLE bids CASCADE;
+-- DROP TABLE care_taker_leaves CASCADE;
+-- DROP TABLE care_taker CASCADE;
+-- DROP TABLE care_takers_pet_preferences CASCADE;
+-- DROP TABLE pcs_admins CASCADE;
+-- DROP TABLE pet_owners CASCADE;
+-- DROP TABLE pets CASCADE;
+-- DROP TABLE users CASCADE;

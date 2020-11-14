@@ -4,35 +4,39 @@ import ROUTES from "../../routes/Routes";
 import * as FaIcons from "react-icons/fa";
 
 const sideBarData = [
-    {
-        icon: <FaIcons.FaHome />,
-        key: "Home",
-        link: ROUTES.ADMIN_HOME
-    },
-    {
-        icon: <FaIcons.FaBook />,
-        key: "Overview",
-        link: "#"
-    },
-    {
-        icon: <FaIcons.FaUser />,
-        key: "Caretakers",
-        link: "#"
-    },
-    {
-        icon: <FaIcons.FaPaw />,
-        key: "Pets",
-        link: ROUTES.ADMIN_PET_INFO
-    }
-
+  {
+    icon: <FaIcons.FaHome />,
+    key: "Home",
+    link: ROUTES.ADMIN_HOME,
+  },
+  {
+    icon: <FaIcons.FaBook />,
+    key: "Overview",
+    link: ROUTES.ADMIN_OVERVIEW,
+  },
+  {
+    icon: <FaIcons.FaUser />,
+    key: "Employee of the Month",
+    link: ROUTES.ADMIN_EMPLOYEE_OF_MONTH,
+  },
+  {
+    icon: <FaIcons.FaUser />,
+    key: "Underperforming Caretakers",
+    link: ROUTES.ADMIN_CARE_TAKER,
+  },
+  {
+    icon: <FaIcons.FaPaw />,
+    key: "Pets",
+    link: ROUTES.ADMIN_PET_INFO,
+  },
 ];
 
 const AdminSidebar = ({ defaultKey }) => {
-    return (
-        <>
-            <Sidebar defaultKey={defaultKey} sideBarData={sideBarData} />
-        </>
-    );
+  return (
+    <>
+      <Sidebar defaultKey={defaultKey} sideBarData={sideBarData} />
+    </>
+  );
 };
 
 export default AdminSidebar;

@@ -15,6 +15,13 @@ class Caretaker {
     ]);
   }
 
+  static removeLeave(user_name, leave_date) {
+    return pool.query("DELETE FROM care_taker_leaves WHERE care_taker = $1 AND leave_date = $2;", [
+      user_name,
+      leave_date
+    ]);
+  }
+
   static getCaretaker(user_name) {
     return pool.query("SELECT * FROM care_takers WHERE user_name = $1;", [
       user_name,
@@ -64,7 +71,16 @@ class Caretaker {
   }
 
   static getAll() {
-    return pool.query("SELECT * FROM care_takers;");
+    return pool.query(`
+      SELECT care_takers.*, users.name, users.user_email, users.user_country, users.user_address,
+        JSON_AGG(daily_price) AS pet_prices, care_takers_rating.avg_rating
+      FROM ((care_takers NATURAL JOIN users) 
+        INNER JOIN daily_price 
+        ON care_takers.user_name = daily_price.care_taker)
+        LEFT JOIN care_takers_rating
+        ON care_takers.user_name = care_takers_rating.care_taker
+      GROUP BY (care_takers.user_name, users.name, users.user_email, users.user_country, users.user_address, care_takers_rating.avg_rating);
+    `);
   }
 }
 
