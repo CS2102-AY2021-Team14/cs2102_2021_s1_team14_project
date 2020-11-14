@@ -268,7 +268,7 @@ const PcsAdminHome = () => {
 
   useEffect(() => {
     getEmployeesInfo();
-  }, [filterFn]);
+  }, []);
 
   return (
     <div>
