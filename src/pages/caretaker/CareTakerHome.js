@@ -59,10 +59,6 @@ const CareTakerHome = () => {
                 var caretakerLeaveData = res.data.data;
                 setCaretakerLeaves(caretakerLeaveData);
             })
-
-        // Get active bids
-        axios
-            .get(caretaker)
     }, [])
 
     // Find employment
@@ -115,7 +111,7 @@ const CareTakerHome = () => {
         jobs: getActiveJobs(),
         availability: {
             leaveDays: getLeaveDays(),
-            startDate: new Date(2020, 7, 3)
+            startDate: new Date(2020, 8, 3)
         } 
     }
     
