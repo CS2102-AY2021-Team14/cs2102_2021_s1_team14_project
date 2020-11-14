@@ -14,7 +14,7 @@ export const mapPetInfoToPetData = (petInfo) => {
         petType: pet_type,
         petOwner: pet_owner,
         petOwnerName: pet_owner_name,
-        petCategories: pet_categories[0] == null ? [] : pet_categories,
+        petCategories: pet_categories[0] === null ? [] : pet_categories,
         petSpecialRequirements: getPetSpecialRequirements(pet_special_requirement, pet_requirements_description)
     }
 };
@@ -22,7 +22,7 @@ export const mapPetInfoToPetData = (petInfo) => {
 const getPetSpecialRequirements = (pet_special_requirement, pet_requirements_description) => {
     let specialRequirements = [];
 
-    if (pet_special_requirement.length == 1 && pet_requirements_description[0] == null) {
+    if (pet_special_requirement.length === 1 && pet_requirements_description[0] === null) {
         return [];
     }
 

@@ -26,9 +26,9 @@ const PagePagination = (props) => {
       pageNum = LAST_PAGE;
     }
 
-    if (pageNum == FIRST_PAGE) {
+    if (pageNum === FIRST_PAGE) {
       setPageViews([FIRST_PAGE, FIRST_PAGE + 1, FIRST_PAGE + 2]);
-    } else if (pageNum == LAST_PAGE) {
+    } else if (pageNum === LAST_PAGE) {
       setPageViews([LAST_PAGE - 2, LAST_PAGE - 1, LAST_PAGE]);
     } else {
       setPageViews([pageNum - 1, pageNum, pageNum + 1]);
@@ -49,19 +49,19 @@ const PagePagination = (props) => {
       isOff = true;
     }
 
-    if (LAST_PAGE - FIRST_PAGE == 1) {
+    if (LAST_PAGE - FIRST_PAGE === 1) {
       pageNumbers = [FIRST_PAGE, LAST_PAGE];
       isOff = true;
     }
 
-    if (LAST_PAGE - FIRST_PAGE == 0) {
+    if (LAST_PAGE - FIRST_PAGE === 0) {
       pageNumbers = [FIRST_PAGE];
       isOff = true;
     }
 
     if (isOff) {
       return pageNumbers.map((num) => {
-        if (num == 1) {
+        if (num === 1) {
           return (<Pagination.Item active onClick={() => goTo(num)}>{num}</Pagination.Item>);
         } else {
           return (<Pagination.Item onClick={() => goTo(num)}>{num}</Pagination.Item>);
@@ -70,7 +70,7 @@ const PagePagination = (props) => {
     }
 
     return pageNumbers.map((num) => {
-      if (num == currentPage) {
+      if (num === currentPage) {
         return (<Pagination.Item active onClick={() => goTo(num)}>{num}</Pagination.Item>);
       } else {
         return (<Pagination.Item onClick={() => goTo(num)}>{num}</Pagination.Item>);
@@ -79,7 +79,7 @@ const PagePagination = (props) => {
   };
 
   const generateContent = () => {
-    if (LAST_PAGE == 0) {
+    if (LAST_PAGE === 0) {
       return <p> No Results Found </p>
     } else {
       return (

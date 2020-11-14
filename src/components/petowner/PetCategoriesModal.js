@@ -21,7 +21,7 @@ const PetCategoriesModal = (props) => {
   }
 
   const addCategoryHandler = () => {
-    if (newCategory == '' || /^\s+$/.test(newCategory)) {
+    if (newCategory === '' || /^\s+$/.test(newCategory)) {
       toast.error('Category Cannot be empty!');
       return;
     }

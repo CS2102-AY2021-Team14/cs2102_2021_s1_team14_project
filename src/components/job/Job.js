@@ -1,9 +1,9 @@
 import React from 'react';
 import './Job.css';
 
-const Job = ({jobs}) => {
+const Job = ({ jobs }) => {
 
-    if (jobs.length == 0) {
+    if (jobs.length === 0) {
         return (
             <div className="jobcontainer">
                 <h2>Current jobs</h2>
@@ -42,12 +42,12 @@ const Job = ({jobs}) => {
                             </div>
                         );
                     })}
-                </div>  
+                </div>
             </div>
         )
     }
 
-    
+
 }
 
 export default Job;
