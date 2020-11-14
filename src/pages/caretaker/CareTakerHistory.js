@@ -5,6 +5,7 @@ import CaretakerSidebar from '../../components/sidebar/CaretakerSidebar';
 import Navbar from '../../components/Navbar';
 import Avatar from '../../components/avatar/Avatar';
 import History from '../../components/history/History';
+import Loader from "../../components/Loader";
 
 import axios from 'axios';
 import { UserContext } from "../../utils/UserProvider";
@@ -19,6 +20,7 @@ const CareTakerHistory = () => {
         is_part_time: false,
         introduction: ""
     });
+    const [isLoading, setIsLoading] = useState(true);
 
     const [caretakerJobs, setCaretakerJobs] = useState([]);
 
@@ -43,6 +45,7 @@ const CareTakerHistory = () => {
             .then((res) => {
                 var caretakerJobData = res.data.data;
                 setCaretakerJobs(caretakerJobData);
+                setIsLoading(false);
             });
     }, [])
 
@@ -86,24 +89,28 @@ const CareTakerHistory = () => {
         pastJobs: findPastJobs()
     }
 
-    return (
-        <div>
-            <Navbar />
-            <Container fluid>
-                <Row className="justify-content-md-center">
-                <Col xs={2} id="sidebar">
-                    <CaretakerSidebar defaultKey={"History"} />
-                </Col>
-                <Col xs={8} id="page-content">
-                    <History histories={caretakerInfo.pastJobs} />
-                </Col>
-                <Col xs={2} id="avatar">
-                    <Avatar user={caretakerInfo} />
-                </Col>
-                </Row>
-            </Container>
-        </div>
-    )
+    if (isLoading) {
+        return <Loader />
+    } else {
+        return (
+            <div>
+                <Navbar />
+                <Container fluid>
+                    <Row className="justify-content-md-center">
+                    <Col xs={2} id="sidebar">
+                        <CaretakerSidebar defaultKey={"History"} />
+                    </Col>
+                    <Col xs={8} id="page-content">
+                        <History histories={caretakerInfo.pastJobs} />
+                    </Col>
+                    <Col xs={2} id="avatar">
+                        <Avatar user={caretakerInfo} />
+                    </Col>
+                    </Row>
+                </Container>
+            </div>
+        )
+    }
 }
 
 export default CareTakerHistory;

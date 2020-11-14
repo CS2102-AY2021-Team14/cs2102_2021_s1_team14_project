@@ -6,6 +6,7 @@ import Avatar from '../../components/avatar/Avatar';
 import Navbar from '../../components/Navbar';
 import Job from '../../components/job/Job';
 import Calendar from '../../components/availability/Calendar';
+import Loader from "../../components/Loader";
 
 import YogaPetsLogo from '../../images/logo.png';
 
@@ -27,6 +28,8 @@ const CareTakerHome = () => {
 
     const [caretakerLeaves, setCaretakerLeaves] = useState([]);
 
+    const [isLoading, setIsLoading] = useState(true);
+
 
     // All the backend URL
     const serverURL = '/api/caretaker/';
@@ -37,6 +40,7 @@ const CareTakerHome = () => {
     // API call
     useEffect(() => {
         // Getting caretaker data
+
         axios
             .get(caretakerURL)
             .then((res) => {
@@ -58,6 +62,7 @@ const CareTakerHome = () => {
             .then((res) => {
                 var caretakerLeaveData = res.data.data;
                 setCaretakerLeaves(caretakerLeaveData);
+                setIsLoading(false);
             })
     }, [])
 
@@ -114,28 +119,32 @@ const CareTakerHome = () => {
             startDate: new Date(2020, 8, 3)
         } 
     }
-    
-    return (
-        <div>
-            <Navbar />
-            <Container fluid>
-                <Row className="justify-content-md-center">
-                    <Col xs={2} id="sidebar">
-                        <CaretakerSidebar defaultKey={"Home"} />
-                    </Col>
-                    <Col xs={4} id="availability">
-                        <Calendar caretakerAvailability={caretakerInfo.availability} />
-                    </Col>
-                    <Col xs={4} id="jobs">
-                        <Job jobs={caretakerInfo.jobs} />
-                    </Col>
-                    <Col xs={2} id="avatar">
-                        <Avatar user={caretakerInfo} />
-                    </Col>
-                </Row>
-            </Container>
-        </div>
-    )
+
+    if (isLoading) {
+        return <Loader />
+    } else {
+        return (
+            <div>
+                <Navbar />
+                <Container fluid>
+                    <Row className="justify-content-md-center">
+                        <Col xs={2} id="sidebar">
+                            <CaretakerSidebar defaultKey={"Home"} />
+                        </Col>
+                        <Col xs={4} id="availability">
+                            <Calendar caretakerAvailability={caretakerInfo.availability} />
+                        </Col>
+                        <Col xs={4} id="jobs">
+                            <Job jobs={caretakerInfo.jobs} />
+                        </Col>
+                        <Col xs={2} id="avatar">
+                            <Avatar user={caretakerInfo} />
+                        </Col>
+                    </Row>
+                </Container>
+            </div>
+        )
+    }
 }
 
 export default CareTakerHome;
