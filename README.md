@@ -8,7 +8,7 @@
 https://www.youtube.com/watch?v=--9MX3FhOD4&feature=youtu.be
 
 ### Promotional video
-https://youtu.be/M9WbADNQSCw
+https://youtu.be/_Hcf0Mb1C4s
 
 ## Deployed app link
 https://cs2102-ay2021-s1-team14.herokuapp.com/
