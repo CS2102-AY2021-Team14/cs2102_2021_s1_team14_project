@@ -159,4 +159,19 @@ router.get("/checkpay/:username/:month/:year", async (req, res) => {
   }
 })
 
+router.delete("/deletepay/:username/:month/:year", async (req, res) => {
+  const username = req.params.username;
+  const month = req.params.month;
+  const year = req.params.year;
+  try {
+    const result = await Admin.deleteSalaryForEmployeeOfMonth(username, month, year);
+    res.status(200).json({
+      message: `Successfully deleted ${username} salary for ${month}-${year}`,
+    });
+  } catch (error) {
+    console.error("Could not delete salary", error);
+    res.status(404).json({ message: "Delete salary error", error });
+  }
+});
+
 module.exports = router;

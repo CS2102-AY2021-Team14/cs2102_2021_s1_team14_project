@@ -199,8 +199,7 @@ const PcsAdminHome = () => {
     setSalaryData(null);
   }
 
-  const handleCheckPay = () => {
-    // toast.success("Clicked");
+  const handleUnpay = () => {
     const currSalaryData = salaryData;
     if (currSalaryData) {
       const {
@@ -209,7 +208,26 @@ const PcsAdminHome = () => {
         year,
       } = currSalaryData;
       const letter_month = monthsMap['' + month];
-      console.log(letter_month);
+      axios.delete(`/api/admin/deletepay/${care_taker}/${letter_month}/${year}`)
+            .then(res => {
+              console.log(res.data.message);
+              toast.error(`You have unpaid ${care_taker} for ${letter_month}-${year}`);
+            })
+            .catch(err => console.error(err.response.data.message));
+    }
+  }
+
+  // Check if admin has paid employee: 
+  // i.e. Salary table has employee's salary for the given month and year
+  const handleCheckPay = () => {
+    const currSalaryData = salaryData;
+    if (currSalaryData) {
+      const {
+        care_taker,
+        month,
+        year,
+      } = currSalaryData;
+      const letter_month = monthsMap['' + month];
       axios.get(`/api/admin/checkpay/${care_taker}/${letter_month}/${year}`)
             .then(res => {
               const { data } = res;
@@ -223,8 +241,6 @@ const PcsAdminHome = () => {
             .catch(err => {
               console.error(err.response.data.message);
             });
-
-      
     }
   }
 
@@ -444,7 +460,7 @@ const PcsAdminHome = () => {
                       {salaryData && 
                       <Grid container className={styles.container}>
                         <Grid item xs={12} sm={4}>
-                          <Button variant="contained" color="secondary">
+                          <Button variant="contained" color="secondary" onClick={handleUnpay}>
                             UNPAY
                           </Button>
                         </Grid>
