@@ -199,6 +199,7 @@ const PcsAdminHome = () => {
     setSalaryData(null);
   }
 
+  // Unpays an employee if Salary was pre-maturely paid for by admin
   const handleUnpay = () => {
     const currSalaryData = salaryData;
     if (currSalaryData) {
@@ -242,6 +243,34 @@ const PcsAdminHome = () => {
               console.error(err.response.data.message);
             });
     }
+  }
+
+  // Payment of a salary of the computed amount to stated employee
+  const handlePaySalary = () => {
+    console.log("Pay salary");
+    const currSalaryData = salaryData;
+    const { care_taker, month, year, pet_days, amount } = currSalaryData;
+    if (amount <= 0) {
+      toast.error(`You can't pay ${care_taker} $${amount}!`);
+      return;
+    }
+    const letter_month = monthsMap['' + month];
+    const body = {
+      care_taker,
+      month: letter_month,
+      year: year+'',
+      pet_days,
+      amount
+    }
+    console.log(body);
+    axios.post(`/api/admin/paysalary`, body)
+          .then(res => {
+            console.log(res.data.message);
+            toast.success(`You have paid ${care_taker} $${amount} for ${letter_month}-${year}`);
+          })
+          .catch(err => {
+            console.error(err.response.data.message);
+          })
   }
 
   const handleDateChange = (value) => {
@@ -320,6 +349,7 @@ const PcsAdminHome = () => {
         salary += pricesArr[i].pet_days * pricesArr[i].price;
       }
     }
+
     return [salary, petDays];
   }
 
@@ -470,7 +500,7 @@ const PcsAdminHome = () => {
                           </Button>
                         </Grid>
                         <Grid item xs={12} sm={4}>
-                          <Button variant="contained" color="primary">
+                          <Button variant="contained" color="primary" onClick={handlePaySalary}>
                             PAY
                           </Button>
                         </Grid>

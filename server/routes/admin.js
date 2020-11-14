@@ -165,6 +165,7 @@ router.delete("/deletepay/:username/:month/:year", async (req, res) => {
   const year = req.params.year;
   try {
     const result = await Admin.deleteSalaryForEmployeeOfMonth(username, month, year);
+    console.log(result);
     res.status(200).json({
       message: `Successfully deleted ${username} salary for ${month}-${year}`,
     });
@@ -173,5 +174,32 @@ router.delete("/deletepay/:username/:month/:year", async (req, res) => {
     res.status(404).json({ message: "Delete salary error", error });
   }
 });
+
+router.post("/paysalary", async (req, res) => {
+  try {
+    const {
+      care_taker,
+      month,
+      year,
+      pet_days,
+      amount
+    } = req.body;
+
+    const result = await Admin.insertSalaryInfoForEmployee(
+      care_taker,
+      month,
+      year,
+      pet_days,
+      amount
+    );
+
+    res.status(200).send({
+      message: `Insert salary success`,
+    })
+  } catch (error) {
+    console.error("Could not insert salary", error);
+    res.statusMessage(404).json({ message: "Insert salary error", error })
+  }
+})
 
 module.exports = router;
