@@ -1,7 +1,7 @@
 import React from "react";
-import { Card, Badge, Button, Form, Modal, Row, Col } from "react-bootstrap";
+import { Card, Modal, Row, Col } from "react-bootstrap";
 
-import { MdStar, MdPerson, MdPets, MdDateRange } from "react-icons/md";
+import { MdStar } from "react-icons/md";
 import StarRatings from "react-star-ratings";
 
 const ReviewTextModal = (props) => {

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { Button, Card, Col, Row, Modal } from 'react-bootstrap';
-import PET_TYPES from "../../utils/PetTypes";
+import { Button } from 'react-bootstrap';
 import AddPetTypeModal from './AddPetTypeModal';
 import PetPreferenceStatus from "./PetPreferenceStatus";
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import  { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 import Navbar from '../../components/Navbar';
 import CaretakerSidebar from '../../components/sidebar/CaretakerSidebar';
 import axios from 'axios';
@@ -10,12 +10,12 @@ import Offers from '../../components/offers/Offers';
 import Loader from  '../../components/Loader';
 
 const CareTakerOffers = () => {
-    // Caretaker information
-  const { username, authToken, roles } = useContext(UserContext); 
+  // Caretaker information
+  const { username } = useContext(UserContext);
   const [caretaker, setCaretaker] = useState({
-      user_name: "",
-      is_part_time: false,
-      introduction: ""
+    user_name: "",
+    is_part_time: false,
+    introduction: ""
   });
 
   const [isLoading, setIsLoading] = useState(true);
@@ -33,29 +33,29 @@ const CareTakerOffers = () => {
 
   // API call
   useEffect(() => {
-      // Getting caretaker data
-      axios
-          .get(caretakerURL)
-          .then((res) => {
-              var caretakerData = res.data[0];
-              setCaretaker(caretakerData);
-          });
+    // Getting caretaker data
+    axios
+      .get(caretakerURL)
+      .then((res) => {
+        var caretakerData = res.data[0];
+        setCaretaker(caretakerData);
+      });
 
-      // Getting caretaker salary
-      axios
-          .get(caretakerSalaryURL)
-          .then((res) => {
-              var caretakerSalaryData = res.data.data;
-              setCaretakerSalary(caretakerSalaryData);
-          });
+    // Getting caretaker salary
+    axios
+      .get(caretakerSalaryURL)
+      .then((res) => {
+        var caretakerSalaryData = res.data.data;
+        setCaretakerSalary(caretakerSalaryData);
+      });
 
-      // Get caretaker job
-      axios
-          .get(caretakerJobsURL)
-          .then((res) => {
-              var caretakerJobData = res.data.data;
-              setCaretakerJobs(caretakerJobData);
-          });
+    // Get caretaker job
+    axios
+      .get(caretakerJobsURL)
+      .then((res) => {
+        var caretakerJobData = res.data.data;
+        setCaretakerJobs(caretakerJobData);
+      });
 
       // Get all active bids
       axios 
@@ -71,41 +71,41 @@ const CareTakerOffers = () => {
   const findEmployment = () => {
     let currentJobs = [];
     const today = new Date();
-    for (var i = 0; i < caretakerJobs.length; i ++) {
-        const jobStart = new Date(caretakerJobs[i].start_date)
-        const jobEnd = new Date(caretakerJobs[i].end_date);
-        if (today.getTime() >= jobStart.getTime() && today.getTime() <= jobEnd.getTime()) {
-            currentJobs.push(caretakerJobs[i]);
-        }
+    for (var i = 0; i < caretakerJobs.length; i++) {
+      const jobStart = new Date(caretakerJobs[i].start_date)
+      const jobEnd = new Date(caretakerJobs[i].end_date);
+      if (today.getTime() >= jobStart.getTime() && today.getTime() <= jobEnd.getTime()) {
+        currentJobs.push(caretakerJobs[i]);
+      }
     }
     if (currentJobs.length < 1) {
-        return "UNEMPLOYED";
+      return "UNEMPLOYED";
     } else {
-        return "EMPLOYED";
+      return "EMPLOYED";
     }
   }
 
   const findPersonalActiveBids = () => {
     let activeBids = [];
-    for (var i = 0; i < caretakerBids.length; i ++) {
-      if (caretakerBids[i].care_taker ===  caretaker.user_name) {
+    for (var i = 0; i < caretakerBids.length; i++) {
+      if (caretakerBids[i].care_taker === caretaker.user_name) {
         activeBids.push(caretakerBids[i]);
-      } 
+      }
     }
     return activeBids;
   }
 
   const caretakerInfo = {
-      username: caretaker.user_name,
-      image: YogaPetsLogo,
-      job: caretaker.is_part_time ? "Part time" : "Full time",
-      join: (new Date(2020, 8, 9).toDateString().split(" ").splice(1).join(" ")),
-      employment: findEmployment(),
-      activeBids: findPersonalActiveBids(),
-      salary: caretakerSalary,
-      jobs: caretakerJobs,
+    username: caretaker.user_name,
+    image: YogaPetsLogo,
+    job: caretaker.is_part_time ? "Part time" : "Full time",
+    join: (new Date(2020, 8, 9).toDateString().split(" ").splice(1).join(" ")),
+    employment: findEmployment(),
+    activeBids: findPersonalActiveBids(),
+    salary: caretakerSalary,
+    jobs: caretakerJobs,
   }
-
+  
   if (isLoading) {
     return <Loader />
   } else {

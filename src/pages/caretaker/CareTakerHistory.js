@@ -14,7 +14,7 @@ import YogaPetsLogo from '../../images/logo.png';
 
 const CareTakerHistory = () => {
     // Caretaker information
-    const { username, authToken, roles } = useContext(UserContext); 
+    const { username } = useContext(UserContext); 
     const [caretaker, setCaretaker] = useState({
         user_name: "",
         is_part_time: false,
