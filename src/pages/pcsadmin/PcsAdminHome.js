@@ -79,19 +79,19 @@ const PcsAdminHome = () => {
   ];
 
   const monthsMap = {
-    '1' : 'Jan',
-    '2' : 'Feb',
-    '3' : 'Mar',
-    '4' : 'Apr',
-    '5' : 'May',
-    '6' : 'Jun',
-    '7' : 'Jul',
-    '8' : 'Aug',
-    '9' : 'Sep',
-    '10' : 'Oct',
-    '11' : 'Nov',
-    '12' : 'Dec'
-}
+    '1': 'Jan',
+    '2': 'Feb',
+    '3': 'Mar',
+    '4': 'Apr',
+    '5': 'May',
+    '6': 'Jun',
+    '7': 'Jul',
+    '8': 'Aug',
+    '9': 'Sep',
+    '10': 'Oct',
+    '11': 'Nov',
+    '12': 'Dec'
+  }
 
   const handleSortRequest = cellId => {
     const isAsc = orderBy === cellId && order === "asc";
@@ -171,9 +171,9 @@ const PcsAdminHome = () => {
         } else {
           return items.filter(item => {
             if (
-              item.name.toLowerCase().includes(value) ||
-              item.user_email.toLowerCase().includes(value) ||
-              item.user_address.toLowerCase().includes(value)
+              item.name.toLowerCase().includes(value.toLowerCase()) ||
+              item.user_email.toLowerCase().includes(value.toLowerCase()) ||
+              item.user_address.toLowerCase().includes(value.toLowerCase())
             ) {
               return true;
             }
@@ -214,12 +214,12 @@ const PcsAdminHome = () => {
       } = currSalaryData;
       const letter_month = monthsMap['' + month];
       axios.delete(`/api/admin/deletepay/${care_taker}/${letter_month}/${year}`)
-            .then(res => {
-              console.log(res.data.message);
-              toast.error(`You have unpaid ${care_taker} for ${letter_month}-${year}`);
-              setUnpayButtonShow(false);
-            })
-            .catch(err => console.error(err.response.data.message));
+        .then(res => {
+          console.log(res.data.message);
+          toast.error(`You have unpaid ${care_taker} for ${letter_month}-${year}`);
+          setUnpayButtonShow(false);
+        })
+        .catch(err => console.error(err.response.data.message));
     }
   }
 
@@ -235,20 +235,20 @@ const PcsAdminHome = () => {
       } = currSalaryData;
       const letter_month = monthsMap['' + month];
       axios.get(`/api/admin/checkpay/${care_taker}/${letter_month}/${year}`)
-            .then(res => {
-              const { data } = res;
-              console.log(data.data);
-              if (data.data.length > 0) {
-                toast.success(`You have paid ${care_taker}: ${data.data[0].amount} for ${letter_month}-${year}`);
-                setUnpayButtonShow(true);
-              } else {
-                toast.warning(`You have not paid ${care_taker} for ${letter_month}-${year}`);
-                setPayButtonShow(true);
-              }
-            })
-            .catch(err => {
-              console.error(err.response.data.message);
-            });
+        .then(res => {
+          const { data } = res;
+          console.log(data.data);
+          if (data.data.length > 0) {
+            toast.success(`You have paid ${care_taker}: ${data.data[0].amount} for ${letter_month}-${year}`);
+            setUnpayButtonShow(true);
+          } else {
+            toast.warning(`You have not paid ${care_taker} for ${letter_month}-${year}`);
+            setPayButtonShow(true);
+          }
+        })
+        .catch(err => {
+          console.error(err.response.data.message);
+        });
     }
   }
 
@@ -266,20 +266,20 @@ const PcsAdminHome = () => {
     const body = {
       care_taker,
       month: letter_month,
-      year: year+'',
+      year: year + '',
       pet_days,
       amount
     }
     console.log(body);
     axios.post(`/api/admin/paysalary`, body)
-          .then(res => {
-            console.log(res.data.message);
-            toast.success(`You have paid ${care_taker} $${amount} for ${letter_month}-${year}`);
-            setPayButtonShow(false);
-          })
-          .catch(err => {
-            console.error(err.response.data.message);
-          })
+      .then(res => {
+        console.log(res.data.message);
+        toast.success(`You have paid ${care_taker} $${amount} for ${letter_month}-${year}`);
+        setPayButtonShow(false);
+      })
+      .catch(err => {
+        console.error(err.response.data.message);
+      })
   }
 
   const handleDateChange = (value) => {
@@ -289,46 +289,46 @@ const PcsAdminHome = () => {
     console.log(value.getMonth() + 1);
     console.log(value.getFullYear());
     axios.get(`/api/admin/salary/${selectedEmp}/${value.getMonth() + 1}/${value.getFullYear()}`)
-         .then(res => {
-           const { data } = res;
-           console.log(data.data);
-          //  setSalaryData(data.data ?? []);
-          
-           // Compute salaries
-           if (usersMap.get(selectedEmp) === true && data.data.length > 0) {
-             // Employee is a part timer
-             const computedData = computePartTimeSalary(data.data);
-             const care_taker = data.data[0].care_taker;
-             const month = value.getMonth() + 1;
-             const year = value.getFullYear();
-             const pet_days = computedData[1];
-             const amount = computedData[0];
+      .then(res => {
+        const { data } = res;
+        console.log(data.data);
+        //  setSalaryData(data.data ?? []);
 
-             // set some state to insert into salary database later
-             setSalaryData({care_taker, month, year, pet_days, amount});
-           } else if (usersMap.get(selectedEmp) === false && data.data.length > 0) {
-             // employee is full timer
-             const computedData = computeFullTimeSalary(data.data)
-             const care_taker = data.data[0].care_taker;
-             const month = value.getMonth() + 1;
-             const year = value.getFullYear();
-             const pet_days = computedData[1];
-             const amount = computedData[0];
+        // Compute salaries
+        if (usersMap.get(selectedEmp) === true && data.data.length > 0) {
+          // Employee is a part timer
+          const computedData = computePartTimeSalary(data.data);
+          const care_taker = data.data[0].care_taker;
+          const month = value.getMonth() + 1;
+          const year = value.getFullYear();
+          const pet_days = computedData[1];
+          const amount = computedData[0];
 
-             // set some state to insert into salary database later
-             setSalaryData({care_taker, month, year, pet_days, amount});
-           } else {
-             const care_taker = selectedEmp
-             const month = value.getMonth() + 1;
-             const year = value.getFullYear();
-             const pet_days = 0;
-             const amount = usersMap.get(selectedEmp) ? 0 : 3000; // base pay of fulltime = 3000
-             setSalaryData({care_taker, month, year, pet_days, amount});
-           }
-         })
-         .catch(err => {
-           console.error(err.response.data.message);
-         })
+          // set some state to insert into salary database later
+          setSalaryData({ care_taker, month, year, pet_days, amount });
+        } else if (usersMap.get(selectedEmp) === false && data.data.length > 0) {
+          // employee is full timer
+          const computedData = computeFullTimeSalary(data.data)
+          const care_taker = data.data[0].care_taker;
+          const month = value.getMonth() + 1;
+          const year = value.getFullYear();
+          const pet_days = computedData[1];
+          const amount = computedData[0];
+
+          // set some state to insert into salary database later
+          setSalaryData({ care_taker, month, year, pet_days, amount });
+        } else {
+          const care_taker = selectedEmp
+          const month = value.getMonth() + 1;
+          const year = value.getFullYear();
+          const pet_days = 0;
+          const amount = usersMap.get(selectedEmp) ? 0 : 3000; // base pay of fulltime = 3000
+          setSalaryData({ care_taker, month, year, pet_days, amount });
+        }
+      })
+      .catch(err => {
+        console.error(err.response.data.message);
+      })
   }
 
   const computePartTimeSalary = (pricesArr) => {
@@ -410,18 +410,18 @@ const PcsAdminHome = () => {
                             {header.label}
                           </Typography>
                         ) : (
-                          <TableSortLabel
-                            active={true}
-                            direction={orderBy === header.id ? order : "asc"}
-                            onClick={() => {
-                              handleSortRequest(header.id);
-                            }}
-                          >
-                            <Typography className={styles.header}>
-                              {header.label}
-                            </Typography>
-                          </TableSortLabel>
-                        )}
+                            <TableSortLabel
+                              active={true}
+                              direction={orderBy === header.id ? order : "asc"}
+                              onClick={() => {
+                                handleSortRequest(header.id);
+                              }}
+                            >
+                              <Typography className={styles.header}>
+                                {header.label}
+                              </Typography>
+                            </TableSortLabel>
+                          )}
                       </TableCell>
                     ))}
                   </TableHead>
@@ -462,41 +462,42 @@ const PcsAdminHome = () => {
               ></Popup>
               <Modal open={isModalOpen} onClose={handleClose}>
                 <Card className={styles.modalcard}>
-                    <br />
-                    <Typography align='center'>
-                      Select month to check employee salary
+                  <br />
+                  <Typography align='center'>
+                    Select month to check employee salary
                     </Typography>
-                    <CardContent className={styles.yearpicker}>
-                      <DatePicker
-                        selected={selectedDate}
-                        onChange={handleDateChange}
-                        dateFormat="MM/yyyy"
-                        showMonthYearPicker
-                        inline
-                      />
-                    </CardContent>
-                    <CardContent>
-                      {salaryData && <Table stickyHeader aria-label="employee salary">
-                        <TableHead>
-                          <TableRow>
-                            <TableCell>Employee Name</TableCell>
-                            <TableCell>Month</TableCell>
-                            <TableCell>Year</TableCell>
-                            <TableCell>Pet Days</TableCell>
-                            <TableCell>Salary</TableCell>
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                          <TableRow>
-                            <TableCell>{salaryData.care_taker}</TableCell>
-                            <TableCell>{salaryData.month}</TableCell>
-                            <TableCell>{salaryData.year}</TableCell>
-                            <TableCell>{salaryData.pet_days}</TableCell>
-                            <TableCell>{salaryData.amount}</TableCell>
-                          </TableRow>
-                        </TableBody>
-                      </Table>}
-                      {salaryData && 
+                  <CardContent className={styles.yearpicker}>
+                    <DatePicker
+                      minDate={new Date(2020, 8, 9)}
+                      selected={selectedDate}
+                      onChange={handleDateChange}
+                      dateFormat="MM/yyyy"
+                      showMonthYearPicker
+                      inline
+                    />
+                  </CardContent>
+                  <CardContent>
+                    {salaryData && <Table stickyHeader aria-label="employee salary">
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>Employee Name</TableCell>
+                          <TableCell>Month</TableCell>
+                          <TableCell>Year</TableCell>
+                          <TableCell>Pet Days</TableCell>
+                          <TableCell>Salary</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        <TableRow>
+                          <TableCell>{salaryData.care_taker}</TableCell>
+                          <TableCell>{salaryData.month}</TableCell>
+                          <TableCell>{salaryData.year}</TableCell>
+                          <TableCell>{salaryData.pet_days}</TableCell>
+                          <TableCell>{salaryData.amount}</TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </Table>}
+                    {salaryData &&
                       <Grid container className={styles.container}>
                         <Grid item xs={12} sm={4}>
                           {unpayButtonShow ? <Button variant="contained" color="secondary" onClick={handleUnpay}>
@@ -514,7 +515,7 @@ const PcsAdminHome = () => {
                           </Button> : null}
                         </Grid>
                       </Grid>}
-                    </CardContent>
+                  </CardContent>
                 </Card>
               </Modal>
             </Container>
