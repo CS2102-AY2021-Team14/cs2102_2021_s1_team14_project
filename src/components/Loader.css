@@ -1,0 +1,12 @@
+.loaderContainer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.loaderContainer h1 {
+    font-size: 1.3em;
+    margin-bottom: 20px;
+}

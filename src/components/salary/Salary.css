@@ -1,0 +1,9 @@
+.tableHead {
+    font-size: 1.1em;
+    color: white;
+    font-weight: bold;
+}
+
+.tableContainer {
+    border-radius: 10px;
+}

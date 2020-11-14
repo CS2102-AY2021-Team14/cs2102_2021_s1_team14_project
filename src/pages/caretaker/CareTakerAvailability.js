@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import AddLeaveModal from "../../components/caretaker/AddLeaveModal";
 import RemoveLeaveModal from "../../components/caretaker/RemoveLeaveModal";
 import PetTypeSelector from "../../components/caretaker/PetTypeSelector";
+import Loader from "../../components/Loader";
 
 const CareTakerAvailability = () => {
   // Caretaker information
@@ -20,6 +21,8 @@ const CareTakerAvailability = () => {
     is_part_time: false,
     introduction: ""
   });
+
+  const [isLoading, setIsLoading] = useState(true);
 
   const [caretakerSalary, setCaretakerSalary] = useState([]);
   const [caretakerJobs, setCaretakerJobs] = useState([]);
@@ -119,24 +122,30 @@ const CareTakerAvailability = () => {
     axios
       .get(caretakerURL)
       .then((res) => {
+        setIsLoading(true);
         var caretakerData = res.data[0];
         setCaretaker(caretakerData);
+        setIsLoading(false);
       });
 
     // Getting caretaker salary
     axios
       .get(caretakerSalaryURL)
       .then((res) => {
+        setIsLoading(true);
         var caretakerSalaryData = res.data.data;
         setCaretakerSalary(caretakerSalaryData);
+        setIsLoading(false);
       });
 
     // Get caretaker job
     axios
       .get(caretakerJobsURL)
       .then((res) => {
+        setIsLoading(true);
         var caretakerJobData = res.data.data;
         setCaretakerJobs(caretakerJobData);
+        setIsLoading(false);
       });
 
     getLeaves();
@@ -176,54 +185,60 @@ const CareTakerAvailability = () => {
     startDate: new Date(2020, 8, 9)
   }
 
-  return (
-    <div>
-      <Navbar />
-      <Container fluid>
-        <Row className="justify-content-md-center">
-          <Col xs={2} id="sidebar">
-            <CaretakerSidebar defaultKey={"Availability"} />
-          </Col>
-          <Col xs={4} id="page-content">
-            <Row>
-              <Calendar caretakerAvailability={availability} />
-            </Row>
-            <br />
-            <Row>
-              <Col>
-                <Button onClick={() => setAdderOpen(true)}> Add a new Leave Date </Button>
-              </Col>
-              <Col>
-                <Button onClick={() => setDeleterOpen(true)}> Remove a Leave Date </Button>
-              </Col>
-            </Row>
-            <AddLeaveModal
-              isAdderOpen={isAdderOpen}
-              setAdderOpen={setAdderOpen}
-              leaveDate={leaveDate}
-              setLeaveDate={setLeaveDate}
-              caretakerLeaves={caretakerLeaves}
-              addLeave={addLeave}
-            />
-            <RemoveLeaveModal
-              isOpen={isDeleterOpen}
-              setOpen={setDeleterOpen}
-              leaveDate={removedDate}
-              setLeaveDate={setRemovedDate}
-              caretakerLeaves={caretakerLeaves}
-              deleteLeave={deleteLeave}
-            />
-          </Col>
-          <Col xs={4} id="page-content">
-            <PetTypeSelector isPartTime={caretaker.is_part_time} petTypes={petTypes} editPetType={editPetType} addPetType={addPetType} />
-          </Col>
-          <Col xs={2} id="avatar">
-            <Avatar user={caretakerInfo} />
-          </Col>
-        </Row>
-      </Container>
-    </div>
-  );
+  if (isLoading) {
+    return <Loader />
+  } else {
+    return (
+      <div>
+        <Navbar />
+        <Container fluid style={{
+          marginBottom: '2vh'
+        }}>
+          <Row className="justify-content-md-center">
+            <Col xs={2} id="sidebar">
+              <CaretakerSidebar defaultKey={"Availability"} />
+            </Col>
+            <Col xs={4} id="page-content">
+              <Row>
+                <Calendar caretakerAvailability={availability} />
+              </Row>
+              <br />
+              <Row>
+                <Col>
+                  <Button onClick={() => setAdderOpen(true)}> Add a new Leave Date </Button>
+                </Col>
+                <Col>
+                  <Button onClick={() => setDeleterOpen(true)}> Remove a Leave Date </Button>
+                </Col>
+              </Row>
+              <AddLeaveModal
+                isAdderOpen={isAdderOpen}
+                setAdderOpen={setAdderOpen}
+                leaveDate={leaveDate}
+                setLeaveDate={setLeaveDate}
+                caretakerLeaves={caretakerLeaves}
+                addLeave={addLeave}
+              />
+              <RemoveLeaveModal
+                isOpen={isDeleterOpen}
+                setOpen={setDeleterOpen}
+                leaveDate={removedDate}
+                setLeaveDate={setRemovedDate}
+                caretakerLeaves={caretakerLeaves}
+                deleteLeave={deleteLeave}
+              />
+            </Col>
+            <Col xs={4} id="page-content">
+              <PetTypeSelector isPartTime={caretaker.is_part_time} petTypes={petTypes} editPetType={editPetType} addPetType={addPetType} />
+            </Col>
+            <Col xs={2} id="avatar">
+              <Avatar user={caretakerInfo} />
+            </Col>
+          </Row>
+        </Container>
+      </div>
+    );
+  }
 }
 
 export default CareTakerAvailability;

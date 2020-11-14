@@ -7,6 +7,7 @@ import { UserContext } from "../../utils/UserProvider";
 import YogaPetsLogo from '../../images/logo.png';
 import Avatar from '../../components/avatar/Avatar';
 import Offers from '../../components/offers/Offers';
+import Loader from  '../../components/Loader';
 
 const CareTakerOffers = () => {
   // Caretaker information
@@ -16,6 +17,8 @@ const CareTakerOffers = () => {
     is_part_time: false,
     introduction: ""
   });
+
+  const [isLoading, setIsLoading] = useState(true);
 
   const [caretakerSalary, setCaretakerSalary] = useState([]);
   const [caretakerJobs, setCaretakerJobs] = useState([]);
@@ -54,13 +57,14 @@ const CareTakerOffers = () => {
         setCaretakerJobs(caretakerJobData);
       });
 
-    // Get all active bids
-    axios
-      .get(activeBidsURL)
-      .then((res) => {
-        var caretakerBidsData = res.data.data;
-        setCaretakerBids(caretakerBidsData);
-      })
+      // Get all active bids
+      axios 
+          .get(activeBidsURL)
+          .then((res) => {
+            var caretakerBidsData = res.data.data;
+            setCaretakerBids(caretakerBidsData);
+            setIsLoading(false);
+          })
   }, [])
 
   // Find employment
@@ -101,25 +105,29 @@ const CareTakerOffers = () => {
     salary: caretakerSalary,
     jobs: caretakerJobs,
   }
-
-  return (
-    <div>
+  
+  if (isLoading) {
+    return <Loader />
+  } else {
+    return (
+      <div>
       <Navbar />
-      <Container fluid>
-        <Row className="justify-content-md-center">
-          <Col xs={2} id="sidebar">
-            <CaretakerSidebar defaultKey={"Offers"} />
-          </Col>
-          <Col xs={8} id="page-content">
-            <Offers activeBids={caretakerInfo.activeBids} username={caretakerInfo.username} />
-          </Col>
-          <Col xs={2} id="avatar">
-            <Avatar user={caretakerInfo} />
-          </Col>
-        </Row>
-      </Container>
-    </div>
-  );
+        <Container fluid>
+          <Row className="justify-content-md-center">
+            <Col xs={2} id="sidebar">
+              <CaretakerSidebar defaultKey={"Offers"} />
+            </Col>
+            <Col xs={8} id="page-content">
+              <Offers activeBids={caretakerInfo.activeBids} username={caretakerInfo.username}/>
+            </Col>
+            <Col xs={2} id="avatar">
+              <Avatar user={caretakerInfo} />
+            </Col>
+          </Row>  
+        </Container>
+      </div>
+    )
+  }
 }
 
 export default CareTakerOffers;

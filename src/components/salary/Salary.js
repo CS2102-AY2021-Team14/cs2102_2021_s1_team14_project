@@ -14,11 +14,13 @@ const Salary = ({ allSalaries }) => {
         <>
            { allSalaries ? 
             <Table>
-                <TableHead>
-                    <TableCell>Month</TableCell>
-                    <TableCell>Year</TableCell>
-                    <TableCell>Pet Days</TableCell>
-                    <TableCell>Salary</TableCell>
+                <TableHead style={{
+                    backgroundColor: '#364F6B',
+                }}>
+                    <TableCell><h2 className="tableHead">Month</h2></TableCell>
+                    <TableCell><h2 className="tableHead">Year</h2></TableCell>
+                    <TableCell><h2 className="tableHead">Pet days</h2></TableCell>
+                    <TableCell><h2 className="tableHead">Salary</h2></TableCell>
                 </TableHead>
                 <TableBody>
                     {allSalaries.map(row => (
