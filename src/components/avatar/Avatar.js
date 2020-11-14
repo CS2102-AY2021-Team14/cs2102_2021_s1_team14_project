@@ -23,6 +23,7 @@ const Avatar = ({user}) => {
             <div className="avatar">
                 <img
                     src={userinfo.image}
+                    alt="avatar"
                     id="avatarimage"
                     class="img-thumbnail"
                 />

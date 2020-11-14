@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Card, Form, Modal, Row, Col } from "react-bootstrap";
+import { Button, Card, Row, Col } from "react-bootstrap";
 
 const PetRequirementCard = (props) => {
   const {

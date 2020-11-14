@@ -53,7 +53,7 @@ const History = ({ histories }) => {
                                             starRatedColor="gold"
                                             rating={parseFloat(history.rating ?? 0)}
                                         />
-                                        <OverlayTrigger trigger="click" placement="bottom" overlay={popover} trigger="hover">
+                                        <OverlayTrigger trigger="click" placement="bottom" overlay={popover}>
                                             <h5 className="reviewButton">Read review</h5>
                                         </OverlayTrigger>
                                     </div>

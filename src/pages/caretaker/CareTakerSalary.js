@@ -12,7 +12,7 @@ import Salary from '../../components/salary/Salary';
 const CareTakerSalary = () => {
   
   // Caretaker information
-  const { username, authToken, roles } = useContext(UserContext); 
+  const { username} = useContext(UserContext); 
   const [caretaker, setCaretaker] = useState({
       user_name: "",
       is_part_time: false,
