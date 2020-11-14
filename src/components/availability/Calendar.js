@@ -15,7 +15,9 @@ const FindWorkingDays = (leaveDays, date, startDate) => {
 
     const isInArray = (array, value) => {
         return !!array.find(item => {
-            return item.getTime() === value.getTime();
+            return item.getDate() == value.getDate() 
+                && item.getMonth() == value.getMonth()
+                && item.getYear() == value.getYear();
         });
     }
 
