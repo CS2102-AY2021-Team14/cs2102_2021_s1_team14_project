@@ -104,7 +104,7 @@ router.put("/updateEmployee", async (req, res) => {
     console.error("Could not update employee", error);
     res.status(404).json({ message: "Update employee error", error });
   }
-})
+});
 
 router.get("/employees", async (req, res) => {
   try {
@@ -118,5 +118,85 @@ router.get("/employees", async (req, res) => {
     res.status(404).json({ message: "Could not get employees from database", error });
   }
 });
+
+router.get(`/salary/:username/:month/:year`, async (req, res) => {
+  const username = req.params.username;
+  const month = req.params.month;
+  const year = req.params.year;
+  try {
+    const result = await Admin.getEmployeePricesForMonth(username, month, year);
+    res.status(200).json({
+      message: `Data fetch success`,
+      data: result.rows
+    })
+  } catch (error) {
+    console.error(`Could not get ${username}'s salary`);
+    res.status(404).json({
+      message: "Could not fetch month year price info",
+      error
+    });
+  }
+});
+
+router.get("/checkpay/:username/:month/:year", async (req, res) => {
+  const username = req.params.username;
+  const month = req.params.month;
+  const year = req.params.year;
+  try {
+    const result = await Admin.getSalaryInfoForMonth(username, month, year);
+    res.status(200).json({
+      message: `Successful retrieve of ${username} salary`,
+      data: result.rows
+    })
+  } catch (error) {
+    console.error(`Could not get ${username}'s salary`);
+    res.status(404).json({
+      message: `Failed fetching salary data from server`,
+      error
+    })
+  }
+})
+
+router.delete("/deletepay/:username/:month/:year", async (req, res) => {
+  const username = req.params.username;
+  const month = req.params.month;
+  const year = req.params.year;
+  try {
+    const result = await Admin.deleteSalaryForEmployeeOfMonth(username, month, year);
+    res.status(200).json({
+      message: `Successfully deleted ${username} salary for ${month}-${year}`,
+    });
+  } catch (error) {
+    console.error("Could not delete salary", error);
+    res.status(404).json({ message: "Delete salary error", error });
+  }
+});
+
+router.post("/paysalary", async (req, res) => {
+  try {
+    const {
+      care_taker,
+      month,
+      year,
+      pet_days,
+      amount
+    } = req.body;
+
+    const result = await Admin.insertSalaryInfoForEmployee(
+      care_taker,
+      month,
+      year,
+      pet_days,
+      amount
+    );
+
+    res.status(200).send({
+      message: `Insert salary success`,
+    })
+  } catch (error) {
+    console.error("Could not insert salary", error);
+    res.statusMessage(404).json({ message: "Insert salary error", error })
+  }
+})
 
 module.exports = router;
