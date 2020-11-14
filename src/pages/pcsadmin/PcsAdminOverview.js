@@ -47,27 +47,6 @@ const PcsAdminOverview = () => {
     setBaseDailyPrices(updatedPrices);
   };
 
-  const handleDelete = pet_type => {
-    const pet = pet_type.toLowerCase();
-
-    axios
-      .delete(`/api/admin/basedailyprices/${pet}`)
-      .then(response => {
-        toast.success(response.data.message);
-        removePrice(pet_type);
-      })
-      .catch(error => {
-        toast.error(error.response.data);
-      });
-  };
-
-  const removePrice = pet_type => {
-    const updatedPrices = baseDailyPrices.filter(
-      dailyPrice => dailyPrice.pet_type !== pet_type
-    );
-    setBaseDailyPrices(updatedPrices);
-  };
-
   const getBaseDailyPrices = async () => {
     axios
       .get("/api/admin/basedailyprices")

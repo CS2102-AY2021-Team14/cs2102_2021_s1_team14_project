@@ -1,12 +1,10 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import {
   Button,
-  Container,
   Form,
   Modal,
   Row,
   Col,
-  Card,
   Badge,
 } from "react-bootstrap";
 import { RiAuctionFill } from "react-icons/ri";

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Button, Card, Badge, OverlayTrigger, Popover } from "react-bootstrap";
 import { MdPerson, MdPets } from "react-icons/md";
 import { FaRegStickyNote } from "react-icons/fa";

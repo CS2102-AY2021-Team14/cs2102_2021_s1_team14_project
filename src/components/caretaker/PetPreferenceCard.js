@@ -1,6 +1,5 @@
 import React from "react";
 import { Button, Card, Row, Col } from 'react-bootstrap';
-import PET_TYPES from "../../utils/PetTypes";
 
 const PetPreferenceCard = (props) => {
   const {
