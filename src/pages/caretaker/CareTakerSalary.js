@@ -8,12 +8,15 @@ import { UserContext } from "../../utils/UserProvider";
 // import Avatar from '../../components/avatar/Avatar';
 import Salary from '../../components/salary/Salary';
 import { Typography } from "@material-ui/core";
+import Loader from "../../components/Loader";
 
 const CareTakerSalary = () => {
   
   // Caretaker information
   const { username } = useContext(UserContext); 
   const [allSalaries, setAllSalaries] = useState([])
+
+  const [isLoading, setIsLoading] = useState(true);
 
   const getCareTakerSalary = (username) => {
     axios.get(`/api/caretaker/${username}/salary`)
@@ -22,6 +25,7 @@ const CareTakerSalary = () => {
             const fetchedSalaries = data.data ?? [];
             console.log(fetchedSalaries);
             setAllSalaries(fetchedSalaries);
+            setIsLoading(false);
           })
           .catch(err => console.error(err.response.data.message));
   }
@@ -50,30 +54,45 @@ const CareTakerSalary = () => {
   //     jobs: caretakerJobs,
   // }
 
-  return (
-    <div>
-      <Navbar />
-        <Container fluid>
-          <Row className="justify-content-md-center">
-            <Col xs={2} id="sidebar">
-              <CaretakerSidebar defaultKey={"Salary"} />
-            </Col>
-            <Col xs={8} id="page-content">
-              <Typography variant='h6'>
-                You've been working hard {username} !
-              </Typography>
-              <Typography variant='h6'>
-                Here are your monthly salaries:
-              </Typography>
-              {allSalaries && <Salary allSalaries={allSalaries} />}
-            </Col>
-            {/* <Col xs={2} id="avatar">
-              <Avatar user={caretakerInfo} />
-            </Col> */}
-          </Row>  
-        </Container>
-    </div>
-  )
+  const message = (allSalaries.length == 0) 
+    ? 'Please work harder ' + username + ", this is unacceptable!"
+    : 'Enjoy your money while it lasted ' + username + "!";
+
+  if (isLoading) {
+    return <Loader />
+  } else {
+    return (
+      <div>
+        <Navbar />
+          <Container fluid style={{
+            marginTop: '2vh'
+          }}>
+            <Row className="justify-content-md-center">
+              <Col xs={2} id="sidebar">
+                <CaretakerSidebar defaultKey={"Salary"} />
+              </Col>
+              <Col xs={10} id="page-content">
+                <Typography variant='h6' style={{
+                  marginBottom: '2vh',
+                  fontWeight: 'bold',
+                  textAlign: 'center',
+                  backgroundColor: '#FC5185',
+                  padding: '20px',
+                  color: 'white',
+                  borderRadius: '5px'
+                }}>
+                  {message}
+                </Typography>
+                {allSalaries && <Salary allSalaries={allSalaries} />}
+              </Col>
+              {/* <Col xs={2} id="avatar">
+                <Avatar user={caretakerInfo} />
+              </Col> */}
+            </Row>  
+          </Container>
+      </div>
+    )
+  }
 };
 
 export default CareTakerSalary;

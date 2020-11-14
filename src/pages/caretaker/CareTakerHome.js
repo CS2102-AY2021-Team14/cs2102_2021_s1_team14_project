@@ -17,7 +17,7 @@ import { UserContext } from "../../utils/UserProvider";
 const CareTakerHome = () => {
 
     // Caretaker information
-    const { username } = useContext(UserContext); 
+    const { username, authToken, roles } = useContext(UserContext); 
     const [caretaker, setCaretaker] = useState({
         user_name: "",
         is_part_time: false,
@@ -45,7 +45,7 @@ const CareTakerHome = () => {
             .get(caretakerURL)
             .then((res) => {
                 var caretakerData = res.data[0];
-                setCaretaker(caretakerData);
+                setCaretaker(caretakerData);     
             });
 
         // Get caretaker job

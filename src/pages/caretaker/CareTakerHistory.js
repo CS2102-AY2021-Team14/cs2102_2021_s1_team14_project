@@ -37,6 +37,7 @@ const CareTakerHistory = () => {
             .then((res) => {
                 var caretakerData = res.data[0];
                 setCaretaker(caretakerData);
+                setIsLoading(false);
             });
 
         // Get caretaker job
@@ -45,7 +46,6 @@ const CareTakerHistory = () => {
             .then((res) => {
                 var caretakerJobData = res.data.data;
                 setCaretakerJobs(caretakerJobData);
-                setIsLoading(false);
             });
     }, [])
 
