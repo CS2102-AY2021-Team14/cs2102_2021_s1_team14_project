@@ -11,6 +11,10 @@ const EditPriceModal = (props) => {
     editPetType
   } = props;
 
+  const editPrice = () => {
+    editPetType(petType, price);
+    setOpen(false);
+  }
 
   return (
     <Modal
@@ -39,7 +43,7 @@ const EditPriceModal = (props) => {
         </Form.Group>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={() => editPetType(petType, price)}>
+        <Button onClick={() => editPrice()}>
           Submit
         </Button>
       </Modal.Footer>
