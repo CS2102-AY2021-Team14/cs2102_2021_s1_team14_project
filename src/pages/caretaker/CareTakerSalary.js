@@ -54,7 +54,7 @@ const CareTakerSalary = () => {
   //     jobs: caretakerJobs,
   // }
 
-  const message = (allSalaries.length == 0) 
+  const message = (allSalaries.length === 0) 
     ? 'Please work harder ' + username + ", this is unacceptable!"
     : 'Enjoy your money while it lasted ' + username + "!";
 

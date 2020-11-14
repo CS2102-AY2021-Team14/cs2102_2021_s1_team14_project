@@ -28,7 +28,7 @@ const AddLeaveModal = (props) => {
           selected={leaveDate}
           onChange={date => setLeaveDate(date)}
           filterDate={date => { return caretakerLeaves.filter(d => 
-            d.getDate() == date.getDate() && d.getMonth() == date.getMonth() && d.getYear() == date.getYear()
+            d.getDate() === date.getDate() && d.getMonth() === date.getMonth() && d.getYear() === date.getYear()
           ).length === 0 }}
           inline
         />
