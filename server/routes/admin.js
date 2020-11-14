@@ -104,7 +104,7 @@ router.put("/updateEmployee", async (req, res) => {
     console.error("Could not update employee", error);
     res.status(404).json({ message: "Update employee error", error });
   }
-})
+});
 
 router.get("/employees", async (req, res) => {
   try {
@@ -116,6 +116,27 @@ router.get("/employees", async (req, res) => {
   } catch (error) {
     console.error("Could not get employees");
     res.status(404).json({ message: "Could not get employees from database", error });
+  }
+});
+
+router.get(`/salary/:username/:month/:year`, async (req, res) => {
+  const username = req.params.username;
+  const month = req.params.month;
+  const year = req.params.year;
+  try {
+    console.log("Username whee: " + username + " " + month + " " + year);
+    const result = await Admin.getEmployeePricesForMonth(username, month, year);
+    console.log(result);
+    res.status(200).json({
+      message: `Data fetch success`,
+      data: result.rows
+    })
+  } catch (error) {
+    console.error(`Could not get ${username}'s salary`);
+    res.status(404).json({
+      message: "Could not fetch month year price info",
+      error
+    });
   }
 });
 
