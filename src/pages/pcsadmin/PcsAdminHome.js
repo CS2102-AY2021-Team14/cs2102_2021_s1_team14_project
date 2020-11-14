@@ -186,12 +186,8 @@ const PcsAdminHome = () => {
 
   const handleRowClick = (e) => {
     if (e.target.id !== 'edit-btn' && e.target.id) {
-      console.log(e.target.id); // gives me user name
       setSelectedEmp(e.target.id); // username of the employee selected
       setIsModalOpen(true);
-      console.log(selectedDate.getMonth());
-      console.log(selectedDate.getFullYear());
-      console.log(usersMap.get(e.target.id));
     }
   }
 
@@ -215,7 +211,6 @@ const PcsAdminHome = () => {
       const letter_month = monthsMap['' + month];
       axios.delete(`/api/admin/deletepay/${care_taker}/${letter_month}/${year}`)
         .then(res => {
-          console.log(res.data.message);
           toast.error(`You have unpaid ${care_taker} for ${letter_month}-${year}`);
           setUnpayButtonShow(false);
         })
@@ -237,7 +232,6 @@ const PcsAdminHome = () => {
       axios.get(`/api/admin/checkpay/${care_taker}/${letter_month}/${year}`)
         .then(res => {
           const { data } = res;
-          console.log(data.data);
           if (data.data.length > 0) {
             toast.success(`You have paid ${care_taker}: ${data.data[0].amount} for ${letter_month}-${year}`);
             setUnpayButtonShow(true);
@@ -254,7 +248,6 @@ const PcsAdminHome = () => {
 
   // Payment of a salary of the computed amount to stated employee
   const handlePaySalary = () => {
-    console.log("Pay salary");
     const currSalaryData = salaryData;
     const { care_taker, month, year, pet_days, amount } = currSalaryData;
     if (amount <= 0) {
@@ -270,10 +263,8 @@ const PcsAdminHome = () => {
       pet_days,
       amount
     }
-    console.log(body);
     axios.post(`/api/admin/paysalary`, body)
       .then(res => {
-        console.log(res.data.message);
         toast.success(`You have paid ${care_taker} $${amount} for ${letter_month}-${year}`);
         setPayButtonShow(false);
       })
@@ -283,15 +274,10 @@ const PcsAdminHome = () => {
   }
 
   const handleDateChange = (value) => {
-    console.log(value);
     setSelectedDate(value);
-    console.log(selectedEmp);
-    console.log(value.getMonth() + 1);
-    console.log(value.getFullYear());
     axios.get(`/api/admin/salary/${selectedEmp}/${value.getMonth() + 1}/${value.getFullYear()}`)
       .then(res => {
         const { data } = res;
-        console.log(data.data);
         //  setSalaryData(data.data ?? []);
 
         // Compute salaries
@@ -332,15 +318,12 @@ const PcsAdminHome = () => {
   }
 
   const computePartTimeSalary = (pricesArr) => {
-    console.log(pricesArr);
     let salary = 0;
     let petDays = 0;
     for (let i = 0; i < pricesArr.length; i++) {
       salary += pricesArr[i].pet_days * pricesArr[i].price;
       petDays += pricesArr[i].pet_days;
     }
-    console.log(salary);
-    console.log(petDays);
     return [salary, petDays];
   }
 
@@ -363,7 +346,6 @@ const PcsAdminHome = () => {
   }
 
   const openInPopup = item => {
-    console.log(item);
     setInfoToEdit({ ...item });
     setOpenPopup(true);
   };
