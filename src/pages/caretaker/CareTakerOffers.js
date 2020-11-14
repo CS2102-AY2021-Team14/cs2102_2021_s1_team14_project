@@ -19,9 +19,11 @@ const CareTakerOffers = () => {
 
   const [caretakerSalary, setCaretakerSalary] = useState([]);
   const [caretakerJobs, setCaretakerJobs] = useState([]);
+  const [caretakerBids, setCaretakerBids] = useState([]);
 
   // All the backend URL
-  const serverURL = 'http://localhost:8080/api/caretaker/';
+  const serverURL = '/api/caretaker/';
+  const activeBidsURL = "/api/bids/active";
   const caretakerURL = serverURL + username;
   const caretakerSalaryURL = caretakerURL + "/salary";
   const caretakerJobsURL = caretakerURL + "/jobs";
@@ -34,7 +36,6 @@ const CareTakerOffers = () => {
           .then((res) => {
               var caretakerData = res.data[0];
               setCaretaker(caretakerData);
-              console.log("Content of this caretaker is: " + JSON.stringify(caretakerData));
           });
 
       // Getting caretaker salary
@@ -43,7 +44,6 @@ const CareTakerOffers = () => {
           .then((res) => {
               var caretakerSalaryData = res.data.data;
               setCaretakerSalary(caretakerSalaryData);
-              console.log("This caretaker salary data is: " + JSON.stringify(caretakerSalaryData));
           });
 
       // Get caretaker job
@@ -52,17 +52,43 @@ const CareTakerOffers = () => {
           .then((res) => {
               var caretakerJobData = res.data.data;
               setCaretakerJobs(caretakerJobData);
-              console.log("This caretaker job information is: " + JSON.stringify(caretakerJobData))
           });
+
+      // Get all active bids
+      axios 
+          .get(activeBidsURL)
+          .then((res) => {
+            var caretakerBidsData = res.data.data;
+            setCaretakerBids(caretakerBidsData);
+          })
   }, [])
 
   // Find employment
   const findEmployment = () => {
-      if (caretakerJobs.length < 1) {
-          return "UNEMPLOYED";
-      } else {
-          return "EMPLOYED";
-      }
+    let currentJobs = [];
+    const today = new Date();
+    for (var i = 0; i < caretakerJobs.length; i ++) {
+        const jobStart = new Date(caretakerJobs[i].start_date)
+        const jobEnd = new Date(caretakerJobs[i].end_date);
+        if (today.getTime() >= jobStart.getTime() && today.getTime() <= jobEnd.getTime()) {
+            currentJobs.push(caretakerJobs[i]);
+        }
+    }
+    if (currentJobs.length < 1) {
+        return "UNEMPLOYED";
+    } else {
+        return "EMPLOYED";
+    }
+  }
+
+  const findPersonalActiveBids = () => {
+    let activeBids = [];
+    for (var i = 0; i < caretakerBids.length; i ++) {
+      if (caretakerBids[i].care_taker ===  caretaker.user_name) {
+        activeBids.push(caretakerBids[i]);
+      } 
+    }
+    return activeBids;
   }
 
   const caretakerInfo = {
@@ -71,6 +97,7 @@ const CareTakerOffers = () => {
       job: caretaker.is_part_time ? "Part time" : "Full time",
       join: (new Date(2020, 8, 9).toDateString().split(" ").splice(1).join(" ")),
       employment: findEmployment(),
+      activeBids: findPersonalActiveBids(),
       salary: caretakerSalary,
       jobs: caretakerJobs,
   }
@@ -84,7 +111,7 @@ const CareTakerOffers = () => {
             <CaretakerSidebar defaultKey={"Offers"} />
           </Col>
           <Col xs={8} id="page-content">
-            <Offers />
+            <Offers activeBids={caretakerInfo.activeBids} username={caretakerInfo.username}/>
           </Col>
           <Col xs={2} id="avatar">
             <Avatar user={caretakerInfo} />

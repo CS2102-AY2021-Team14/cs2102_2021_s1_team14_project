@@ -1,0 +1,70 @@
+.offercontainer {
+    margin-top: 2vh;   
+    margin-bottom: 2vh;
+}
+
+.offercontainer h2 {
+    background-color: #364F6B;
+    color: white;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em; 
+    font-size: 1.3em;
+    border-radius: 10px 10px 0px 0px;
+    margin: 0;
+}
+
+.offersitems {
+    border: 2px solid #364F6B;
+    border-radius: 0px 0px 10px 10px;
+}
+
+.ownerinfo {
+    display: flex;
+    align-items: center;
+}
+
+.ownername {
+    text-decoration: underline;
+    margin-left: 20px;
+}
+
+.offercardContainer {
+    display: flex;
+    border-radius: 10px;
+    align-items: center;
+    margin: 2vh;
+    background-color: #364F6B;
+    padding: 10px 20px 10px 20px;
+}
+
+.offercard {
+    text-align: left;
+    margin-right: auto;
+    float: left;
+}
+
+.offersitems .nojob {
+    font-size: 1em;
+    padding: 20px;
+}
+
+.offercard h4, .offercard h3, .offercard p {
+    padding: 0px;
+    margin: 0px;
+    color: white;
+    font-size: 1em;
+}
+
+.offerPayment h1 {
+    background-color: rgb(29, 139, 1);
+    color: white;
+    text-align: center;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.offerButtons .btn {
+    width: 150px;
+    font-size: large;
+    margin-left: 50px;
+}

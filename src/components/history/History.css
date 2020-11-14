@@ -18,6 +18,11 @@
     border-radius: 0px 0px 10px 10px;
 }
 
+.historyItems .nohistory {
+    font-size: 1em;
+    padding: 20px;
+}
+
 .historyCard{
     margin: 2vh;
     background-color: #364F6B;

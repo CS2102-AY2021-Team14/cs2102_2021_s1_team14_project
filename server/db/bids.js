@@ -111,7 +111,7 @@ class Bids {
     return pool.query(
       `
       UPDATE bids
-        SET payment_type = $5, transfer_method = $6
+        SET payment_type = $5, transfer_method = $6, is_active = False, is_successful = True
         WHERE pet = $1 AND care_taker = $2 AND start_date = $3 AND end_date = $4;
     `,
       [pet, care_taker, start_date, end_date, payment_type, transfer_method]

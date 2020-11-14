@@ -29,12 +29,6 @@ const sideBarData = [
         key: "Availability",
         link: ROUTES.CARE_TAKER_AVAILABILITY
     },
-    {
-        icon: <FaIcons.FaCog />,
-        key: "Settings",
-        link: "#"
-    }
-
 ];
 
 const CaretakerSidebar = ({ defaultKey }) => {
