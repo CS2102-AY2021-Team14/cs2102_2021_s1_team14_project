@@ -113,21 +113,21 @@ class Admin {
   // Retrieve employee salary
   static getSalaryInfoForMonth(username, month, year) {
     return pool.query(`
-      SELECT amount, pet_days FROM salary WHERE care_taker = $1, month = $2, year = $3
+      SELECT amount, pet_days FROM salary WHERE care_taker = $1 AND month = $2 AND year = $3
     `, [username, month, year]);
   }
 
   // Update employee salary
   static updateSalaryInfoForMonth(username, month, year, amount, petDays) {
     return pool.query(`
-      UPDATE salary SET amount = $1, pet_days = $2 WHERE care_taker = $1, month = $2, year = $3
+      UPDATE salary SET amount = $1, pet_days = $2 WHERE care_taker = $1 AND month = $2 AND year = $3
     `, [amount, petDays, username, month, year]);
   }
 
   // Delete employee salary (for eg. after paid by admin)
   static deleteSalaryForEmployeeOfMonth(username, month, year) {
     return pool.query(`
-      DELETE FROM salary WHERE care_taker = $1, month = $2, year = $3
+      DELETE FROM salary WHERE care_taker = $1 AND month = $2 AND year = $3
     `, [username, month, year]);
   }
 

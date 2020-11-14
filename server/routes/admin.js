@@ -124,7 +124,6 @@ router.get(`/salary/:username/:month/:year`, async (req, res) => {
   const month = req.params.month;
   const year = req.params.year;
   try {
-    console.log("Username whee: " + username + " " + month + " " + year);
     const result = await Admin.getEmployeePricesForMonth(username, month, year);
     console.log(result);
     res.status(200).json({
@@ -139,5 +138,25 @@ router.get(`/salary/:username/:month/:year`, async (req, res) => {
     });
   }
 });
+
+router.get("/checkpay/:username/:month/:year", async (req, res) => {
+  const username = req.params.username;
+  const month = req.params.month;
+  const year = req.params.year;
+  try {
+    const result = await Admin.getSalaryInfoForMonth(username, month, year);
+    console.log(result);
+    res.status(200).json({
+      message: `Successful retrieve of ${username} salary`,
+      data: result.rows
+    })
+  } catch (error) {
+    console.error(`Could not get ${username}'s salary`);
+    res.status(404).json({
+      message: `Failed fetching salary data from server`,
+      error
+    })
+  }
+})
 
 module.exports = router;

@@ -3,6 +3,8 @@ import { Container, Row, Col } from "react-bootstrap";
 import Navbar from "../../components/Navbar";
 import AdminSidebar from "../../components/sidebar/AdminSidebar";
 import {
+  Grid,
+  Button,
   Modal,
   Paper,
   Typography,
@@ -27,6 +29,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 import styles from "../../components/admin/styles/PcsAdmin.module.css";
+import { toast } from "react-toastify";
 
 const PcsAdminHome = () => {
   const [employeeInfos, setEmployeesInfo] = useState([]);
@@ -59,7 +62,7 @@ const PcsAdminHome = () => {
     name: "",
   });
 
-  // Salary modal states
+  // Salary states
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [salaryData, setSalaryData] = useState(null);
@@ -72,6 +75,21 @@ const PcsAdminHome = () => {
     { label: "Part-Time/Full-Time", id: "ptft", disableSort: true },
     { label: "", id: " ", disableSort: true },
   ];
+
+  const monthsMap = {
+    '1' : 'Jan',
+    '2' : 'Feb',
+    '3' : 'Mar',
+    '4' : 'Apr',
+    '5' : 'May',
+    '6' : 'Jun',
+    '7' : 'Jul',
+    '8' : 'Aug',
+    '9' : 'Sep',
+    '10' : 'Oct',
+    '11' : 'Nov',
+    '12' : 'Dec'
+}
 
   const handleSortRequest = cellId => {
     const isAsc = orderBy === cellId && order === "asc";
@@ -179,6 +197,35 @@ const PcsAdminHome = () => {
     setIsModalOpen(false);
     setSelectedDate(new Date());
     setSalaryData(null);
+  }
+
+  const handleCheckPay = () => {
+    // toast.success("Clicked");
+    const currSalaryData = salaryData;
+    if (currSalaryData) {
+      const {
+        care_taker,
+        month,
+        year,
+      } = currSalaryData;
+      const letter_month = monthsMap['' + month];
+      console.log(letter_month);
+      axios.get(`/api/admin/checkpay/${care_taker}/${letter_month}/${year}`)
+            .then(res => {
+              const { data } = res;
+              console.log(data.data);
+              if (data.data.length > 0) {
+                toast.success(`You have paid ${care_taker}: ${data.data[0].amount} for ${letter_month}-${year}`);
+              } else {
+                toast.warning(`You have not paid ${care_taker} for ${letter_month}-${year}`);
+              }
+            })
+            .catch(err => {
+              console.error(err.response.data.message);
+            });
+
+      
+    }
   }
 
   const handleDateChange = (value) => {
@@ -360,6 +407,10 @@ const PcsAdminHome = () => {
               ></Popup>
               <Modal open={isModalOpen} onClose={handleClose}>
                 <Card className={styles.modalcard}>
+                    <br />
+                    <Typography align='center'>
+                      Select month to check employee salary
+                    </Typography>
                     <CardContent className={styles.yearpicker}>
                       <DatePicker
                         selected={selectedDate}
@@ -390,6 +441,24 @@ const PcsAdminHome = () => {
                           </TableRow>
                         </TableBody>
                       </Table>}
+                      {salaryData && 
+                      <Grid container className={styles.container}>
+                        <Grid item xs={12} sm={4}>
+                          <Button variant="contained" color="secondary">
+                            UNPAY
+                          </Button>
+                        </Grid>
+                        <Grid item xs={12} sm={4}>
+                          <Button variant="contained" className={styles.warning} onClick={handleCheckPay}>
+                            CHECK PAY
+                          </Button>
+                        </Grid>
+                        <Grid item xs={12} sm={4}>
+                          <Button variant="contained" color="primary">
+                            PAY
+                          </Button>
+                        </Grid>
+                      </Grid>}
                     </CardContent>
                 </Card>
               </Modal>
