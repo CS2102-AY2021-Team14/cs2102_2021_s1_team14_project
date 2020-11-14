@@ -37,7 +37,7 @@ const ReviewsModal = props => {
       </Modal.Header>
       <Modal.Body>
         <ListGroup>
-          {reviews.length == 0 && (
+          {reviews.length === 0 && (
             <ListGroup.Item>No reviews for this caretaker yet</ListGroup.Item>
           )}
           {reviews.map((review, index) => {

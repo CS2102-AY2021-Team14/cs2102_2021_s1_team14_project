@@ -3,9 +3,9 @@ import './History.css';
 import { Popover, OverlayTrigger } from "react-bootstrap";
 import StarRatings from "react-star-ratings";
 
-const History = ({histories}) => {
+const History = ({ histories }) => {
 
-    if(histories.length == 0) {
+    if (histories.length === 0) {
         return (
             <div className="historyContainer">
                 <h2>History</h2>
@@ -15,7 +15,7 @@ const History = ({histories}) => {
             </div>
         )
     } else {
-        return(
+        return (
             <div className="historyContainer">
                 <h2>History</h2>
                 <div className="historyItems">
@@ -56,15 +56,15 @@ const History = ({histories}) => {
                                         <OverlayTrigger trigger="click" placement="bottom" overlay={popover} trigger="hover">
                                             <h5 className="reviewButton">Read review</h5>
                                         </OverlayTrigger>
-                                    </div>  
+                                    </div>
                                 </div>
                             );
                         })
-                    } 
+                    }
                 </div>
             </div>
         );
-    }   
+    }
 };
 
 export default History;
