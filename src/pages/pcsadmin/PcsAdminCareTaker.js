@@ -60,13 +60,13 @@ const PcsAdminHome = () => {
                   {console.log(caretaker.error_types, caretaker.error_datas)}
                   {
                     caretaker.error_types.map((error_type, index) => {
-                      if (error_type == 1) {
+                      if (error_type === 1) {
                         return (
                           <Card.Text>
                             Average Rating is: {caretaker.error_datas[index]}
                           </Card.Text>
                         );
-                      } else if (error_type == 2) {
+                      } else if (error_type === 2) {
                         return (
                           <Card.Text>
                             Average Pet Days Per Month is: {caretaker.error_datas[index]}
