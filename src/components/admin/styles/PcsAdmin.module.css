@@ -23,3 +23,32 @@
     background-color: #a6d4fa !important;
     cursor: pointer !important;
 }
+
+.modalcard {
+    position: 'absolute';
+    text-align: 'center';
+    width: 500px;
+    height: 500px;
+    box-shadow: #888888;
+    border: '2px solid #000000';
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+}
+
+.yearpicker {
+    text-align: center !important;
+}
+
+.container {
+    margin-top: 30px !important;
+    text-align: center !important;
+}
+
+.warning {
+    background-color: rgb(250, 197, 62) !important;
+}
+
+.warning:hover {
+    background-color: rgb(192, 139, 4) !important;
+}
