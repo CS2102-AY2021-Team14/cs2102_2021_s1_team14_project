@@ -20,7 +20,7 @@ const RemoveLeaveModal = (props) => {
       centered
     >
       <Modal.Header closeButton>
-        <Modal.Title>Add a new Leave Date</Modal.Title>
+        <Modal.Title>Remove a Leave Date</Modal.Title>
       </Modal.Header>
       <Modal.Body class="p-3 d-flex justify-content-center">
         <DatePicker
