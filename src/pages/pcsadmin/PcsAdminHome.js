@@ -24,12 +24,12 @@ import {
 import axios from "axios";
 import TablePageScroll from "../../components/admin/TablePageScroll";
 import { BiSearchAlt, BiEditAlt } from "react-icons/bi";
-import Popup from "../../components/admin/Popup";
+import { toast } from "react-toastify";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 import styles from "../../components/admin/styles/PcsAdmin.module.css";
-import { toast } from "react-toastify";
+import Popup from "../../components/admin/Popup";
 
 const PcsAdminHome = () => {
   const [employeeInfos, setEmployeesInfo] = useState([]);
@@ -131,21 +131,17 @@ const PcsAdminHome = () => {
                 const usersMap = new Map();
                 const { data } = response;
                 setEmployeesInfo(data.employeesInfo);
-
-                const fetchedData = data.employeesInfo?.map(emp => {
+                
+                for (let i = 0; i < data.employeesInfo.length; i++) {
                   const {
                     user_name,
-                    is_part_time
-                  } = emp;
+                    is_part_time,
+                  } = data.employeesInfo[i];
 
-                usersMap.set(user_name, is_part_time);
+                  usersMap.set(user_name, is_part_time);
 
-                return {
-                  user_name,
-                  is_part_time,
-                };
-                });
-                setUsersMap(usersMap ?? {});
+                }
+                setUsersMap(usersMap);
           })
           .catch(err => console.error(err.response.data.message));
   };
