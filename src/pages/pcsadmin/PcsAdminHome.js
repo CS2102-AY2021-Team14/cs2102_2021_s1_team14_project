@@ -126,25 +126,28 @@ const PcsAdminHome = () => {
   };
 
   const getEmployeesInfo = async () => {
-    axios.get("/api/admin/employees").then(response => {
-      const usersMap = new Map();
-      const { data } = response;
-      setEmployeesInfo(data.employeesInfo);
-      const fetchedData = data.employeesInfo?.map(emp => {
-        const {
-          user_name,
-          is_part_time
-        } = emp;
+    axios.get("/api/admin/employees")
+          .then(response => {
+                const usersMap = new Map();
+                const { data } = response;
+                setEmployeesInfo(data.employeesInfo);
 
-        usersMap.set(user_name, is_part_time);
+                const fetchedData = data.employeesInfo?.map(emp => {
+                  const {
+                    user_name,
+                    is_part_time
+                  } = emp;
 
-        return {
-          user_name,
-          is_part_time,
-        };
-      });
-      setUsersMap(usersMap ?? {});
-    });
+                usersMap.set(user_name, is_part_time);
+
+                return {
+                  user_name,
+                  is_part_time,
+                };
+                });
+                setUsersMap(usersMap ?? {});
+          })
+          .catch(err => console.error(err.response.data.message));
   };
 
   const employeesInfoDisplay = () => {
