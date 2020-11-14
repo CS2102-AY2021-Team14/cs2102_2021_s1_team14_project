@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Button, Container, Row, Col, Modal } from 'react-bootstrap';
+import { Button, Container, Row, Col } from 'react-bootstrap';
 import Navbar from '../../components/Navbar';
 import CaretakerSidebar from '../../components/sidebar/CaretakerSidebar';
 import axios from 'axios';
@@ -10,10 +10,11 @@ import Calendar from "../../components/availability/Calendar";
 import { toast } from "react-toastify";
 import AddLeaveModal from "../../components/caretaker/AddLeaveModal";
 import RemoveLeaveModal from "../../components/caretaker/RemoveLeaveModal";
+import PetTypeSelector from "../../components/caretaker/PetTypeSelector";
 
 const CareTakerAvailability = () => {
   // Caretaker information
-  const { username, authToken, roles } = useContext(UserContext);
+  const { username } = useContext(UserContext);
   const [caretaker, setCaretaker] = useState({
     user_name: "",
     is_part_time: false,
@@ -30,12 +31,16 @@ const CareTakerAvailability = () => {
   const [isDeleterOpen, setDeleterOpen] = useState(false);
   const [removedDate, setRemovedDate] = useState(new Date());
 
+  const [petTypes, setPetTypes] = useState([]);
+
   // All the backend URL
   const serverURL = '/api/caretaker/';
   const caretakerURL = serverURL + username;
   const caretakerSalaryURL = caretakerURL + "/salary";
   const caretakerJobsURL = caretakerURL + "/jobs";
   const caretakerLeaveURL = caretakerURL + "/leaves";
+  const caretakerPetTypesURL = caretakerURL + "/pettype";
+  const caretakerPetTypesEditURL = caretakerPetTypesURL + "/edit";
 
   const addLeave = (date) => {
     axios
@@ -70,7 +75,41 @@ const CareTakerAvailability = () => {
         var caretakerLeaveData = res.data.data;
         let caretakerLeaveDates = caretakerLeaveData.map(item => new Date(item.leave_date));
         setCaretakerLeaves(caretakerLeaveDates);
-        console.log("This caretaker leave date is: " + JSON.stringify(caretakerLeaveData));
+      });
+  }
+
+  const addPetType = (pet_type) => {
+    axios
+      .post(caretakerPetTypesURL, { pet_type: pet_type, is_part_time: caretaker.is_part_time })
+      .then(() => {
+        toast.success(`Added ${pet_type} to your preferences`);
+        getTypes();
+      })
+      .catch(error => {
+        toast.error(`Error adding ${pet_type}!`);
+      });
+  }
+
+
+  const editPetType = (pet_type, price) => {
+    axios
+      .post(caretakerPetTypesEditURL, { pet_type: pet_type, price: price })
+      .then(() => {
+        toast.success(`Edited price for ${pet_type}!`);
+        getTypes();
+      })
+      .catch(error => {
+        console.log(error);
+        toast.error(`Error editing price for ${pet_type}!`);
+      });
+  }
+
+  const getTypes = () => {
+    axios
+      .get(caretakerPetTypesURL)
+      .then((res) => {
+        var petPreferencesData = res.data;
+        setPetTypes(petPreferencesData);
       });
   }
 
@@ -82,7 +121,6 @@ const CareTakerAvailability = () => {
       .then((res) => {
         var caretakerData = res.data[0];
         setCaretaker(caretakerData);
-        console.log("Content of this caretaker is: " + JSON.stringify(caretakerData));
       });
 
     // Getting caretaker salary
@@ -91,7 +129,6 @@ const CareTakerAvailability = () => {
       .then((res) => {
         var caretakerSalaryData = res.data.data;
         setCaretakerSalary(caretakerSalaryData);
-        console.log("This caretaker salary data is: " + JSON.stringify(caretakerSalaryData));
       });
 
     // Get caretaker job
@@ -100,20 +137,29 @@ const CareTakerAvailability = () => {
       .then((res) => {
         var caretakerJobData = res.data.data;
         setCaretakerJobs(caretakerJobData);
-        console.log("This caretaker job information is: " + JSON.stringify(caretakerJobData))
       });
 
     getLeaves();
+    getTypes();
   }, [])
 
   // Find employment
   const findEmployment = () => {
-    if (caretakerJobs.length < 1) {
-      return "UNEMPLOYED";
-    } else {
-      return "EMPLOYED";
+    let currentJobs = [];
+    const today = new Date();
+    for (var i = 0; i < caretakerJobs.length; i ++) {
+        const jobStart = new Date(caretakerJobs[i].start_date)
+        const jobEnd = new Date(caretakerJobs[i].end_date);
+        if (today.getTime() >= jobStart.getTime() && today.getTime() <= jobEnd.getTime()) {
+            currentJobs.push(caretakerJobs[i]);
+        }
     }
-  }
+    if (currentJobs.length < 1) {
+        return "UNEMPLOYED";
+    } else {
+        return "EMPLOYED";
+    }
+}
 
   const caretakerInfo = {
     username: caretaker.user_name,
@@ -138,7 +184,7 @@ const CareTakerAvailability = () => {
           <Col xs={2} id="sidebar">
             <CaretakerSidebar defaultKey={"Availability"} />
           </Col>
-          <Col xs={8} id="page-content">
+          <Col xs={4} id="page-content">
             <Row>
               <Calendar caretakerAvailability={availability} />
             </Row>
@@ -167,6 +213,9 @@ const CareTakerAvailability = () => {
               caretakerLeaves={caretakerLeaves}
               deleteLeave={deleteLeave}
             />
+          </Col>
+          <Col xs={4} id="page-content">
+            <PetTypeSelector isPartTime={caretaker.is_part_time} petTypes={petTypes} editPetType={editPetType} addPetType={addPetType} />
           </Col>
           <Col xs={2} id="avatar">
             <Avatar user={caretakerInfo} />

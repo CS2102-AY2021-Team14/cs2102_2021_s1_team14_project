@@ -125,7 +125,6 @@ router.get(`/salary/:username/:month/:year`, async (req, res) => {
   const year = req.params.year;
   try {
     const result = await Admin.getEmployeePricesForMonth(username, month, year);
-    console.log(result);
     res.status(200).json({
       message: `Data fetch success`,
       data: result.rows
@@ -145,7 +144,6 @@ router.get("/checkpay/:username/:month/:year", async (req, res) => {
   const year = req.params.year;
   try {
     const result = await Admin.getSalaryInfoForMonth(username, month, year);
-    console.log(result);
     res.status(200).json({
       message: `Successful retrieve of ${username} salary`,
       data: result.rows
@@ -165,7 +163,6 @@ router.delete("/deletepay/:username/:month/:year", async (req, res) => {
   const year = req.params.year;
   try {
     const result = await Admin.deleteSalaryForEmployeeOfMonth(username, month, year);
-    console.log(result);
     res.status(200).json({
       message: `Successfully deleted ${username} salary for ${month}-${year}`,
     });

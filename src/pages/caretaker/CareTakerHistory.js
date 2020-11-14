@@ -20,13 +20,11 @@ const CareTakerHistory = () => {
         introduction: ""
     });
 
-    const [caretakerSalary, setCaretakerSalary] = useState([]);
     const [caretakerJobs, setCaretakerJobs] = useState([]);
 
     // All the backend URL
-    const serverURL = 'http://localhost:8080/api/caretaker/';
+    const serverURL = '/api/caretaker/';
     const caretakerURL = serverURL + username;
-    const caretakerSalaryURL = caretakerURL + "/salary";
     const caretakerJobsURL = caretakerURL + "/jobs";
 
     // API call
@@ -37,16 +35,6 @@ const CareTakerHistory = () => {
             .then((res) => {
                 var caretakerData = res.data[0];
                 setCaretaker(caretakerData);
-                console.log("Content of this caretaker is: " + JSON.stringify(caretakerData));
-            });
-
-        // Getting caretaker salary
-        axios
-            .get(caretakerSalaryURL)
-            .then((res) => {
-                var caretakerSalaryData = res.data.data;
-                setCaretakerSalary(caretakerSalaryData);
-                console.log("This caretaker salary data is: " + JSON.stringify(caretakerSalaryData));
             });
 
         // Get caretaker job
@@ -55,13 +43,21 @@ const CareTakerHistory = () => {
             .then((res) => {
                 var caretakerJobData = res.data.data;
                 setCaretakerJobs(caretakerJobData);
-                console.log("This caretaker job information is: " + JSON.stringify(caretakerJobData))
             });
     }, [])
 
     // Find employment
     const findEmployment = () => {
-        if (caretakerJobs.length < 1) {
+        let currentJobs = [];
+        const today = new Date();
+        for (var i = 0; i < caretakerJobs.length; i ++) {
+            const jobStart = new Date(caretakerJobs[i].start_date)
+            const jobEnd = new Date(caretakerJobs[i].end_date);
+            if (today.getTime() >= jobStart.getTime() && today.getTime() <= jobEnd.getTime()) {
+                currentJobs.push(caretakerJobs[i]);
+            }
+        }
+        if (currentJobs.length < 1) {
             return "UNEMPLOYED";
         } else {
             return "EMPLOYED";

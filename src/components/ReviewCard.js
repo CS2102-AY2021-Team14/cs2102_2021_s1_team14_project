@@ -27,7 +27,7 @@ const ReviewCard = props => {
   const [newReviewText, setReviewText] = useState(reviewText ? reviewText : '');
 
   const addReviewHandler = () => {
-    if (newReviewText == '' || /^\s+$/.test(newReviewText)) {
+    if (newReviewText === '' || /^\s+$/.test(newReviewText)) {
       toast.error('Review Text Cannot be empty!');
       return;
     }

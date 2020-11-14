@@ -54,12 +54,36 @@ class Caretaker {
     );
   }
 
-  // Add a pet type caretaker can take care of
-  static addPetType(user_name, pet_type) {
+  static getPetTypes(user_name) {
     return pool.query(
-      "INSERT INTO care_takers_pet_preferences VALUES($1, $2);",
-      [user_name, pet_type]
-    );
+      "SELECT * FROM care_takers_pet_preferences WHERE care_taker = $1;",
+      [user_name]
+    )
+  }
+
+  static editPetType(user_name, pet_type, price) {
+    return pool.query(
+      `
+      UPDATE care_takers_pet_preferences
+        SET price = $3
+        WHERE care_taker = $1 AND pet_type = $2
+      `, [user_name, pet_type, price]
+    )
+  }
+
+  // Add a pet type caretaker can take care of
+  static addPetType(user_name, pet_type, is_part_time) {
+    if (is_part_time) {
+      return pool.query(
+        "INSERT INTO care_takers_pet_preferences VALUES($1, $2, $3);",
+        [user_name, pet_type, 1.0]
+      );
+    } else {
+      return pool.query(
+        "INSERT INTO care_takers_pet_preferences VALUES($1, $2);",
+        [user_name, pet_type]
+      );
+    }
   }
 
   // Remove a pet type caretaker can take care of
