@@ -23,7 +23,7 @@ const CareTakerSalary = () => {
   const [caretakerJobs, setCaretakerJobs] = useState([]);
 
   // All the backend URL
-  const serverURL = 'http://localhost:8080/api/caretaker/';
+  const serverURL = '/api/caretaker/';
   const caretakerURL = serverURL + username;
   const caretakerSalaryURL = caretakerURL + "/salary";
   const caretakerJobsURL = caretakerURL + "/jobs";
@@ -60,12 +60,21 @@ const CareTakerSalary = () => {
 
   // Find employment
   const findEmployment = () => {
-      if (caretakerJobs.length < 1) {
-          return "UNEMPLOYED";
-      } else {
-          return "EMPLOYED";
-      }
-  }
+    let currentJobs = [];
+    const today = new Date();
+    for (var i = 0; i < caretakerJobs.length; i ++) {
+        const jobStart = new Date(caretakerJobs[i].start_date)
+        const jobEnd = new Date(caretakerJobs[i].end_date);
+        if (today.getTime() >= jobStart.getTime() && today.getTime() <= jobEnd.getTime()) {
+            currentJobs.push(caretakerJobs[i]);
+        }
+    }
+    if (currentJobs.length < 1) {
+        return "UNEMPLOYED";
+    } else {
+        return "EMPLOYED";
+    }
+}
 
   const caretakerInfo = {
       username: caretaker.user_name,
