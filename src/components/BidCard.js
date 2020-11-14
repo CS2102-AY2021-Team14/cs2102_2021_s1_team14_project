@@ -27,9 +27,7 @@ const BidCard = props => {
     isSuccessful,
     isActive,
     paymentType,
-    transferMethod,
-    rating,
-    reviewText,
+    transferMethod
   } = props;
 
   const [isCancelBidModalOpen, setIsCancelBidModalOpen] = useState(false);

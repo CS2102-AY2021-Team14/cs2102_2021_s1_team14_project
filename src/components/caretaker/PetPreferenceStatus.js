@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Card, Col, Row, Modal } from 'react-bootstrap';
+import { Button, Card } from 'react-bootstrap';
 import EditPriceModal from "./EditPriceModal";
 
 const PetPreferenceStatus = (props) => {
